@@ -1,0 +1,44 @@
+:root {
+
+  /* 1. colors  */
+  --black: #000000;
+  --white: #ffffff;
+  --blue: #3D95C5;
+  --gray: #b2b2b2;
+
+  --dark-white: #F9F9F7;
+  --white-blue: #EAF3FC;
+
+  
+  /* 2. tokens */
+  --bg-primary: var(--dark-white);
+  
+  --text-primary: var(--white);
+  --text-secondary: var(--black);
+  --text-tertiary: var(--gray);
+
+  --color-white: var(--white);
+  
+  /* 3. typography */
+  --font-main: 'JetBrains Mono', monospace;
+  --font-size-desktop: 24px;
+  --font-size-mobile: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font-main);
+}
+
+html {
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;        
+}
