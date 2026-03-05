@@ -3,17 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/src/css/main.css">
+    <link rel="stylesheet" href="/src/css/template.css">
+
     <title>recebi - Gerador de Recibo Online</title>
 </head>
 <body>
 
-    <header >
+    <header>
         <div class="menu-header">
-            <img>
+            <!-- CORREÇÃO 6: Adicionados atributos src e alt obrigatórios -->
+            <img src="/src/assets/logo.png" alt="Logo recebi">
         </div>
 
         <div class="menu-banner">
-            <h1>receb<spa>i</spa> - Gerador de Recibo</h1>
+            <!-- CORREÇÃO 1: <spa> corrigido para <span> -->
+            <h1>receb<span>i</span> - Gerador de Recibo</h1>
             <p>Crie recibos em segundos, sem cadastro e gratuito!</p>
         </div>
     </header>
@@ -124,7 +134,7 @@
 
         <!-- veículo -->
         <div class="card">
-            <div class="section-title"><span>🚗</span> Dados do Veículo</div>
+            <div class="section-title"><span class="icon">🚗</span> Dados do Veículo</div>
             <div class="grid-3">
 
                 <div class="field">
@@ -149,9 +159,11 @@
             <div class="section-title"><span class="icon">📍</span> Dados do Estabelecimento</div>
             <div class="grid-3">
                 
-                <div class="field cold-span-2">
+                <!-- CORREÇÃO 2: name="estState" corrigido para name="estName" -->
+                <!-- CORREÇÃO 5: class="cold-span-2" corrigido para class="col-span-2" -->
+                <div class="field col-span-2">
                     <label>Nome da Empresa *</label>
-                    <input type="text" name="estState" placeholder="Minha Empresa" required>
+                    <input type="text" name="estName" placeholder="Minha Empresa" required>
                 </div>
 
                 <div class="field">
@@ -191,9 +203,10 @@
 
             <div class="grid-3">
 
+                <!-- CORREÇÃO 3: atributo "disable" corrigido para "disabled" -->
                 <div class="field">
                     <label>Cidade</label>
-                    <select name="estCity" id="estCitySelect" disable>
+                    <select name="estCity" id="estCitySelect" disabled>
                         <option value="">Selecione o estado primeiro</option>
                     </select>
                 </div>
@@ -208,7 +221,7 @@
                         <span class="cep-label-row">
                             CEP
                             <span id="cepSpinner">⏳ buscando...</span>
-                            <span id="cepSucess">✓ endereço preenchido!</span>
+                            <span id="cepSuccess">✓ endereço preenchido!</span>
                         </span>
                     </label>
 
@@ -230,12 +243,8 @@
 
         <!-- servico -->
         <div class="card">
-            <div class="section-title">
-                <div>
-                    <span class="icon">🔧</span> Serviços/Produtos
-                </div>
-            </div>
-
+            <!-- CORREÇÃO 4: </span> extra removido -->
+            <div class="section-title"><span class="icon">🔧</span> Serviços/Produtos</div>
             <div id="servicesContainer"></div>
             <button type="button" class="btn-add" onclick="addService()">+ Adicionar serviço</button>
             <div>
@@ -285,3 +294,6 @@
 
     <footer>© 2026 Nilton F. O. Júnior</footer>
 </main>
+
+</body>
+</html>

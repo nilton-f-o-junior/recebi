@@ -1,44 +1,69 @@
-:root {
-
-  /* 1. colors  */
-  --black: #000000;
-  --white: #ffffff;
-  --blue: #3D95C5;
-  --gray: #b2b2b2;
-
-  --dark-white: #F9F9F7;
-  --white-blue: #EAF3FC;
-
-  
-  /* 2. tokens */
-  --bg-primary: var(--dark-white);
-  
-  --text-primary: var(--white);
-  --text-secondary: var(--black);
-  --text-tertiary: var(--gray);
-
-  --color-white: var(--white);
-  
-  /* 3. typography */
-  --font-main: 'JetBrains Mono', monospace;
-  --font-size-desktop: 24px;
-  --font-size-mobile: 16px;
-}
-
-* {
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: var(--font-main);
+}
+
+:root {
+
+  /* paleta base */
+  --black:       #000000;
+  --white:       #ffffff;
+  --pri-blue:    #3D95C5;
+  --sec-blue:    #6CACFB;
+  --tec-blue:    #7DBEFD;
+  --qua-blue:    #A4E2FE;
+  --gray:        #b2b2b2;
+  --sec-gray:    #5F6C7E;
+  --tec-gray:    #B8C1D0;
+  --dark-white:  #F9F9F7;
+  --white-blue:  #EAF3FC;
+  --accent:      #FFC094;
+  --success:     #5BC075;
+
+  /* tokens semânticos */
+  
+  /* background */
+  --bg-primary:   var(--dark-white);
+  --bg-secondary: var(--white);
+
+  /* typography - home */
+  --text-primary:   var(--pri-blue);
+  --text-secondary: var(--gray);
+
+  /* typography - template */
+  --color-title:    var(--pri-blue);
+  --color-subtitle: var(--sec-gray);
+  --color-place:       var(--tec-gray);
+
+  /* bordas */
+  --border:        1px solid #E5E7EB;
+  --border-strong: 1px solid #D1D5DB;
+
+  /* sombras */
+  --shadow:    0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+
+  /* forma */
+  --radius: 8px;
+
+  /* tipografia */
+  --font-main:        'JetBrains Mono', monospace;
+  --font-size-base:   16px;
+  --font-size-mobile: 14px;
+  --font-size-desktop: 24px;
 }
 
 html {
+  font-family:      var(--font-main);
+  font-size:        var(--font-size-base);
   background-color: var(--bg-primary);
-  min-height: 100vh;
-  scroll-behavior: smooth;
+  color:            var(--text-primary);
+  min-height:       100vh;
+  scroll-behavior:  smooth;
 }
 
 a {
-    text-decoration: none;
-    color: inherit;        
+  text-decoration: none;
+  color: inherit;
 }

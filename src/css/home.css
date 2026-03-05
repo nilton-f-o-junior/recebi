@@ -27,57 +27,56 @@ main p {
     margin-bottom: 12px;
     font-size: 16px;
     font-weight: 400;
-    color: var(--blue);
+    color: var(--text-primary);
 }
 
 main button {
     font-size: 18px;
     font-weight: 600;
-    color: var(--blue);
+    color: var(--pri-blue);
     padding: 14px 24px;
-    border-radius: 8px;
+    border-radius: var(--radius);
     background-color: var(--white-blue);
     border: none;
 }
 
 main button:hover {
     color: var(--white-blue);
-    background-color: var(--blue);
+    background-color: var(--pri-blue);
 }
 
 footer {
     font-size: 16px;
     margin-top: 64px;
-    color: var(--text-tertiary);
+    color: var(--text-secondary);
     text-align: center;
 }
 
 @media (max-width: 768px) {
 
-header img {
-    width: 24px;
-    height: auto;
-}
+    header img {
+        width: 24px;
+        height: auto;
+    }
 
-main p {
-    margin-bottom: 12px;
-    font-size: 12px;
-}
+    main p {
+        margin-bottom: 12px;
+        font-size: 12px;
+    }
 
-main img {
-    width: 180px;
-    height: auto;
-}
+    main img {
+        width: 180px;
+        height: auto;
+    }
 
-main button {
-    font-size: 12px;
-    padding: 10px 20px;
-    background-color: var(--white-blue);
-    border: none;
-}
+    main button {
+        font-size: 12px;
+        padding: 10px 20px;
+        background-color: var(--white-blue);
+        border: none;
+    }
 
-footer {
-    font-size: 12px;
-}
-
+    footer {
+        font-size: 12px;
+    }
 }
