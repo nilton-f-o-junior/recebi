@@ -7,51 +7,64 @@
 :root {
 
   /* paleta base */
-  --black:       #000000;
   --white:       #ffffff;
+  --black:       #000000;
+
   --pri-blue:    #3D95C5;
   --sec-blue:    #6CACFB;
   --tec-blue:    #7DBEFD;
   --qua-blue:    #A4E2FE;
+
   --gray:        #b2b2b2;
   --sec-gray:    #5F6C7E;
   --tec-gray:    #B8C1D0;
+
   --dark-white:  #F9F9F7;
   --white-blue:  #EAF3FC;
+  
   --accent:      #FFC094;
+  --accent-light:#EFF6FF;
+  
   --success:     #5BC075;
+
 
   /* tokens semânticos */
   
-  /* background */
-  --bg-primary:   var(--dark-white);
-  --bg-secondary: var(--white);
+  /* home.css */
+  --text-home-pri: var(--pri-blue);
+  --text-home-sec: var(--gray);
+  --text-home-ter: var(--white);
 
-  /* typography - home */
-  --text-primary:   var(--pri-blue);
-  --text-secondary: var(--gray);
+  --bg-home-pri: var(--white-blue);
+  --bg-home-sec: var(--pri-blue);
 
-  /* typography - template */
+  /* template.css */
+  --bg-primary:    var(--dark-white);
+  --bg-secondary:  var(--white);
+  --bg-tertiary:   var(--white-blue);
+  --bg-quaternary: var(--pri-blue);
+
   --color-title:    var(--pri-blue);
   --color-subtitle: var(--sec-gray);
-  --color-place:       var(--tec-gray);
+  --color-place:    var(--tec-gray);
+
+
 
   /* bordas */
   --border:        1px solid #E5E7EB;
   --border-strong: 1px solid #D1D5DB;
 
   /* sombras */
-  --shadow:    0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow:    0 1px 3px  rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
   --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
 
   /* forma */
-  --radius: 8px;
+  --radius-pri:   8px;
+  --radius-sec: 16px;
 
   /* tipografia */
-  --font-main:        'JetBrains Mono', monospace;
-  --font-size-base:   16px;
-  --font-size-mobile: 14px;
-  --font-size-desktop: 24px;
+  --font-main:      'JetBrains Mono', monospace;
+  --font-size-base: 16px;
 }
 
 html {
