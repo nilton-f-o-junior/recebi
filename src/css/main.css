@@ -1,3 +1,5 @@
+/* main.css */
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -5,78 +7,117 @@
 }
 
 :root {
+  /* paleta */
+  --blue-500: #3D95C5;
+  --blue-400: #6CACFB;
+  --blue-300: #7DBEFD;
+  --blue-100: #D6EDFC;
+  --blue-50:  #EAF3FC;
 
-  /* paleta base */
-  --white:       #ffffff;
-  --black:       #000000;
+  --gray-900: #111827;
+  --gray-700: #374151;
+  --gray-500: #6B7280;
+  --gray-400: #9CA3AF;
+  --gray-300: #D1D5DB;
+  --gray-200: #E5E7EB;
+  --gray-100: #F3F4F6;
+  --gray-50:  #F9FAFB;
 
-  --pri-blue:    #3D95C5;
-  --sec-blue:    #6CACFB;
-  --tec-blue:    #7DBEFD;
-  --qua-blue:    #A4E2FE;
+  --amber-700: #92400E;
+  --amber-400: #FCD34D;
+  --amber-50:  #FFFBEB;
 
-  --gray:        #b2b2b2;
-  --sec-gray:    #5F6C7E;
-  --tec-gray:    #B8C1D0;
+  --white: #ffffff;
 
-  --dark-white:  #F9F9F7;
-  --white-blue:  #EAF3FC;
-  
-  --accent:      #FFC094;
-  --accent-light:#EFF6FF;
-  
-  --success:     #5BC075;
+  /* tokens */
+  --accent:       var(--blue-500);
+  --accent-mid:   var(--blue-400);
+  --accent-light: var(--blue-50);
 
+  --success:      #5BC075;
+  --success-bg:   #F0FDF4;
 
-  /* tokens semânticos */
-  
-  /* home.css */
-  --text-home-pri: var(--pri-blue);
-  --text-home-sec: var(--gray);
-  --text-home-ter: var(--white);
+  --error:        #EF4444;
+  --error-bg:     #FFF5F5;
+  --error-border: #FCA5A5;
 
-  --bg-home-pri: var(--white-blue);
-  --bg-home-sec: var(--pri-blue);
+  --warn-bg:     var(--amber-50);
+  --warn-border: var(--amber-400);
+  --warn-text:   var(--amber-700);
 
-  /* template.css */
-  --bg-primary:    var(--dark-white);
-  --bg-secondary:  var(--white);
-  --bg-tertiary:   var(--white-blue);
-  --bg-quaternary: var(--pri-blue);
+  /* superfícies */
+  --bg-page:  #F9F9F7;
+  --bg-card:  var(--white);
+  --bg-input: #F9F9F7;
 
-  --color-title:    var(--pri-blue);
-  --color-subtitle: var(--sec-gray);
-  --color-place:    var(--tec-gray);
-
-
+  /* texto */
+  --text-primary:     var(--gray-900);
+  --text-secondary:   var(--gray-500);
+  --text-muted:       var(--gray-400);
+  --text-placeholder: var(--gray-300);
+  --text-heading:     var(--blue-500);
 
   /* bordas */
-  --border:        1px solid #E5E7EB;
-  --border-strong: 1px solid #D1D5DB;
+  --border-color:        var(--gray-200);
+  --border-color-strong: var(--gray-300);
+  --border:              1px solid var(--border-color);
+  --border-strong:       1px solid var(--border-color-strong);
 
   /* sombras */
-  --shadow:    0 1px 3px  rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-xl: 0 24px 64px rgba(0,0,0,0.20);
 
-  /* forma */
-  --radius-pri:   8px;
-  --radius-sec: 16px;
+  /* raios */
+  --radius-sm:   6px;
+  --radius-md:   8px;
+  --radius-lg:   14px;
+  --radius-xl:   20px;
+  --radius-pill: 9999px;
+
+  /* espaçamento */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
 
   /* tipografia */
-  --font-main:      'JetBrains Mono', monospace;
-  --font-size-base: 16px;
+  --font-mono:      'JetBrains Mono', monospace;
+  --font-size-xs:   0.7rem;
+  --font-size-sm:   0.75rem;
+  --font-size-base: 0.875rem;
+  --font-size-md:   1rem;
+
+  /* transições */
+  --transition-fast: 0.12s ease;
+  --transition-base: 0.2s ease;
 }
 
 html {
-  font-family:      var(--font-main);
-  font-size:        var(--font-size-base);
-  background-color: var(--bg-primary);
+  font-family:      var(--font-mono);
+  font-size:        16px;
+  background-color: var(--bg-page);
   color:            var(--text-primary);
   min-height:       100vh;
   scroll-behavior:  smooth;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
   text-decoration: none;
   color: inherit;
+}
+
+button {
+  font-family: var(--font-mono);
+  cursor: pointer;
+}
+
+input, textarea, select {
+  font-family: var(--font-mono);
 }
