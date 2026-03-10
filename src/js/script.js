@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('input[name="issueDate"]').value = new Date().toISOString().split('T')[0];
     addService(true);
     updateProgress();
+    initLogoDropZone();
+    document.getElementById('panelUpload').style.display = 'block';
+    document.getElementById('panelUrl').style.display    = 'none';
 });
 
 let logoDataUrl = '';
@@ -17,33 +20,66 @@ function switchLogoTab(mode) {
     document.getElementById('panelUrl').style.display   = mode === 'url'    ? 'block' : 'none';
 }
 
-function handleLogoFile(input) {
-    const file = input.files[0];
+function applyLogoFile(file) {
     if (!file) return;
+    if (!file.type.startsWith('image/')) {
+        alert('Por favor, selecione um arquivo de imagem válido.');
+        return;
+    }
     if (file.size > 2 * 1024 * 1024) {
         alert('A imagem deve ter no máximo 2 MB.');
-        input.value = '';
         return;
     }
     const reader = new FileReader();
     reader.onload = function(e) {
         logoDataUrl = e.target.result;
         document.getElementById('logoPreviewImg').src = logoDataUrl;
-        document.getElementById('logoPlaceholder').style.display  = 'none';
-        document.getElementById('logoPreviewArea').style.display  = 'block';
+        document.getElementById('logoPlaceholder').style.display = 'none';
+        document.getElementById('logoPreviewArea').style.display = 'block';
         document.getElementById('logoDropArea').classList.add('has-image');
+        document.getElementById('logoFileInput').style.pointerEvents = 'none';
     };
     reader.readAsDataURL(file);
 }
 
+function handleLogoFile(input) {
+    applyLogoFile(input.files[0]);
+}
+
 function clearLogo(e) {
+    e.preventDefault();
     e.stopPropagation();
     logoDataUrl = '';
-    document.getElementById('logoFileInput').value = '';
+    const fileInput = document.getElementById('logoFileInput');
+    fileInput.value = '';
+    fileInput.style.pointerEvents = 'auto';
     document.getElementById('logoPreviewImg').src = '';
-    document.getElementById('logoPlaceholder').style.display  = 'block';
-    document.getElementById('logoPreviewArea').style.display  = 'none';
+    document.getElementById('logoPlaceholder').style.display = 'block';
+    document.getElementById('logoPreviewArea').style.display = 'none';
     document.getElementById('logoDropArea').classList.remove('has-image');
+}
+
+function initLogoDropZone() {
+    const dropArea = document.getElementById('logoDropArea');
+
+    dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropArea.classList.add('drag-over');
+    });
+
+    dropArea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        dropArea.classList.remove('drag-over');
+    });
+
+    dropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropArea.classList.remove('drag-over');
+        const file = e.dataTransfer.files[0];
+        applyLogoFile(file);
+    });
 }
 
 // --- LOCALIDADES (IBGE) ---
@@ -186,12 +222,6 @@ function addService(first = false) {
     container.appendChild(div);
 }
 
-function selectSwatch(el) {
-    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('accentColorHex').value = el.dataset.color;
-}
-
 function updateProgress() {
     const form = document.getElementById('receiptForm');
     const required = form.querySelectorAll('input[required]');
@@ -209,57 +239,126 @@ function closePreview() {
 document.getElementById('receiptForm').onsubmit = function(e) {
     e.preventDefault();
 
-    const fd = new FormData(this);
-    const data = Object.fromEntries(fd.entries());
-    const names = fd.getAll('serviceName[]');
-    const values = fd.getAll('serviceValue[]');
-    const accent = data.accentColorHex;
+    const clientDocEl   = document.getElementById('clientDoc');
+    const providerDocEl = document.getElementById('providerDoc');
+    validateDoc(clientDocEl,   'clientDocErr');
+    validateDoc(providerDocEl, 'providerDocErr');
+    if (clientDocEl.classList.contains('field-invalid') ||
+        providerDocEl.classList.contains('field-invalid')) {
+        clientDocEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
 
+    const fd     = new FormData(this);
+    const data   = Object.fromEntries(fd.entries());
+    const names  = fd.getAll('serviceName[]');
+    const values = fd.getAll('serviceValue[]');
+
+    const resolvedLogo = logoMode === 'upload' ? logoDataUrl : (data.logoUrl || '').trim();
+
+    let servicesRows = '';
     let total = 0;
-    let servicesRows = names.map((name, i) => {
+    names.forEach((name, i) => {
         const val = parseFloat(values[i]) || 0;
         total += val;
-        return `<tr><td style="padding:10px 0;font-size:14px;border-bottom:1px solid #F3F4F6">${name}</td><td style="padding:10px 0;font-size:14px;text-align:right;border-bottom:1px solid #F
-3F4F6">R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits:2})}</td></tr>`;
-    }).join('');
+        servicesRows += `
+            <tr>
+                <td class="receipt-table-cell">${name}</td>
+                <td class="receipt-table-cell receipt-table-cell--right">R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
+            </tr>`;
+    });
 
-    const resolvedLogo = logoMode === 'upload' ? logoDataUrl : data.logoUrl;
-    const issueDate = new Date(data.issueDate + 'T12:00:00').toLocaleDateString('pt-BR');
+    const issueDate   = new Date(data.issueDate + 'T12:00:00').toLocaleDateString('pt-BR');
+    const now         = new Date().toLocaleString('pt-BR');
+    const stateSelect = document.getElementById('estStateSelect');
+    const stateValue  = stateSelect.options[stateSelect.selectedIndex]?.value || '';
+
+    const footerHtml = data.footerStyle === 'minimal'
+        ? `<p class="receipt-footer-minimal">Documento emitido em ${now}</p>`
+        : `
+            <div class="receipt-footer-signatures">
+                <div class="receipt-signature-block">
+                    <div class="receipt-signature-line">
+                        <p class="receipt-signature-name">${data.providerName}</p>
+                        <p class="receipt-signature-role">Assinatura do Beneficiário</p>
+                    </div>
+                </div>
+                <div class="receipt-signature-block">
+                    <div class="receipt-signature-line">
+                        <p class="receipt-signature-name">${data.clientName}</p>
+                        <p class="receipt-signature-role">Assinatura do Cliente</p>
+                    </div>
+                </div>
+            </div>
+            <p class="receipt-footer-timestamp">Gerado em ${now} — Recebi</p>`;
 
     const html = `
-    <div style="font-family:'DM Sans',sans-serif;background:white;">
-        <div style="background:${accent};padding:28px 36px;display:flex;justify-content:space-between;color:white">
-            <div style="display:flex;gap:16px;align-items:center">
-                ${resolvedLogo ? `<img src="${resolvedLogo}" style="max-height:50px;background:white;padding:4px;border-radius:4px">` : ''}
-                <div><h1 style="font-size:22px;margin:0">${data.estName}</h1><p style="font-size:12px;opacity:0.8">${data.estStreet || ''}</p></div>
-            </div>
-            <div style="text-align:right">
-                <p style="font-size:11px;opacity:0.7">${data.receiptType}</p>
-                <p style="font-size:18px;font-weight:600">${issueDate}</p>
-            </div>
-        </div>
-        <div style="padding:32px 36px">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px">
-                <div style="background:#F9FAFB;padding:16px;border-radius:10px">
-                    <p style="font-size:10px;color:#6B7280;text-transform:uppercase">Cliente</p>
-                    <p style="font-weight:600">${data.clientName}</p><p style="font-size:13px">${data.clientDoc}</p>
+        <div class="receipt-wrapper">
+            <div class="receipt-header">
+                <div class="receipt-header-left">
+                    ${resolvedLogo ? `<img src="${resolvedLogo}" alt="Logo" class="receipt-logo" onerror="this.style.display='none'">` : ''}
+                    <div>
+                        <p class="receipt-type">${data.receiptType}</p>
+                        <h1 class="receipt-est-name">${data.estName}</h1>
+                        <p class="receipt-est-address">${[data.estStreet, data.estNumber].filter(Boolean).join(', ')}${data.estNeighborhood ? ' — ' + data.estNeighborhood : ''}</p>
+                    </div>
                 </div>
-                <div style="background:#F9FAFB;padding:16px;border-radius:10px">
-                    <p style="font-size:10px;color:#6B7280;text-transform:uppercase">Beneficiário</p>
-                    <p style="font-weight:600">${data.providerName}</p><p style="font-size:13px">${data.providerDoc}</p>
+                <div class="receipt-header-right">
+                    <p class="receipt-date-label">Emissão</p>
+                    <p class="receipt-date-value">${issueDate}</p>
+                    <p class="receipt-city">${data.estCity || ''}${stateValue ? ', ' + stateValue : ''}</p>
                 </div>
             </div>
-            <table style="width:100%;border-collapse:collapse">${servicesRows}</table>
-            <div style="display:flex;justify-content:flex-end;margin-top:20px">
-                <div style="background:${accent};color:white;padding:15px 25px;border-radius:10px;text-align:right">
-                    <span style="font-size:10px;text-transform:uppercase">Total</span>
-                    <div style="font-size:26px;font-weight:700">R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits:2})}</div>
+            <div class="receipt-body">
+                <div class="receipt-parties">
+                    <div class="receipt-party-card">
+                        <p class="receipt-section-label">Cliente</p>
+                        <p class="receipt-party-name">${data.clientName}</p>
+                        <p class="receipt-party-detail">${data.clientDoc}</p>
+                        ${data.clientPhone ? `<p class="receipt-party-detail">${data.clientPhone}</p>` : ''}
+                    </div>
+                    <div class="receipt-party-card">
+                        <p class="receipt-section-label">Beneficiário</p>
+                        <p class="receipt-party-name">${data.providerName}</p>
+                        <p class="receipt-party-detail">${data.providerDoc}</p>
+                        ${data.providerPhone ? `<p class="receipt-party-detail">${data.providerPhone}</p>` : ''}
+                    </div>
                 </div>
+                ${data.carModel ? `
+                <div class="receipt-vehicle-card">
+                    <p class="receipt-vehicle-label">Veículo</p>
+                    <div class="receipt-vehicle-info">
+                        <span><strong>Modelo:</strong> ${data.carModel}</span>
+                        ${data.carPlate ? `<span><strong>Placa:</strong> ${data.carPlate}</span>` : ''}
+                        ${data.carYear  ? `<span><strong>Ano:</strong> ${data.carYear}</span>`   : ''}
+                    </div>
+                </div>` : ''}
+                <table class="receipt-table">
+                    <thead>
+                        <tr>
+                            <th class="receipt-table-header receipt-table-header--left">Descrição</th>
+                            <th class="receipt-table-header receipt-table-header--right">Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>${servicesRows}</tbody>
+                </table>
+                <div class="receipt-total-wrapper">
+                    <div class="receipt-total-box">
+                        <p class="receipt-total-label">Total</p>
+                        <p class="receipt-total-value">R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits:2})}</p>
+                    </div>
+                </div>
+                ${data.observations ? `
+                <div class="receipt-observations">
+                    <p class="receipt-observations-label">Observações</p>
+                    <p class="receipt-observations-text">${data.observations}</p>
+                </div>` : ''}
+                ${footerHtml}
             </div>
-        </div>
-    </div>`;
+        </div>`;
 
     document.getElementById('receiptContent').innerHTML = html;
     document.getElementById('printContainer').classList.add('visible');
     document.body.style.overflow = 'hidden';
+    window.scrollTo(0, 0);
 };

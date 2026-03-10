@@ -12,6 +12,7 @@
 
   <link rel="stylesheet" href="/src/css/main.css">
   <link rel="stylesheet" href="/src/css/template.css">
+  <link rel="stylesheet" href="/src/css/receipt.css">
 
   <title>recebi - Gerador de Recibo Online</title>
 </head>
@@ -66,7 +67,7 @@
                   <span>PNG, JPG, SVG, WEBP — até 2 MB</span>
                 </div>
 
-                <div id="logoPreviewArea">
+                <div id="logoPreviewArea" style="display:none">
                   <img id="logoPreviewImg" src="" alt="Preview da logo">
                   <p>✓ Logo carregada com sucesso</p>
                   <button type="button" id="logoClearBtn" onclick="clearLogo(event)">Remover imagem</button>
@@ -96,7 +97,7 @@
 
             <div class="field">
               <label>CPF/CNPJ *</label>
-              <input type="text" name="clientDoc" placeholder="000.000.000-00" oninput="maskCpfCnpj(this)"
+              <input type="text" id="clientDoc" name="clientDoc" placeholder="000.000.000-00" oninput="maskCpfCnpj(this)"
                 onblur="validateDoc(this, 'clientDocErr')" required>
               <span class="field-error" id="clientDocErr">CPF ou CPNJ inválidos</span>
             </div>
@@ -120,7 +121,7 @@
 
             <div class="field">
               <label>CPF/CNPJ *</label>
-              <input type="text" name="providerDoc" placeholder="000.000.000-00" oninput="maskCpfCnpj(this)"
+              <input type="text" id="providerDoc" name="providerDoc" placeholder="000.000.000-00" oninput="maskCpfCnpj(this)"
                 onblur="validateDoc(this, 'providerDocErr')" required>
               <span class="field-error" id="providerDocErr">CPF ou CNPJ inválido</span>
             </div>
@@ -258,31 +259,8 @@
         </div>
       </div>
 
-      <!-- personalização -->
-      <div class="card">
-        <div class="section-title"><span class="icon">🎨</span> Aparência do Recibo</div>
-        <div class="grid-2">
-          <div class="field">
-            <label>Cor de destaque</label>
-            <input type="hidden" name="accentColorHex" id="accentColorHex" value="#1D4ED8">
-            <div class="swatch-row">
-              <div class="swatch swatch-blue active" data-color="#1D4ED8" onclick="selectSwatch(this)"></div>
-              <div class="swatch swatch-black" data-color="#111827" onclick="selectSwatch(this)"></div>
-              <div class="swatch swatch-green" data-color="#059669" onclick="selectSwatch(this)"></div>
-              <div class="swatch swatch-red" data-color="#DC2626" onclick="selectSwatch(this)"></div>
-              <div class="swatch swatch-purple" data-color="#7C3AED" onclick="selectSwatch(this)"></div>
-              <div class="swatch swatch-amber" data-color="#D97706" onclick="selectSwatch(this)"></div>
-            </div>
-          </div>
-          <div class="field">
-            <label>Estilo do rodapé</label>
-            <select name="footerStyle">
-              <option value="standard">Com linha de assinatura</option>
-              <option value="minimal">Minimalista</option>
-            </select>
-          </div>
-        </div>
-      </div>
+      <input type="hidden" name="accentColorHex" id="accentColorHex" value="#6CACFB">
+      <input type="hidden" name="footerStyle" value="minimal">
 
       <!-- finalizar -->
       <div class="warn-box">
@@ -301,6 +279,17 @@
     <script src="/src/js/script.js" defer></script>
 
   </main>
+
+  <!-- Modal de preview/impressão -->
+  <div id="printContainer">
+    <div class="receipt-wrapper">
+      <div id="receiptContent"></div>
+    </div>
+    <div class="print-actions">
+      <button class="btn-close-preview" onclick="closePreview()">✕ Fechar</button>
+      <button class="btn-print-preview" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+    </div>
+  </div>
 
 </body>
 
