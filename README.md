@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="img/recebi-banner.png">
+  <img src="img/git-recebi.png">
 </p>
 
 > Plataforma gratuita para criação de recibos profissionais para estéticas automotivas e lava-jatos — personalize, gere e compartilhe em segundos.
