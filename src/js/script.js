@@ -210,11 +210,11 @@ function addService(first = false) {
     div.className = 'service-row';
     div.innerHTML = `
         <div class="field">
-            ${first ? '<label>Serviço / Produto *</label>' : ''}
+            ${first ? '<label>Serviço / Produto</label>' : ''}
             <input type="text" name="serviceName[]" placeholder="Descrição" required>
         </div>
         <div class="field">
-            ${first ? '<label>Valor (R$) *</label>' : ''}
+            ${first ? '<label>Valor (R$)</label>' : ''}
             <input type="number" step="0.01" name="serviceValue[]" placeholder="0,00" required oninput="updateProgress()">
         </div>
         <button type="button" class="btn-remove" onclick="this.parentElement.remove(); updateProgress()">×</button>

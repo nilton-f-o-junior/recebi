@@ -1,6 +1,7 @@
 > Atualizacao
 
 [x] Imagem Inicial
+[x] Retirada dos \* dos itens
 [] Ícones
 [] Melhorar o layout dos Serviços/Produtos
 [] Temos de Politica e Privacidade

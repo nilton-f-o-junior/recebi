@@ -1,296 +1,415 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      rel="stylesheet"
+    />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
-    rel="stylesheet">
+    <link rel="stylesheet" href="/src/css/main.css" />
+    <link rel="stylesheet" href="/src/css/template.css" />
+    <link rel="stylesheet" href="/src/css/receipt.css" />
 
-  <link rel="stylesheet" href="/src/css/main.css">
-  <link rel="stylesheet" href="/src/css/template.css">
-  <link rel="stylesheet" href="/src/css/receipt.css">
+    <title>recibi - Gerador de Recibo Online</title>
+  </head>
 
-  <title>recebi - Gerador de Recibo Online</title>
-</head>
+  <body>
+    <header></header>
 
-<body>
+    <main class="no-print">
+      <div class="steps-bar">
+        <div class="step-fill" id="stepFill"></div>
+      </div>
 
-  <header>
-
-  </header>
-
-
-  <main class="no-print">
-    <div class="steps-bar">
-      <div class="step-fill" id="stepFill"></div>
-    </div>
-
-    <form id="receiptForm">
-
-      <!-- Informações do Recibo -->
-      <div class="card">
-        <div class="section-title"><span class="icon">📄</span> Informações do Recibo</div>
-        <div class="grid-2">
-
-          <div class="field">
-            <label>Tipo do Recibo *</label>
-            <input type="text" name="receiptType" value="Recibo de Pagamento" required>
+      <form id="receiptForm">
+        <!-- Informações do Recibo -->
+        <div class="card">
+          <div class="section-title">
+            <span class="icon">📄</span> Informações do Recibo
           </div>
-
-          <div class="field">
-            <label>Data de Emissão *</label>
-            <input type="date" name="issueDate" required>
-          </div>
-
-          <!-- Logo com abas -->
-          <div class="field col-span-2">
-            <label>Logo da empresa (opcional)</label>
-            <div class="logo-source-tabs">
-              <button type="button" class="logo-tab active" id="tabUpload" onclick="switchLogoTab('upload')">📁 Enviar
-                do computador</button>
-              <button type="button" class="logo-tab" id="tabUrl" onclick="switchLogoTab('url')">🔗 Inserir link
-                (URL)</button>
+          <div class="grid-2">
+            <div class="field">
+              <label>Tipo do Recibo</label>
+              <input
+                type="text"
+                name="receiptType"
+                value="Recibo de Pagamento"
+                required
+              />
             </div>
 
-            <!-- Painel Upload -->
-            <div id="panelUpload">
-              <div class="logo-upload-area" id="logoDropArea">
-                <input type="file" id="logoFileInput" accept="image/png,image/jpeg,image/webp,image/svg+xml"
-                  onchange="handleLogoFile(this)">
-                <div class="logo-placeholder" id="logoPlaceholder">
-                  <div class="up-icon">🖼️</div>
-                  <p>Clique aqui ou arraste a imagem</p>
-                  <span>PNG, JPG, SVG, WEBP — até 2 MB</span>
-                </div>
+            <div class="field">
+              <label>Data de Emissão</label>
+              <input type="date" name="issueDate" required />
+            </div>
 
-                <div id="logoPreviewArea" style="display:none">
-                  <img id="logoPreviewImg" src="" alt="Preview da logo">
-                  <p>✓ Logo carregada com sucesso</p>
-                  <button type="button" id="logoClearBtn" onclick="clearLogo(event)">Remover imagem</button>
+            <!-- Logo com abas -->
+            <div class="field col-span-2">
+              <label>Logo da empresa (opcional)</label>
+              <div class="logo-source-tabs">
+                <button
+                  type="button"
+                  class="logo-tab active"
+                  id="tabUpload"
+                  onclick="switchLogoTab('upload')"
+                >
+                  📁 Enviar do computador
+                </button>
+                <button
+                  type="button"
+                  class="logo-tab"
+                  id="tabUrl"
+                  onclick="switchLogoTab('url')"
+                >
+                  🔗 Inserir link (URL)
+                </button>
+              </div>
+
+              <!-- Painel Upload -->
+              <div id="panelUpload">
+                <div class="logo-upload-area" id="logoDropArea">
+                  <input
+                    type="file"
+                    id="logoFileInput"
+                    accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                    onchange="handleLogoFile(this)"
+                  />
+                  <div class="logo-placeholder" id="logoPlaceholder">
+                    <div class="up-icon">🖼️</div>
+                    <p>Clique aqui ou arraste a imagem</p>
+                    <span>PNG, JPG, SVG, WEBP — até 2 MB</span>
+                  </div>
+
+                  <div id="logoPreviewArea" style="display: none">
+                    <img id="logoPreviewImg" src="" alt="Preview da logo" />
+                    <p>✓ Logo carregada com sucesso</p>
+                    <button
+                      type="button"
+                      id="logoClearBtn"
+                      onclick="clearLogo(event)"
+                    >
+                      Remover imagem
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Painel URL -->
-            <div id="panelUrl">
-              <input type="text" name="logoUrl" id="logoUrlInput" placeholder="https://suaempresa.com.br/logo.png">
+              <!-- Painel URL -->
+              <div id="panelUrl">
+                <input
+                  type="text"
+                  name="logoUrl"
+                  id="logoUrlInput"
+                  placeholder="https://suaempresa.com.br/logo.png"
+                />
+              </div>
             </div>
-
           </div>
         </div>
-      </div>
 
-      <!-- cliente e beneficiário -->
-      <div class="grid-cards">
+        <!-- cliente e beneficiário -->
+        <div class="grid-cards">
+          <div class="card">
+            <div class="section-title">
+              <span class="icon">👤</span> Cliente
+            </div>
+            <div class="section-card">
+              <div class="field">
+                <label>Nome Completo</label>
+                <input
+                  type="text"
+                  name="clientName"
+                  placeholder="Alice Silva"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label>CPF/CNPJ</label>
+                <input
+                  type="text"
+                  id="clientDoc"
+                  name="clientDoc"
+                  placeholder="000.000.000-00"
+                  oninput="maskCpfCnpj(this)"
+                  onblur="validateDoc(this, 'clientDocErr')"
+                  required
+                />
+                <span class="field-error" id="clientDocErr"
+                  >CPF ou CPNJ inválidos</span
+                >
+              </div>
+
+              <div class="field">
+                <label>Celular</label>
+                <input
+                  type="text"
+                  name="clientPhone"
+                  placeholder="(83) 9 0000-0000"
+                  oninput="maskPhone(this)"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <span class="icon">🏢</span> Beneficiário
+            </div>
+            <div class="section-card">
+              <div class="field">
+                <label>Nome completo</label>
+                <input
+                  type="text"
+                  name="providerName"
+                  placeholder="Roberto Oliveira"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label>CPF/CNPJ</label>
+                <input
+                  type="text"
+                  id="providerDoc"
+                  name="providerDoc"
+                  placeholder="000.000.000-00"
+                  oninput="maskCpfCnpj(this)"
+                  onblur="validateDoc(this, 'providerDocErr')"
+                  required
+                />
+                <span class="field-error" id="providerDocErr"
+                  >CPF ou CNPJ inválido</span
+                >
+              </div>
+
+              <div class="field">
+                <label>Celular</label>
+                <input
+                  type="text"
+                  name="providerPhone"
+                  placeholder="(83) 9 8888-8888"
+                  oninput="maskPhone(this)"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- veículo -->
         <div class="card">
-          <div class="section-title"><span class="icon">👤</span> Cliente</div>
-          <div class="section-card">
-
+          <div class="section-title">
+            <span class="icon">🚗</span> Dados do Veículo
+          </div>
+          <div class="grid-3">
             <div class="field">
-              <label>Nome Completo *</label>
-              <input type="text" name="clientName" placeholder="Alice Silva" required>
+              <label>Modelo</label>
+              <input
+                type="text"
+                name="carModel"
+                placeholder="Fiat Argo"
+                required
+              />
             </div>
 
             <div class="field">
-              <label>CPF/CNPJ *</label>
-              <input type="text" id="clientDoc" name="clientDoc" placeholder="000.000.000-00" oninput="maskCpfCnpj(this)"
-                onblur="validateDoc(this, 'clientDocErr')" required>
-              <span class="field-error" id="clientDocErr">CPF ou CPNJ inválidos</span>
+              <label>Placa</label>
+              <input
+                type="text"
+                name="carPlate"
+                placeholder="BRA-0A00"
+                oninput="maskPlate(this)"
+                required
+              />
             </div>
 
             <div class="field">
-              <label>Celular *</label>
-              <input type="text" name="clientPhone" placeholder="(83) 9 0000-0000" oninput="maskPhone(this)" required>
+              <label>Ano</label>
+              <input type="text" name="carYear" placeholder="2026" required />
             </div>
-
           </div>
         </div>
 
+        <!-- estabelecimento -->
         <div class="card">
-          <div class="section-title"><span class="icon">🏢</span> Beneficiário</div>
-          <div class="section-card">
-
-            <div class="field">
-              <label>Nome completo *</label>
-              <input type="text" name="providerName" placeholder="Roberto Oliveira" required>
+          <div class="section-title">
+            <span class="icon">📍</span> Dados do Estabelecimento
+          </div>
+          <div class="grid-3">
+            <div class="field col-span-2">
+              <label>Nome da Empresa</label>
+              <input
+                type="text"
+                name="estName"
+                placeholder="Minha Empresa"
+                required
+              />
             </div>
 
             <div class="field">
-              <label>CPF/CNPJ *</label>
-              <input type="text" id="providerDoc" name="providerDoc" placeholder="000.000.000-00" oninput="maskCpfCnpj(this)"
-                onblur="validateDoc(this, 'providerDocErr')" required>
-              <span class="field-error" id="providerDocErr">CPF ou CNPJ inválido</span>
+              <label>Estado</label>
+              <select
+                name="estState"
+                id="estStateSelect"
+                onchange="loadCities(this.value)"
+              >
+                <option value="">Selecione ...</option>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="field">
+              <label>Cidade</label>
+              <select name="estCity" id="estCitySelect" disabled>
+                <option value="">Selecione o estado primeiro</option>
+              </select>
             </div>
 
             <div class="field">
-              <label>Celular *</label>
-              <input type="text" name="providerPhone" placeholder="(83) 9 8888-8888" oninput="maskPhone(this)" required>
+              <label>Bairro</label>
+              <input
+                type="text"
+                name="estNeighborhood"
+                id="estNeighborhood"
+                placeholder="Centro"
+              />
+            </div>
+
+            <div class="field">
+              <label>
+                <span class="cep-label-row">
+                  CEP
+                  <span id="cepSpinner">⏳ buscando...</span>
+                  <span id="cepSuccess">✓ endereço preenchido!</span>
+                </span>
+              </label>
+
+              <input
+                type="text"
+                name="estCep"
+                id="estCep"
+                placeholder="00000-000"
+                maxlength="9"
+                oninput="formatCep(this)"
+                onblur="fetchCep(this.value)"
+              />
+            </div>
+
+            <div class="field col-span-2">
+              <label>Rua/Logradouro</label>
+              <input
+                type="text"
+                name="estStreet"
+                id="estStreet"
+                placeholder="Rua das Flores"
+              />
+            </div>
+
+            <div class="field">
+              <label>Número</label>
+              <input type="text" name="estNumber" placeholder="100" />
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- veículo -->
-      <div class="card">
-        <div class="section-title"><span class="icon">🚗</span> Dados do Veículo</div>
-        <div class="grid-3">
-
-          <div class="field">
-            <label>Modelo *</label>
-            <input type="text" name="carModel" placeholder="Fiat Argo" required>
+        <!-- servico -->
+        <div class="card">
+          <div class="section-title">
+            <span class="icon">🔧</span> Serviços/Produtos
           </div>
-
-          <div class="field">
-            <label>Placa *</label>
-            <input type="text" name="carPlate" placeholder="BRA-0A00" oninput="maskPlate(this)" required>
-          </div>
-
-          <div class="field">
-            <label>Ano *</label>
-            <input type="text" name="carYear" placeholder="2026" required>
-          </div>
-        </div>
-      </div>
-
-      <!-- estabelecimento -->
-      <div class="card">
-        <div class="section-title"><span class="icon">📍</span> Dados do Estabelecimento</div>
-        <div class="grid-3">
-
-          <!-- CORREÇÃO 2: name="estState" corrigido para name="estName" -->
-          <!-- CORREÇÃO 5: class="cold-span-2" corrigido para class="col-span-2" -->
-          <div class="field col-span-2">
-            <label>Nome da Empresa *</label>
-            <input type="text" name="estName" placeholder="Minha Empresa" required>
-          </div>
-
-          <div class="field">
-            <label>Estado</label>
-            <select name="estState" id="estStateSelect" onchange="loadCities(this.value)">
-              <option value="">Selecione ...</option>
-              <option value="AC">Acre</option>
-              <option value="AL">Alagoas</option>
-              <option value="AP">Amapá</option>
-              <option value="AM">Amazonas</option>
-              <option value="BA">Bahia</option>
-              <option value="CE">Ceará</option>
-              <option value="DF">Distrito Federal</option>
-              <option value="ES">Espírito Santo</option>
-              <option value="GO">Goiás</option>
-              <option value="MA">Maranhão</option>
-              <option value="MT">Mato Grosso</option>
-              <option value="MS">Mato Grosso do Sul</option>
-              <option value="MG">Minas Gerais</option>
-              <option value="PA">Pará</option>
-              <option value="PB">Paraíba</option>
-              <option value="PR">Paraná</option>
-              <option value="PE">Pernambuco</option>
-              <option value="PI">Piauí</option>
-              <option value="RJ">Rio de Janeiro</option>
-              <option value="RN">Rio Grande do Norte</option>
-              <option value="RS">Rio Grande do Sul</option>
-              <option value="RO">Rondônia</option>
-              <option value="RR">Roraima</option>
-              <option value="SC">Santa Catarina</option>
-              <option value="SP">São Paulo</option>
-              <option value="SE">Sergipe</option>
-              <option value="TO">Tocantins</option>
-            </select>
+          <div id="servicesContainer"></div>
+          <button type="button" class="btn-add" onclick="addService()">
+            + Adicionar serviço
+          </button>
+          <div>
+            <div class="field">
+              <label>Observações (opcional)</label>
+              <textarea
+                name="observations"
+                placeholder="Algum detalhe adicional sobre o serviço ou pagamento..."
+              ></textarea>
+            </div>
           </div>
         </div>
 
-        <div class="grid-3">
+        <input
+          type="hidden"
+          name="accentColorHex"
+          id="accentColorHex"
+          value="#6CACFB"
+        />
+        <input type="hidden" name="footerStyle" value="minimal" />
 
-          <!-- CORREÇÃO 3: atributo "disable" corrigido para "disabled" -->
-          <div class="field">
-            <label>Cidade</label>
-            <select name="estCity" id="estCitySelect" disabled>
-              <option value="">Selecione o estado primeiro</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>Bairro</label>
-            <input type="text" name="estNeighborhood" id="estNeighborhood" placeholder="Centro">
-          </div>
-
-          <div class="field">
-            <label>
-              <span class="cep-label-row">
-                CEP
-                <span id="cepSpinner">⏳ buscando...</span>
-                <span id="cepSuccess">✓ endereço preenchido!</span>
-              </span>
-            </label>
-
-            <input type="text" name="estCep" id="estCep" placeholder="00000-000" maxlength="9" oninput="formatCep(this)"
-              onblur="fetchCep(this.value)">
-          </div>
-
-          <div class="field col-span-2">
-            <label>Rua/Logradouro</label>
-            <input type="text" name="estStreet" id="estStreet" placeholder="Rua das Flores">
-          </div>
-
-          <div class="field">
-            <label>Número</label>
-            <input type="text" name="estNumber" placeholder="100">
-          </div>
+        <!-- finalizar -->
+        <div class="warn-box">
+          <p>
+            <strong>⚠️ Antes de gerar:</strong> revise todos os dados com
+            atenção. O recibo gerado pode ser impresso ou salvo como PDF
+            diretamente pelo navegador.
+          </p>
         </div>
-      </div>
-
-
-      <!-- servico -->
-      <div class="card">
-        <!-- CORREÇÃO 4: </span> extra removido -->
-        <div class="section-title"><span class="icon">🔧</span> Serviços/Produtos</div>
-        <div id="servicesContainer"></div>
-        <button type="button" class="btn-add" onclick="addService()">+ Adicionar serviço</button>
-        <div>
-          <div class="field">
-            <label>Observações (opcional)</label>
-            <textarea name="observations"
-              placeholder="Algum detalhe adicional sobre o serviço ou pagamento..."></textarea>
-          </div>
+        <div class="check-row">
+          <input type="checkbox" id="privacy" required />
+          <label for="privacy"
+            >Li e concordo com a <a href="#">Política de Privacidade</a></label
+          >
         </div>
+        <button type="submit" class="btn-submit">Gerar Recibo Agora</button>
+      </form>
+
+      <footer>© 2026 Nilton F. O. Júnior</footer>
+
+      <script src="/src/js/script.js" defer></script>
+    </main>
+
+    <!-- Modal de preview/impressão -->
+    <div id="printContainer">
+      <div class="receipt-wrapper">
+        <div id="receiptContent"></div>
       </div>
-
-      <input type="hidden" name="accentColorHex" id="accentColorHex" value="#6CACFB">
-      <input type="hidden" name="footerStyle" value="minimal">
-
-      <!-- finalizar -->
-      <div class="warn-box">
-        <p><strong>⚠️ Antes de gerar:</strong> revise todos os dados com atenção. O recibo gerado pode ser impresso ou
-          salvo como PDF diretamente pelo navegador.</p>
+      <div class="print-actions">
+        <button class="btn-close-preview" onclick="closePreview()">
+          ✕ Fechar
+        </button>
+        <button class="btn-print-preview" onclick="window.print()">
+          🖨️ Imprimir / Salvar PDF
+        </button>
       </div>
-      <div class="check-row">
-        <input type="checkbox" id="privacy" required>
-        <label for="privacy">Li e concordo com a <a href="#">Política de Privacidade</a></label>
-      </div>
-      <button type="submit" class="btn-submit">Gerar Recibo Agora</button>
-    </form>
-
-    <footer>© 2026 Nilton F. O. Júnior</footer>
-
-    <script src="/src/js/script.js" defer></script>
-
-  </main>
-
-  <!-- Modal de preview/impressão -->
-  <div id="printContainer">
-    <div class="receipt-wrapper">
-      <div id="receiptContent"></div>
     </div>
-    <div class="print-actions">
-      <button class="btn-close-preview" onclick="closePreview()">✕ Fechar</button>
-      <button class="btn-print-preview" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
-    </div>
-  </div>
-
-</body>
-
+  </body>
 </html>
