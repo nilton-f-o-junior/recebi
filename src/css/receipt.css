@@ -1,15 +1,11 @@
-/* =========================================
-   RECEIPT — Estilos do recibo gerado por JS
-   ========================================= */
-
-/* --- Wrapper principal --- */
+/* wrapper principal */
 .receipt-wrapper {
     font-family: 'DM Sans', sans-serif;
     background: white;
     padding: 0;
 }
 
-/* --- Cabeçalho azul --- */
+/* cabeçalho azul */
 .receipt-header {
     background: #6CACFB;
     padding: 28px 36px;
@@ -79,12 +75,12 @@
     font-size: 11px;
 }
 
-/* --- Corpo --- */
+/* Corpo */
 .receipt-body {
     padding: 32px 36px;
 }
 
-/* --- Cards Cliente / Beneficiário --- */
+/* cards Cliente / beneficiário */
 .receipt-parties {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -121,7 +117,7 @@
     margin-top: 2px;
 }
 
-/* --- Card Veículo --- */
+/* card veículo */
 .receipt-vehicle-card {
     background: #EFF6FF;
     border: 1px solid #BFDBFE;
@@ -146,7 +142,7 @@
     color: #374151;
 }
 
-/* --- Tabela de serviços --- */
+/* tabela de serviços */
 .receipt-table {
     width: 100%;
     border-collapse: collapse;
@@ -175,7 +171,7 @@
 
 .receipt-table-cell--right { text-align: right; }
 
-/* --- Total --- */
+/* total */
 .receipt-total-wrapper {
     display: flex;
     justify-content: flex-end;
@@ -204,7 +200,7 @@
     letter-spacing: -0.02em;
 }
 
-/* --- Observações --- */
+/* observações */
 .receipt-observations {
     margin-top: 24px;
     padding: 14px 16px;
@@ -231,7 +227,7 @@
     white-space: pre-wrap;
 }
 
-/* --- Rodapé minimal --- */
+/* rodapé minimal */
 .receipt-footer-minimal {
     text-align: center;
     font-size: 11px;
@@ -239,7 +235,7 @@
     margin-top: 32px;
 }
 
-/* --- Rodapé com assinaturas --- */
+/* rodapé com assinaturas */
 .receipt-footer-signatures {
     display: grid;
     grid-template-columns: 1fr 1fr;
