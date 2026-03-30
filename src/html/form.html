@@ -30,7 +30,10 @@
         <!-- Informações do Recibo -->
         <div class="card">
           <div class="section-title">
-            <span class="icon"><img src="/src/assets/images/icon-file.svg" alt="" /></span> Informações do Recibo
+            <span class="icon"
+              ><img src="/src/assets/images/icon-file.svg" alt=""
+            /></span>
+            Informações do Recibo
           </div>
           <div class="grid-2">
             <div class="field">
@@ -58,7 +61,8 @@
                   id="tabUpload"
                   onclick="switchLogoTab('upload')"
                 >
-                  <img src="/src/assets/images/icon-folder.svg" alt="" /> Enviar do computador
+                  <img src="/src/assets/images/icon-folder.svg" alt="" /> Enviar
+                  do computador
                 </button>
                 <button
                   type="button"
@@ -66,7 +70,8 @@
                   id="tabUrl"
                   onclick="switchLogoTab('url')"
                 >
-                  <img src="/src/assets/images/icon-url.svg" alt="" /> Inserir link (URL)
+                  <img src="/src/assets/images/icon-url.svg" alt="" /> Inserir
+                  link (URL)
                 </button>
               </div>
 
@@ -80,7 +85,9 @@
                     onchange="handleLogoFile(this)"
                   />
                   <div class="logo-placeholder" id="logoPlaceholder">
-                    <div class="up-icon"><img src="/src/assets/images/icon-picture.svg" alt="" /></div>
+                    <div class="up-icon">
+                      <img src="/src/assets/images/icon-picture.svg" alt="" />
+                    </div>
                     <p>Clique aqui ou arraste a imagem</p>
                     <span>PNG, JPG, SVG, WEBP — até 2 MB</span>
                   </div>
@@ -116,7 +123,10 @@
         <div class="grid-cards">
           <div class="card">
             <div class="section-title">
-              <span class="icon"><img src="/src/assets/images/icon-client.svg" alt="" /></span> Cliente
+              <span class="icon"
+                ><img src="/src/assets/images/icon-client.svg" alt=""
+              /></span>
+              Cliente
             </div>
             <div class="section-card">
               <div class="field">
@@ -160,7 +170,10 @@
 
           <div class="card">
             <div class="section-title">
-              <span class="icon"><img src="/src/assets/images/icon-building.svg" alt="" /></span> Beneficiário
+              <span class="icon"
+                ><img src="/src/assets/images/icon-building.svg" alt=""
+              /></span>
+              Beneficiário
             </div>
             <div class="section-card">
               <div class="field">
@@ -206,7 +219,10 @@
         <!-- veículo -->
         <div class="card">
           <div class="section-title">
-            <span class="icon"><img src="/src/assets/images/icon-car.svg" alt="" /></span> Dados do Veículo
+            <span class="icon"
+              ><img src="/src/assets/images/icon-car.svg" alt=""
+            /></span>
+            Dados do Veículo
           </div>
           <div class="grid-3">
             <div class="field">
@@ -240,7 +256,10 @@
         <!-- estabelecimento -->
         <div class="card">
           <div class="section-title">
-            <span class="icon"><img src="/src/assets/images/icon-map.svg" alt="" /></span> Dados do Estabelecimento
+            <span class="icon"
+              ><img src="/src/assets/images/icon-map.svg" alt=""
+            /></span>
+            Dados do Estabelecimento
           </div>
           <div class="grid-3">
             <div class="field col-span-2">
@@ -350,7 +369,10 @@
         <!-- servico -->
         <div class="card">
           <div class="section-title">
-            <span class="icon"><img src="/src/assets/images/icon-screwdriver.svg" alt="" /></span> Serviços/Produtos
+            <span class="icon"
+              ><img src="/src/assets/images/icon-screwdriver.svg" alt=""
+            /></span>
+            Serviços/Produtos
           </div>
           <div id="servicesContainer"></div>
           <button type="button" class="btn-add" onclick="addService()">
@@ -378,15 +400,24 @@
         <!-- finalizar -->
         <div class="warn-box">
           <p>
-            <strong><img src="/src/assets/images/icon-exclamation.svg" alt="Atenção" /> Antes de gerar:</strong> revise todos os dados com
-            atenção. O recibo gerado pode ser impresso ou salvo como PDF
-            diretamente pelo navegador.
+            <strong
+              ><img
+                src="/src/assets/images/icon-exclamation.svg"
+                alt="Atenção"
+              />
+              Antes de gerar:</strong
+            >
+            revise todos os dados com atenção. O recibo gerado pode ser impresso
+            ou salvo como PDF diretamente pelo navegador.
           </p>
         </div>
         <div class="check-row">
           <input type="checkbox" id="privacy" required />
           <label for="privacy"
-            >Li e concordo com a <a href="/src/html/politica-privacidade.html">Política de Privacidade</a></label
+            >Li e concordo com a
+            <a href="/src/html/politica-privacidade.html"
+              >Política de Privacidade</a
+            ></label
           >
         </div>
         <button type="submit" class="btn-submit">Gerar Recibo Agora</button>
@@ -406,7 +437,7 @@
         <button class="btn-close-preview" onclick="closePreview()">
           ✕ Fechar
         </button>
-        <button class="btn-print-preview" onclick="window.print()">
+        <button class="btn-print-preview" onclick="printReceipt()">
           🖨️ Imprimir / Salvar PDF
         </button>
       </div>

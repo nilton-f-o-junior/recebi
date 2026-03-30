@@ -272,3 +272,164 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
+
+
+/* ============================================================
+   REGRAS DE IMPRESSÃO
+   Garante que o PDF/impressão fique idêntico ao preview
+   ============================================================ */
+@media print {
+
+    /* Remove margens e padding da página */
+    @page {
+        margin: 0;
+        size: A4;
+    }
+
+    /* Esconde tudo que não é o recibo */
+    body > *:not(#printContainer) {
+        display: none !important;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background: white;
+        overflow: visible !important;
+    }
+
+    /* Faz o container de impressão ocupar tudo */
+    #printContainer {
+        display: block !important;
+        position: static !important;
+        inset: auto !important;
+        background: white !important;
+        overflow: visible !important;
+        width: 100%;
+        height: auto;
+    }
+
+    /* Esconde os botões de ação dentro do modal */
+    .print-actions {
+        display: none !important;
+    }
+
+    /* Garante que o wrapper do recibo ocupe a página toda */
+    .receipt-wrapper {
+        width: 100%;
+        max-width: 100%;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+    }
+
+    /* ---- Força cores de fundo (desativadas por padrão em impressão) ---- */
+
+    /* Cabeçalho azul */
+    .receipt-header {
+        background: #6CACFB !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        color-adjust: exact;
+    }
+
+    /* Box do total azul */
+    .receipt-total-box {
+        background: #6CACFB !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        color-adjust: exact;
+    }
+
+    /* Card de veículo azul claro */
+    .receipt-vehicle-card {
+        background: #EFF6FF !important;
+        border: 1px solid #BFDBFE !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        color-adjust: exact;
+    }
+
+    /* Cards de cliente/beneficiário */
+    .receipt-party-card {
+        background: #F9FAFB !important;
+        border: 1px solid #F3F4F6 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        color-adjust: exact;
+    }
+
+    /* Box de observações amarelo */
+    .receipt-observations {
+        background: #FFFBEB !important;
+        border: 1px solid #FCD34D !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        color-adjust: exact;
+    }
+
+    /* ---- Cores de texto ---- */
+    .receipt-est-name,
+    .receipt-date-value,
+    .receipt-total-value {
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .receipt-type,
+    .receipt-est-address,
+    .receipt-date-label,
+    .receipt-city {
+        color: rgba(255, 255, 255, 0.75) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .receipt-total-label {
+        color: rgba(255, 255, 255, 0.8) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .receipt-vehicle-label {
+        color: #6CACFB !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .receipt-observations-label {
+        color: #92400E !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .receipt-observations-text {
+        color: #78350F !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* ---- Bordas das tabelas ---- */
+    .receipt-table-header {
+        border-bottom: 2px solid #E5E7EB !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .receipt-table-cell {
+        border-bottom: 1px solid #F3F4F6 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Evita quebra de página dentro dos blocos principais */
+    .receipt-header,
+    .receipt-party-card,
+    .receipt-vehicle-card,
+    .receipt-total-box,
+    .receipt-observations,
+    .receipt-signature-block {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}
