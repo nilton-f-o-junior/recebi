@@ -7,4 +7,4 @@
 [x] Adionar ao Readme (Acesse: https://recebi-ten.vercel.app)
 [x] Melhorar o layout dos Serviços/Produtos (Mobile)
 [x] Atualizar o nome do arquivo PDF (BAIXADO > data-Nomedocliente-Modelo Veiculo)
-[] Atualizar o modelo do PDF
+[x] Atualizar o modelo do PDF

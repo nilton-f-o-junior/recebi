@@ -346,9 +346,31 @@ document.getElementById("receiptForm").onsubmit = function (e) {
   const stateValue =
     stateSelect.options[stateSelect.selectedIndex]?.value || "";
 
+  // Monta endereço do estabelecimento
+  const estAddress = [
+    data.estStreet,
+    data.estNumber,
+    data.estNeighborhood,
+    data.estCity,
+    stateValue
+  ].filter(Boolean).join(", ");
+
   const footerHtml =
     data.footerStyle === "minimal"
-      ? `<p class="receipt-footer-minimal">Documento emitido em ${now}</p>`
+      ? `
+        <div class="receipt-footer-signature-email">
+          <div class="receipt-footer-sig-inner">
+            ${resolvedLogo ? `<img src="${resolvedLogo}" alt="Logo" class="receipt-footer-sig-logo" onerror="this.style.display='none'">` : ""}
+            ${resolvedLogo ? `<div class="receipt-footer-sig-divider"></div>` : ""}
+            <div class="receipt-footer-sig-info">
+              <p class="receipt-footer-sig-name">${data.estName}</p>
+              ${data.providerDoc ? `<p class="receipt-footer-sig-detail"><span>CPF/CNPJ:</span> ${data.providerDoc}</p>` : ""}
+              ${data.providerPhone ? `<p class="receipt-footer-sig-detail"><span>Telefone:</span> ${data.providerPhone}</p>` : ""}
+              ${estAddress ? `<p class="receipt-footer-sig-detail"><span>Localizado:</span> ${estAddress}</p>` : ""}
+            </div>
+          </div>
+          <p class="receipt-footer-timestamp">Documento emitido em ${now}</p>
+        </div>`
       : `
             <div class="receipt-footer-signatures">
                 <div class="receipt-signature-block">
@@ -370,7 +392,6 @@ document.getElementById("receiptForm").onsubmit = function (e) {
         <div class="receipt-wrapper">
             <div class="receipt-header">
                 <div class="receipt-header-left">
-                    ${resolvedLogo ? `<img src="${resolvedLogo}" alt="Logo" class="receipt-logo" onerror="this.style.display='none'">` : ""}
                     <div>
                         <p class="receipt-type">${data.receiptType}</p>
                         <h1 class="receipt-est-name">${data.estName}</h1>
