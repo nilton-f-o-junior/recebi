@@ -23,6 +23,8 @@ O **Recebi** é uma ferramenta simples e direta para quem trabalha com estética
 - 🖼️ Inserir sua logo para dar identidade visual ao documento;
 - 📄 Nomear o documento como quiser: recibo, orçamento, ordem de serviço, comprovante de pagamento e muito mais.
 
+Acesse: https://recebi-ten.vercel.app
+
 ## 🎯 Características
 
 - **Totalmente Personalizável**: Defina o nome do documento, dados do beneficiário, cliente, serviços e valores;
