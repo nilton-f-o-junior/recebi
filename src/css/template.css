@@ -419,6 +419,26 @@ input.field-valid {
   border-bottom: none;
 }
 
+@media (max-width: 640px) {
+  .service-row {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+  }
+
+  .service-row .field:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .service-row .field:nth-child(2) {
+    grid-column: 1;
+  }
+
+  .service-row .btn-remove {
+    grid-column: 2;
+    align-self: end;
+  }
+}
+
 @keyframes slideIn {
   from { opacity: 0; transform: translateY(-6px); }
   to   { opacity: 1; transform: translateY(0); }
