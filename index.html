@@ -1,43 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
-      rel="stylesheet"
-    />
+        <!-- SEO -->
+        <title>Recebi — Gerador de Recibos Online Grátis</title>
+        <meta
+            name="description"
+            content="Crie recibos, orçamentos e ordens de serviço personalizados em segundos. Sem cadastro. Totalmente grátis."
+        />
+        <link rel="canonical" href="https://recebi.com.br/" />
 
-    <link rel="stylesheet" href="src/css/main.css" />
-    <link rel="stylesheet" href="src/css/home.css" />
+        <!-- Open Graph / WhatsApp / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://recebi.com.br/" />
+        <meta
+            property="og:title"
+            content="Recebi — Gere seu recibo agora, grátis e sem cadastro"
+        />
+        <meta
+            property="og:description"
+            content="Crie recibos, orçamentos e ordens de serviço em segundos. Sem cadastro. 100% grátis."
+        />
+        <meta property="og:image" content="/assets/og/recebi-og.jpg" />
 
-    <title>recebi - Gerador de Recibo Online</title>
-  </head>
-  <body>
-    <header>
-      <a href="https://github.com/nilton-f-o-junior/recebi" target="_blank"
-        ><img src="src/assets/images/icon-git.svg" alt="Icon Git"
-      /></a>
-    </header>
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+            name="twitter:title"
+            content="Recebi — Gerador de Recibos Online Grátis"
+        />
+        <meta
+            name="twitter:description"
+            content="Crie recibos, orçamentos e ordens de serviço em segundos. Sem cadastro. 100% grátis."
+        />
+        <meta name="twitter:image" content="/assets/og/recebi-og.jpg" />
 
-    <main>
-      <img src="src/assets/images/img-home.svg" alt="" />
-      <p>
-        Crie recibos profissionais para sua Estética ou Lava Jato — 100% grátis
-        e sem cadastro.
-      </p>
-      <a href="/src/html/form.html"><button>Gerar Recibo</button></a>
-    </main>
+        <!-- PWA -->
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#3D95C5" />
 
-    <footer role="contentinfo">
-      <p>
-        <small
-          >&copy; 2026 Nilton F. O. Júnior. Todos os direitos reservados.</small
-        >
-      </p>
-    </footer>
-  </body>
+        <!-- JSON-LD -->
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "WebApplication",
+                "name": "Recebi",
+                "url": "https://recebi.com.br",
+                "description": "Gerador de recibos, orçamentos e ordens de serviço online, gratuito e sem cadastro.",
+                "applicationCategory": "FinanceApplication",
+                "operatingSystem": "Web",
+                "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "BRL"
+                }
+            }
+        </script>
+
+        <!-- Fontes com font-display: swap via subset latino -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap&font-display=swap&subset=latin"
+            rel="stylesheet"
+        />
+
+        <link rel="stylesheet" href="src/css/main.css" />
+        <link rel="stylesheet" href="src/css/home.css" />
+    </head>
+    <body>
+        <header role="banner">
+            <a
+                href="https://github.com/nilton-f-o-junior/recebi"
+                target="_blank"
+                aria-label="Ver código-fonte no GitHub"
+                ><img src="src/assets/images/icon-git.svg" alt="GitHub"
+            /></a>
+        </header>
+
+        <main role="main">
+            <img src="src/assets/images/img-home.svg" alt="" />
+            <p>
+                Crie recibos profissionais para sua Estética ou Lava Jato — 100%
+                grátis e sem cadastro.
+            </p>
+            <a href="/src/html/form.html"><button>Gerar Recibo</button></a>
+        </main>
+
+        <footer role="contentinfo">
+            <p>
+                <small
+                    >&copy; 2026 Nilton F. O. Júnior. Todos os direitos
+                    reservados.</small
+                >
+            </p>
+        </footer>
+    </body>
 </html>
