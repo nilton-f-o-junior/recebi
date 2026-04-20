@@ -26,7 +26,7 @@
         <div class="step-fill" id="stepFill"></div>
       </div>
 
-      <form id="receiptForm">
+      <form id="receiptForm" onsubmit="Form.handleFormSubmit(event)">
         <!-- Informações do Recibo -->
         <div class="card">
           <div class="section-title">
@@ -423,7 +423,23 @@
 
       <footer>© 2026 Nilton F. O. Júnior</footer>
 
-      <script src="/src/js/script.js" defer></script>
+      <!-- Módulos JavaScript (SDD §2.2 - Arquitetura Modular) -->
+      <script src="/src/js/utils.js" defer></script>
+      <script src="/src/js/masks.js" defer></script>
+      <script src="/src/js/validator.js" defer></script>
+      <script src="/src/js/location.js" defer></script>
+      <script src="/src/js/logo.js" defer></script>
+      <script src="/src/js/services.js" defer></script>
+      <script src="/src/js/receipt-builder.js" defer></script>
+      <script src="/src/js/form.js" defer></script>
+
+      <!-- Inicialização -->
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          Form.initForm();
+          Form.initValidation();
+        });
+      </script>
     </main>
 
     <!-- Modal de preview/impressão -->
@@ -432,13 +448,16 @@
         <div id="receiptContent"></div>
       </div>
       <div class="print-actions">
-        <button class="btn-close-preview" onclick="closePreview()">
+        <button class="btn-close-preview" onclick="Form.closePreview()">
           ✕ Fechar
         </button>
-        <button class="btn-print-preview" onclick="printReceipt()">
+        <button class="btn-print-preview" onclick="Form.printReceipt()">
           🖨️ Imprimir / Salvar PDF
         </button>
       </div>
     </div>
+
+    <!-- Acessibilidade: região para announcements -->
+    <div id="a11yLive" aria-live="polite" class="sr-only"></div>
   </body>
 </html>
