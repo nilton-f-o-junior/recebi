@@ -1,13 +1,13 @@
 /* wrapper principal */
 .receipt-wrapper {
-    font-family: 'DM Sans', sans-serif;
+    font-family: "DM Sans", sans-serif;
     background: white;
     padding: 0;
 }
 
 /* cabeçalho azul */
 .receipt-header {
-    background: #6CACFB;
+    background: #6cacfb;
     padding: 28px 36px;
     display: flex;
     justify-content: space-between;
@@ -89,8 +89,8 @@
 }
 
 .receipt-party-card {
-    background: #F9FAFB;
-    border: 1px solid #F3F4F6;
+    background: #f9fafb;
+    border: 1px solid #f3f4f6;
     border-radius: 10px;
     padding: 16px;
 }
@@ -98,7 +98,7 @@
 .receipt-section-label {
     font-size: 10px;
     font-weight: 700;
-    color: #6B7280;
+    color: #6b7280;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 10px;
@@ -113,14 +113,14 @@
 
 .receipt-party-detail {
     font-size: 13px;
-    color: #6B7280;
+    color: #6b7280;
     margin-top: 2px;
 }
 
 /* card veículo */
 .receipt-vehicle-card {
-    background: #EFF6FF;
-    border: 1px solid #BFDBFE;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
     border-radius: 10px;
     padding: 14px 16px;
     margin-bottom: 24px;
@@ -129,7 +129,7 @@
 .receipt-vehicle-label {
     font-size: 10px;
     font-weight: 700;
-    color: #6CACFB;
+    color: #6cacfb;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 8px;
@@ -152,24 +152,30 @@
 .receipt-table-header {
     font-size: 10px;
     font-weight: 700;
-    color: #6B7280;
+    color: #6b7280;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     padding-bottom: 10px;
-    border-bottom: 2px solid #E5E7EB;
+    border-bottom: 2px solid #e5e7eb;
 }
 
-.receipt-table-header--left  { text-align: left; }
-.receipt-table-header--right { text-align: right; }
+.receipt-table-header--left {
+    text-align: left;
+}
+.receipt-table-header--right {
+    text-align: right;
+}
 
 .receipt-table-cell {
     padding: 10px 0;
     font-size: 14px;
     color: #374151;
-    border-bottom: 1px solid #F3F4F6;
+    border-bottom: 1px solid #f3f4f6;
 }
 
-.receipt-table-cell--right { text-align: right; }
+.receipt-table-cell--right {
+    text-align: right;
+}
 
 /* total */
 .receipt-total-wrapper {
@@ -179,7 +185,7 @@
 }
 
 .receipt-total-box {
-    background: #6CACFB;
+    background: #6cacfb;
     border-radius: 10px;
     padding: 14px 24px;
     text-align: right;
@@ -204,15 +210,15 @@
 .receipt-observations {
     margin-top: 24px;
     padding: 14px 16px;
-    background: #FFFBEB;
-    border: 1px solid #FCD34D;
+    background: #fffbeb;
+    border: 1px solid #fcd34d;
     border-radius: 8px;
 }
 
 .receipt-observations-label {
     font-size: 10px;
     font-weight: 700;
-    color: #92400E;
+    color: #92400e;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 6px;
@@ -220,7 +226,7 @@
 
 .receipt-observations-text {
     font-size: 13px;
-    color: #78350F;
+    color: #78350f;
     line-height: 1.5;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -231,7 +237,7 @@
 .receipt-footer-minimal {
     text-align: center;
     font-size: 11px;
-    color: #9CA3AF;
+    color: #9ca3af;
     margin-top: 32px;
 }
 
@@ -260,25 +266,24 @@
 
 .receipt-signature-role {
     font-size: 11px;
-    color: #9CA3AF;
+    color: #9ca3af;
     margin-top: 2px;
 }
 
 .receipt-footer-timestamp {
     text-align: center;
     font-size: 10px;
-    color: #D1D5DB;
+    color: #d1d5db;
     margin-top: 28px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 
-
 /* rodapé estilo assinatura de email */
 .receipt-footer-signature-email {
     margin-top: 32px;
     padding-top: 20px;
-    border-top: 1px solid #E5E7EB;
+    border-top: 1px solid #e5e7eb;
     text-align: center;
 }
 
@@ -299,7 +304,7 @@
 .receipt-footer-sig-divider {
     width: 1.5px;
     height: 52px;
-    background: #D1D5DB;
+    background: #d1d5db;
     flex-shrink: 0;
 }
 
@@ -316,7 +321,7 @@
 
 .receipt-footer-sig-detail {
     font-size: 12px;
-    color: #6B7280;
+    color: #6b7280;
     margin-top: 2px;
 }
 
@@ -328,7 +333,7 @@
 .receipt-footer-timestamp {
     text-align: center;
     font-size: 10px;
-    color: #D1D5DB;
+    color: #d1d5db;
     margin-top: 14px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -339,7 +344,6 @@
    Garante que o PDF/impressão fique idêntico ao preview
    ============================================================ */
 @media print {
-
     /* Remove margens e padding da página */
     @page {
         margin: 0;
@@ -386,7 +390,7 @@
 
     /* Cabeçalho azul */
     .receipt-header {
-        background: #6CACFB !important;
+        background: #6cacfb !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         color-adjust: exact;
@@ -394,7 +398,7 @@
 
     /* Box do total azul */
     .receipt-total-box {
-        background: #6CACFB !important;
+        background: #6cacfb !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         color-adjust: exact;
@@ -402,8 +406,8 @@
 
     /* Card de veículo azul claro */
     .receipt-vehicle-card {
-        background: #EFF6FF !important;
-        border: 1px solid #BFDBFE !important;
+        background: #eff6ff !important;
+        border: 1px solid #bfdbfe !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         color-adjust: exact;
@@ -411,8 +415,8 @@
 
     /* Cards de cliente/beneficiário */
     .receipt-party-card {
-        background: #F9FAFB !important;
-        border: 1px solid #F3F4F6 !important;
+        background: #f9fafb !important;
+        border: 1px solid #f3f4f6 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         color-adjust: exact;
@@ -420,8 +424,8 @@
 
     /* Box de observações amarelo */
     .receipt-observations {
-        background: #FFFBEB !important;
-        border: 1px solid #FCD34D !important;
+        background: #fffbeb !important;
+        border: 1px solid #fcd34d !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         color-adjust: exact;
@@ -452,32 +456,32 @@
     }
 
     .receipt-vehicle-label {
-        color: #6CACFB !important;
+        color: #6cacfb !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
 
     .receipt-observations-label {
-        color: #92400E !important;
+        color: #92400e !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
 
     .receipt-observations-text {
-        color: #78350F !important;
+        color: #78350f !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
 
     /* ---- Bordas das tabelas ---- */
     .receipt-table-header {
-        border-bottom: 2px solid #E5E7EB !important;
+        border-bottom: 2px solid #e5e7eb !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
 
     .receipt-table-cell {
-        border-bottom: 1px solid #F3F4F6 !important;
+        border-bottom: 1px solid #f3f4f6 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
@@ -502,13 +506,13 @@
     }
 
     .receipt-footer-sig-detail {
-        color: #6B7280 !important;
+        color: #6b7280 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
 
     .receipt-footer-sig-divider {
-        background: #D1D5DB !important;
+        background: #d1d5db !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
