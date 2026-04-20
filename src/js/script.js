@@ -26,6 +26,21 @@ function switchLogoTab(mode) {
     mode === "url" ? "block" : "none";
 }
 
+function sanitizeSvgDataUrl(dataUrl) {
+  if (!dataUrl.startsWith("data:image/svg")) return dataUrl;
+  try {
+    const base64 = dataUrl.split(",")[1];
+    let svg = atob(base64);
+    // Remove tags e atributos perigosos — SDD §8
+    svg = svg.replace(/<script[\s\S]*?<\/script>/gi, "");
+    svg = svg.replace(/\son\w+="[^"]*"/gi, "");
+    svg = svg.replace(/href\s*=\s*["']javascript:[^"']*["']/gi, "");
+    return "data:image/svg+xml;base64," + btoa(svg);
+  } catch {
+    return dataUrl;
+  }
+}
+
 function applyLogoFile(file) {
   if (!file) return;
   if (!file.type.startsWith("image/")) {
@@ -38,7 +53,7 @@ function applyLogoFile(file) {
   }
   const reader = new FileReader();
   reader.onload = function (e) {
-    logoDataUrl = e.target.result;
+    logoDataUrl = sanitizeSvgDataUrl(e.target.result);
     document.getElementById("logoPreviewImg").src = logoDataUrl;
     document.getElementById("logoPlaceholder").style.display = "none";
     document.getElementById("logoPreviewArea").style.display = "block";
@@ -190,6 +205,10 @@ function formatCep(input) {
   input.value = v;
 }
 
+function maskYear(input) {
+  input.value = input.value.replace(/\D/g, "").slice(0, 4);
+}
+
 function maskPlate(input) {
   let v = input.value
     .toUpperCase()
@@ -202,6 +221,12 @@ function maskPlate(input) {
 // --- VALIDAÇÃO ---
 function validateDoc(input, errId) {
   const n = input.value.replace(/\D/g, "");
+  if (!n) {
+    // campo vazio é aceitável — CPF/CNPJ é opcional
+    input.classList.remove("field-invalid");
+    document.getElementById(errId)?.classList.remove("visible");
+    return;
+  }
   const ok =
     n.length === 11
       ? validateCpf(n)
@@ -209,7 +234,7 @@ function validateDoc(input, errId) {
         ? validateCnpj(n)
         : false;
   input.classList.toggle("field-invalid", !ok);
-  document.getElementById(errId).classList.toggle("visible", !ok);
+  document.getElementById(errId)?.classList.toggle("visible", !ok);
 }
 
 function validateCpf(n) {
@@ -241,7 +266,38 @@ function validateCnpj(n) {
   return calc(n, 12) === +n[12] && calc(n, 13) === +n[13];
 }
 
-// --- UI/UX ---
+// --- VALIDAÇÃO EM TEMPO REAL (on-blur / on-input) — SDD §3.1/3.11 ---
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("receiptForm").addEventListener(
+    "blur",
+    (e) => {
+      const el = e.target;
+      if (
+        !el.hasAttribute("required") &&
+        el.type !== "text" &&
+        el.type !== "tel"
+      )
+        return;
+      if (el.value.trim()) {
+        el.classList.remove("field-invalid");
+        const errEl = document.getElementById(el.id + "Err");
+        if (errEl) errEl.classList.remove("visible");
+      }
+    },
+    true,
+  );
+
+  document.getElementById("receiptForm").addEventListener("input", (e) => {
+    const el = e.target;
+    if (el.value.trim()) {
+      el.classList.remove("field-invalid");
+      const errEl = document.getElementById(el.id + "Err");
+      if (errEl) errEl.classList.remove("visible");
+    }
+    updateProgress();
+  });
+});
+
 function addService(first = false) {
   const container = document.getElementById("servicesContainer");
   const div = document.createElement("div");
@@ -306,17 +362,107 @@ function printReceipt() {
 document.getElementById("receiptForm").onsubmit = function (e) {
   e.preventDefault();
 
-  const clientDocEl = document.getElementById("clientDoc");
-  const providerDocEl = document.getElementById("providerDoc");
-  validateDoc(clientDocEl, "clientDocErr");
-  validateDoc(providerDocEl, "providerDocErr");
-  if (
-    clientDocEl.classList.contains("field-invalid") ||
-    providerDocEl.classList.contains("field-invalid")
-  ) {
-    clientDocEl.scrollIntoView({ behavior: "smooth", block: "center" });
-    return;
+  // Validação de campos obrigatórios — SDD §3.11
+  let firstInvalid = null;
+
+  function markField(id, condition, errId, msg) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const errEl = errId ? document.getElementById(errId) : null;
+    if (!condition) {
+      el.classList.add("field-invalid");
+      if (errEl) {
+        errEl.textContent = msg || errEl.textContent;
+        errEl.classList.add("visible");
+      }
+      if (!firstInvalid) firstInvalid = el;
+    } else {
+      el.classList.remove("field-invalid");
+      if (errEl) errEl.classList.remove("visible");
+    }
   }
+
+  const fd0 = new FormData(this);
+  const d0 = Object.fromEntries(fd0.entries());
+
+  markField("receiptType", d0.receiptType && d0.receiptType !== "", null, "");
+  markField("issueDate", !!d0.issueDate, null, "");
+  markField(
+    "clientName",
+    d0.clientName?.trim().length >= 3,
+    "clientNameErr",
+    "Mínimo 3 caracteres",
+  );
+  markField(
+    "clientPhone",
+    /^\(\d{2}\) \d{4,5}-\d{4}$/.test(d0.clientPhone || ""),
+    "clientPhoneErr",
+    "Celular inválido",
+  );
+  markField(
+    "providerName",
+    d0.providerName?.trim().length >= 3,
+    "providerNameErr",
+    "Mínimo 3 caracteres",
+  );
+  markField(
+    "carModel",
+    d0.carModel?.trim().length >= 2,
+    "carModelErr",
+    "Mínimo 2 caracteres",
+  );
+  markField(
+    "carYear",
+    /^\d{4}$/.test(d0.carYear || "") &&
+      +d0.carYear >= 1900 &&
+      +d0.carYear <= new Date().getFullYear() + 1,
+    "carYearErr",
+    "Ano inválido",
+  );
+  markField(
+    "estName",
+    d0.estName?.trim().length > 0,
+    "estNameErr",
+    "Campo obrigatório",
+  );
+  markField("estStateSelect", !!d0.estState, null, "");
+  markField("estCitySelect", !!d0.estCity, null, "");
+  markField("estNeighborhood", d0.estNeighborhood?.trim().length > 0, null, "");
+  markField("estStreet", d0.estStreet?.trim().length > 0, null, "");
+  markField("estNumber", d0.estNumber?.trim().length > 0, null, "");
+  markField("estCep", /^\d{5}-\d{3}$/.test(d0.estCep || ""), null, "");
+
+  // Serviços: ao menos 1 item com descrição e valor — SDD §3.11
+  const names0 = fd0.getAll("serviceName[]");
+  const values0 = fd0.getAll("serviceValue[]");
+  const hasService = names0.some(
+    (n, i) => n.trim() && parseFloat(values0[i]) > 0,
+  );
+  if (!hasService && !firstInvalid) {
+    const btn = document.querySelector(".btn-add");
+    if (btn) firstInvalid = btn;
+  }
+
+  // CPF/CNPJ
+  function validateDoc(input, errId) {
+  const n = input.value.replace(/\D/g, "");
+  const errEl = document.getElementById(errId);
+
+  // Se o campo estiver vazio, ele é válido (opcional)
+  if (!n) {
+    input.classList.remove("field-invalid");
+    if (errEl) errEl.classList.remove("visible");
+    return true; 
+  }
+
+  // Se houver algo digitado, verifica se o tamanho e os dígitos estão corretos
+  const ok = n.length === 11 ? validateCpf(n) : n.length === 14 ? validateCnpj(n) : false;
+
+  input.classList.toggle("field-invalid", !ok);
+  if (errEl) errEl.classList.toggle("visible", !ok);
+  
+  return ok;
+}
 
   const fd = new FormData(this);
   const data = Object.fromEntries(fd.entries());
@@ -352,8 +498,10 @@ document.getElementById("receiptForm").onsubmit = function (e) {
     data.estNumber,
     data.estNeighborhood,
     data.estCity,
-    stateValue
-  ].filter(Boolean).join(", ");
+    stateValue,
+  ]
+    .filter(Boolean)
+    .join(", ");
 
   const footerHtml =
     data.footerStyle === "minimal"
@@ -392,6 +540,7 @@ document.getElementById("receiptForm").onsubmit = function (e) {
         <div class="receipt-wrapper">
             <div class="receipt-header">
                 <div class="receipt-header-left">
+                    ${resolvedLogo ? `<img src="${resolvedLogo}" alt="Logo da empresa" class="receipt-logo" onerror="this.style.display='none'">` : ""}
                     <div>
                         <p class="receipt-type">${data.receiptType}</p>
                         <h1 class="receipt-est-name">${data.estName}</h1>
@@ -464,4 +613,10 @@ document.getElementById("receiptForm").onsubmit = function (e) {
   document.getElementById("printContainer").classList.add("visible");
   document.body.style.overflow = "hidden";
   window.scrollTo(0, 0);
+
+  // Anuncia para leitores de tela — SDD §5.7
+  const live = document.getElementById("a11yLive");
+  if (live)
+    live.textContent =
+      "Recibo gerado com sucesso. Use os botões abaixo para imprimir ou fechar.";
 };
