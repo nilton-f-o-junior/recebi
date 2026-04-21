@@ -33,18 +33,7 @@ function printReceipt() {
   const fd = new FormData(document.getElementById("receiptForm"));
   const data = Object.fromEntries(fd.entries());
 
-  // Formata a data: "2027-01-01" → "01.01.2027"
-  const rawDate = data.issueDate || "";
-  const [y, m, d] = rawDate.split("-");
-  const dateStr = d && m && y ? `${d}.${m}.${y}` : rawDate;
-
-  const clientName = (data.clientName || "").trim();
-  const carModel = (data.carModel || "").trim();
-
-  // Monta: "01.01.2027 - Fulano de Tal - Corsa"
-  const parts = [dateStr, clientName, carModel].filter(Boolean);
-  const title = parts.join(" - ") || "Recibo";
-
+  const title = Utils.generateFileName(data);
   const original = document.title;
   document.title = title;
   window.print();
@@ -194,9 +183,23 @@ function handleFormSubmit(e) {
   // Obter logo
   const resolvedLogo = Logo.getResolvedLogo(d);
 
+  // Estado de loading no botão
+  const submitBtn = document.querySelector(".btn-submit");
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Gerando...";
+  }
+
   // Construir e exibir recibo
-  const html = ReceiptBuilder.buildReceiptHTML(d, resolvedLogo);
-  ReceiptBuilder.showReceiptPreview(html);
+  try {
+    const html = ReceiptBuilder.buildReceiptHTML(d, resolvedLogo);
+    ReceiptBuilder.showReceiptPreview(html);
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Gerar Recibo Agora";
+    }
+  }
 }
 
 /**

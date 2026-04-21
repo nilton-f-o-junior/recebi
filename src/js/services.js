@@ -45,11 +45,10 @@ function removeService(rowElement) {
 }
 
 /**
- * Atualiza o total dos serviços (placeholder para integração futura)
+ * Atualiza o total dos serviços e a barra de progresso
  */
 function updateServiceTotal() {
-  // Esta função pode ser expandida para calcular e exibir o total em tempo real
-  updateProgress();
+  Form.updateProgress();
 }
 
 /**
