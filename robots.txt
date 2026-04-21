@@ -2,7 +2,6 @@
 # Recebi - Gerador de Recibo Online
 
 User-agent: *
-Allow: /
 Allow: /src/css/
 Allow: /src/js/
 Allow: /src/assets/
@@ -12,4 +11,4 @@ Disallow: /src/
 
 Crawl-delay: 1
 
-Sitemap: https://recebi-ten.vercel.app/sitemap.xml
+Sitemap: https://recebi.com.br/sitemap.xml
