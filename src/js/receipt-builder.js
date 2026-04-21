@@ -10,14 +10,12 @@
  * @returns {string} HTML do recibo
  */
 function buildReceiptHTML(data, resolvedLogo) {
-  const names = [];
-  const values = [];
-  const formData = new FormData();
+  // Alias local para escapeHtml — previne XSS em todos os dados do usuário
+  const e = Utils.escapeHtml;
 
   // Coletar dados do formulário diretamente
   const form = document.getElementById("receiptForm");
   const fd = new FormData(form);
-  const formEntries = Object.fromEntries(fd.entries());
 
   const serviceNames = fd.getAll("serviceName[]");
   const serviceValues = fd.getAll("serviceValue[]");
@@ -30,7 +28,7 @@ function buildReceiptHTML(data, resolvedLogo) {
     total += val;
     servicesRows += `
             <tr>
-                <td class="receipt-table-cell">${name}</td>
+                <td class="receipt-table-cell">${e(name)}</td>
                 <td class="receipt-table-cell receipt-table-cell--right">R$ ${val.toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                 })}</td>
@@ -67,10 +65,10 @@ function buildReceiptHTML(data, resolvedLogo) {
             ${resolvedLogo ? `<img src="${resolvedLogo}" alt="Logo" class="receipt-footer-sig-logo" onerror="this.style.display='none'">` : ""}
             ${resolvedLogo ? `<div class="receipt-footer-sig-divider"></div>` : ""}
             <div class="receipt-footer-sig-info">
-              <p class="receipt-footer-sig-name">${data.estName}</p>
-              ${data.providerDoc ? `<p class="receipt-footer-sig-detail"><span>CPF/CNPJ:</span> ${data.providerDoc}</p>` : ""}
-              ${data.providerPhone ? `<p class="receipt-footer-sig-detail"><span>Telefone:</span> ${data.providerPhone}</p>` : ""}
-              ${estAddress ? `<p class="receipt-footer-sig-detail"><span>Localizado:</span> ${estAddress}</p>` : ""}
+              <p class="receipt-footer-sig-name">${e(data.estName)}</p>
+              ${data.providerDoc ? `<p class="receipt-footer-sig-detail"><span>CPF/CNPJ:</span> ${e(data.providerDoc)}</p>` : ""}
+              ${data.providerPhone ? `<p class="receipt-footer-sig-detail"><span>Telefone:</span> ${e(data.providerPhone)}</p>` : ""}
+              ${estAddress ? `<p class="receipt-footer-sig-detail"><span>Localizado:</span> ${e(estAddress)}</p>` : ""}
             </div>
           </div>
           <p class="receipt-footer-timestamp">Documento emitido em ${now}</p>
@@ -79,13 +77,13 @@ function buildReceiptHTML(data, resolvedLogo) {
             <div class="receipt-footer-signatures">
                 <div class="receipt-signature-block">
                     <div class="receipt-signature-line">
-                        <p class="receipt-signature-name">${data.providerName}</p>
+                        <p class="receipt-signature-name">${e(data.providerName)}</p>
                         <p class="receipt-signature-role">Assinatura do Beneficiário</p>
                     </div>
                 </div>
                 <div class="receipt-signature-block">
                     <div class="receipt-signature-line">
-                        <p class="receipt-signature-name">${data.clientName}</p>
+                        <p class="receipt-signature-name">${e(data.clientName)}</p>
                         <p class="receipt-signature-role">Assinatura do Cliente</p>
                     </div>
                 </div>
@@ -99,30 +97,30 @@ function buildReceiptHTML(data, resolvedLogo) {
                 <div class="receipt-header-left">
                     ${resolvedLogo ? `<img src="${resolvedLogo}" alt="Logo da empresa" class="receipt-logo" onerror="this.style.display='none'">` : ""}
                     <div>
-                        <p class="receipt-type">${data.receiptType}</p>
-                        <h1 class="receipt-est-name">${data.estName}</h1>
-                        <p class="receipt-est-address">${[data.estStreet, data.estNumber].filter(Boolean).join(", ")}${data.estNeighborhood ? " — " + data.estNeighborhood : ""}</p>
+                        <p class="receipt-type">${e(data.receiptType)}</p>
+                        <h1 class="receipt-est-name">${e(data.estName)}</h1>
+                        <p class="receipt-est-address">${e([data.estStreet, data.estNumber].filter(Boolean).join(", "))}${data.estNeighborhood ? " — " + e(data.estNeighborhood) : ""}</p>
                     </div>
                 </div>
                 <div class="receipt-header-right">
                     <p class="receipt-date-label">Emissão</p>
                     <p class="receipt-date-value">${issueDate}</p>
-                    <p class="receipt-city">${data.estCity || ""}${stateValue ? ", " + stateValue : ""}</p>
+                    <p class="receipt-city">${e(data.estCity || "")}${stateValue ? ", " + e(stateValue) : ""}</p>
                 </div>
             </div>
             <div class="receipt-body">
                 <div class="receipt-parties">
                     <div class="receipt-party-card">
                         <p class="receipt-section-label">Cliente</p>
-                        <p class="receipt-party-name">${data.clientName}</p>
-                        <p class="receipt-party-detail">${data.clientDoc}</p>
-                        ${data.clientPhone ? `<p class="receipt-party-detail">${data.clientPhone}</p>` : ""}
+                        <p class="receipt-party-name">${e(data.clientName)}</p>
+                        <p class="receipt-party-detail">${e(data.clientDoc)}</p>
+                        ${data.clientPhone ? `<p class="receipt-party-detail">${e(data.clientPhone)}</p>` : ""}
                     </div>
                     <div class="receipt-party-card">
                         <p class="receipt-section-label">Beneficiário</p>
-                        <p class="receipt-party-name">${data.providerName}</p>
-                        <p class="receipt-party-detail">${data.providerDoc}</p>
-                        ${data.providerPhone ? `<p class="receipt-party-detail">${data.providerPhone}</p>` : ""}
+                        <p class="receipt-party-name">${e(data.providerName)}</p>
+                        <p class="receipt-party-detail">${e(data.providerDoc)}</p>
+                        ${data.providerPhone ? `<p class="receipt-party-detail">${e(data.providerPhone)}</p>` : ""}
                     </div>
                 </div>
                 ${
@@ -131,9 +129,9 @@ function buildReceiptHTML(data, resolvedLogo) {
                 <div class="receipt-vehicle-card">
                     <p class="receipt-vehicle-label">Veículo</p>
                     <div class="receipt-vehicle-info">
-                        <span><strong>Modelo:</strong> ${data.carModel}</span>
-                        ${data.carPlate ? `<span><strong>Placa:</strong> ${data.carPlate}</span>` : ""}
-                        ${data.carYear ? `<span><strong>Ano:</strong> ${data.carYear}</span>` : ""}
+                        <span><strong>Modelo:</strong> ${e(data.carModel)}</span>
+                        ${data.carPlate ? `<span><strong>Placa:</strong> ${e(data.carPlate)}</span>` : ""}
+                        ${data.carYear ? `<span><strong>Ano:</strong> ${e(data.carYear)}</span>` : ""}
                     </div>
                 </div>`
                     : ""
@@ -160,7 +158,7 @@ function buildReceiptHTML(data, resolvedLogo) {
                     ? `
                 <div class="receipt-observations">
                     <p class="receipt-observations-label">Observações</p>
-                    <p class="receipt-observations-text">${data.observations}</p>
+                    <p class="receipt-observations-text">${e(data.observations)}</p>
                 </div>`
                     : ""
                 }
@@ -177,9 +175,17 @@ function buildReceiptHTML(data, resolvedLogo) {
  */
 function showReceiptPreview(html) {
   document.getElementById("receiptContent").innerHTML = html;
-  document.getElementById("printContainer").classList.add("visible");
+  const container = document.getElementById("printContainer");
+  container.classList.add("visible");
   document.body.style.overflow = "hidden";
   window.scrollTo(0, 0);
+
+  // Move foco para o primeiro botão de ação do modal — SDD §5.6
+  const firstBtn = container.querySelector(".print-actions button");
+  if (firstBtn) {
+    // Aguarda o próximo frame para garantir que o elemento está visível
+    requestAnimationFrame(() => firstBtn.focus());
+  }
 
   // Anuncia para leitores de tela — SDD §5.7
   const live = document.getElementById("a11yLive");

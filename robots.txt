@@ -1,0 +1,14 @@
+# robots.txt
+# Recebi - Gerador de Recibo Online
+
+User-agent: *
+Allow: /src/css/
+Allow: /src/js/
+Allow: /src/assets/
+Allow: /src/html/form.html
+Allow: /src/html/politica-privacidade.html
+Disallow: /src/
+
+Crawl-delay: 1
+
+Sitemap: https://recebi.com.br/sitemap.xml

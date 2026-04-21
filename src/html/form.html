@@ -15,6 +15,26 @@
     <link rel="stylesheet" href="/src/css/template.css" />
     <link rel="stylesheet" href="/src/css/receipt.css" />
 
+    <style>
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      .field-hint {
+        display: block;
+        margin-top: 4px;
+        font-size: 0.68rem;
+        color: var(--text-muted);
+      }
+    </style>
+
     <title>recibi - Gerador de Recibo Online</title>
   </head>
 
@@ -130,13 +150,17 @@
             </div>
             <div class="section-card">
               <div class="field">
-                <label>Nome Completo</label>
+                <label for="clientName">Nome Completo</label>
                 <input
                   type="text"
+                  id="clientName"
                   name="clientName"
                   placeholder="Alice Silva"
                   required
+                  aria-required="true"
+                  aria-describedby="clientNameErr"
                 />
+                <span class="field-error" id="clientNameErr">Mínimo 3 caracteres</span>
               </div>
 
               <div class="field">
@@ -146,6 +170,7 @@
                   id="clientDoc"
                   name="clientDoc"
                   placeholder="000.000.000-00"
+                  aria-describedby="clientDocErr"
                   oninput="maskCpfCnpj(this)"
                   onblur="validateDoc(this, 'clientDocErr')"
                 />
@@ -155,13 +180,16 @@
               </div>
 
               <div class="field">
-                <label>Celular</label>
+                <label for="clientPhone">Celular</label>
                 <input
                   type="text"
+                  id="clientPhone"
                   name="clientPhone"
                   placeholder="(83) 9 0000-0000"
-                  oninput="maskPhone(this)"
                   required
+                  aria-required="true"
+                  aria-describedby="clientPhoneErr"
+                  oninput="maskPhone(this)"
                 />
               </div>
             </div>
@@ -176,13 +204,17 @@
             </div>
             <div class="section-card">
               <div class="field">
-                <label>Nome completo</label>
+                <label for="providerName">Nome completo</label>
                 <input
                   type="text"
+                  id="providerName"
                   name="providerName"
                   placeholder="Roberto Oliveira"
                   required
+                  aria-required="true"
+                  aria-describedby="providerNameErr"
                 />
+                <span class="field-error" id="providerNameErr">Mínimo 3 caracteres</span>
               </div>
 
               <div class="field">
@@ -192,6 +224,7 @@
                   id="providerDoc"
                   name="providerDoc"
                   placeholder="000.000.000-00"
+                  aria-describedby="providerDocErr"
                   oninput="maskCpfCnpj(this)"
                   onblur="validateDoc(this, 'providerDocErr')"
                 />
@@ -201,13 +234,16 @@
               </div>
 
               <div class="field">
-                <label>Celular</label>
+                <label for="providerPhone">Celular</label>
                 <input
                   type="text"
+                  id="providerPhone"
                   name="providerPhone"
                   placeholder="(83) 9 8888-8888"
-                  oninput="maskPhone(this)"
                   required
+                  aria-required="true"
+                  aria-describedby="providerPhoneErr"
+                  oninput="maskPhone(this)"
                 />
               </div>
             </div>
@@ -224,29 +260,44 @@
           </div>
           <div class="grid-3">
             <div class="field">
-              <label>Modelo</label>
+              <label for="carModel">Modelo</label>
               <input
                 type="text"
+                id="carModel"
                 name="carModel"
                 placeholder="Fiat Argo"
                 required
+                aria-required="true"
+                aria-describedby="carModelErr"
               />
+              <span class="field-error" id="carModelErr">Mínimo 2 caracteres</span>
             </div>
 
             <div class="field">
-              <label>Placa</label>
+              <label for="carPlate">Placa</label>
               <input
                 type="text"
+                id="carPlate"
                 name="carPlate"
                 placeholder="BRA-0A00"
+                aria-required="true"
                 oninput="maskPlate(this)"
                 required
               />
             </div>
 
             <div class="field">
-              <label>Ano</label>
-              <input type="text" name="carYear" placeholder="2026" required />
+              <label for="carYear">Ano</label>
+              <input
+                type="text"
+                id="carYear"
+                name="carYear"
+                placeholder="2026"
+                required
+                aria-required="true"
+                aria-describedby="carYearErr"
+              />
+              <span class="field-error" id="carYearErr">Ano inválido</span>
             </div>
           </div>
         </div>
@@ -261,13 +312,17 @@
           </div>
           <div class="grid-3">
             <div class="field col-span-2">
-              <label>Nome da Empresa</label>
+              <label for="estName">Nome da Empresa</label>
               <input
                 type="text"
+                id="estName"
                 name="estName"
                 placeholder="Minha Empresa"
                 required
+                aria-required="true"
+                aria-describedby="estNameErr"
               />
+              <span class="field-error" id="estNameErr">Campo obrigatório</span>
             </div>
 
             <div class="field">
@@ -311,19 +366,21 @@
 
           <div class="grid-3">
             <div class="field">
-              <label>Cidade</label>
-              <select name="estCity" id="estCitySelect" disabled>
+              <label for="estCitySelect">Cidade</label>
+              <select name="estCity" id="estCitySelect" disabled aria-required="true">
                 <option value="">Selecione o estado primeiro</option>
               </select>
             </div>
 
             <div class="field">
-              <label>Bairro</label>
+              <label for="estNeighborhood">Bairro</label>
               <input
                 type="text"
                 name="estNeighborhood"
                 id="estNeighborhood"
                 placeholder="Centro"
+                required
+                aria-required="true"
               />
             </div>
 
@@ -342,24 +399,35 @@
                 id="estCep"
                 placeholder="00000-000"
                 maxlength="9"
+                required
+                aria-required="true"
                 oninput="formatCep(this)"
                 onblur="fetchCep(this.value)"
               />
             </div>
 
             <div class="field col-span-2">
-              <label>Rua/Logradouro</label>
+              <label for="estStreet">Rua/Logradouro</label>
               <input
                 type="text"
                 name="estStreet"
                 id="estStreet"
                 placeholder="Rua das Flores"
+                required
+                aria-required="true"
               />
             </div>
 
             <div class="field">
-              <label>Número</label>
-              <input type="text" name="estNumber" placeholder="100" />
+              <label for="estNumber">Número</label>
+              <input
+                type="text"
+                id="estNumber"
+                name="estNumber"
+                placeholder="100"
+                required
+                aria-required="true"
+              />
             </div>
           </div>
         </div>
@@ -376,13 +444,17 @@
           <button type="button" class="btn-add" onclick="addService()">
             + Adicionar serviço
           </button>
-          <div>
+            <div>
             <div class="field">
-              <label>Observações (opcional)</label>
+              <label for="observations">Observações (opcional)</label>
               <textarea
+                id="observations"
                 name="observations"
                 placeholder="Algum detalhe adicional sobre o serviço ou pagamento..."
+                maxlength="500"
+                aria-describedby="observationsCount"
               ></textarea>
+              <span id="observationsCount" class="field-hint"></span>
             </div>
           </div>
         </div>
@@ -438,6 +510,18 @@
         document.addEventListener('DOMContentLoaded', () => {
           Form.initForm();
           Form.initValidation();
+
+          // Contador de caracteres para o campo de observações
+          const obs = document.getElementById('observations');
+          const obsCount = document.getElementById('observationsCount');
+          if (obs && obsCount) {
+            const update = () => {
+              const remaining = obs.maxLength - obs.value.length;
+              obsCount.textContent = `${obs.value.length}/500 caracteres`;
+              obsCount.style.color = remaining < 50 ? 'var(--error)' : 'var(--text-muted)';
+            };
+            obs.addEventListener('input', update);
+          }
         });
       </script>
     </main>

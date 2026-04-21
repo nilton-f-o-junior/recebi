@@ -6,6 +6,26 @@
 let isLoadingCities = false;
 
 /**
+ * Faz fetch com retry automático
+ * @param {string} url
+ * @param {number} retries - Número de tentativas
+ * @returns {Promise<Response>}
+ */
+async function fetchWithRetry(url, retries = 2) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res;
+    } catch (err) {
+      if (attempt === retries) throw err;
+      // Aguarda 800ms antes de tentar novamente
+      await new Promise((resolve) => setTimeout(resolve, 800));
+    }
+  }
+}
+
+/**
  * Carrega cidades via IBGE API após selecionar estado
  * @param {string} stateCode - Código do estado (UF)
  */
@@ -22,7 +42,7 @@ async function loadCities(stateCode) {
   isLoadingCities = true;
 
   try {
-    const res = await fetch(
+    const res = await fetchWithRetry(
       `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${stateCode}/municipios?orderBy=nome`
     );
     const cities = await res.json();
@@ -35,7 +55,9 @@ async function loadCities(stateCode) {
     });
     citySelect.disabled = false;
   } catch (err) {
-    citySelect.innerHTML = '<option value="">Erro ao carregar</option>';
+    citySelect.innerHTML =
+      '<option value="">Erro ao carregar — tente novamente</option>';
+    citySelect.disabled = false; // Permite nova tentativa ao trocar o estado
     console.error("Erro ao carregar cidades:", err);
   } finally {
     isLoadingCities = false;
@@ -52,14 +74,29 @@ async function fetchCep(cep) {
 
   const spinner = document.getElementById("cepSpinner");
   const success = document.getElementById("cepSuccess");
+  const cepInput = document.getElementById("estCep");
+
   spinner.style.display = "inline";
+  success.style.display = "none";
 
   try {
-    const res = await fetch(`https://viacep.com.br/ws/${clean}/json/`);
+    const res = await fetchWithRetry(`https://viacep.com.br/ws/${clean}/json/`);
     const data = await res.json();
+
     if (data.erro) {
       spinner.style.display = "none";
+      // Marca o campo de CEP como inválido
+      if (cepInput) {
+        cepInput.classList.add("field-invalid");
+        cepInput.title = "CEP não encontrado";
+      }
       return;
+    }
+
+    // Limpa estado de erro do CEP se havia
+    if (cepInput) {
+      cepInput.classList.remove("field-invalid");
+      cepInput.title = "";
     }
 
     const streetEl = document.getElementById("estStreet");
@@ -82,6 +119,10 @@ async function fetchCep(cep) {
     }, 3000);
   } catch (err) {
     spinner.style.display = "none";
+    // Feedback visual de falha na busca
+    if (cepInput) {
+      cepInput.title = "Não foi possível buscar o CEP. Verifique sua conexão.";
+    }
     console.error("Erro ao buscar CEP:", err);
   }
 }
