@@ -1,0 +1,98 @@
+<!-- 
+  MAPEAMENTO DE TESTES - FORMULÁRIO (src/html/form.html)
+  Este arquivo é uma cópia para referência de QA, indicando quais testes (TC) 
+  se aplicam a cada elemento data-testid.
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- ... (cabeçalho omitido para brevidade) ... -->
+    <title>recibi - Mapeamento de Testes</title>
+  </head>
+
+  <body>
+    <main class="no-print">
+      <form id="receiptForm">
+        
+        <!-- SEÇÃO: INFORMAÇÕES DO RECIBO -->
+        <div class="card">
+          <!-- TC-INF-001: Seleção de tipo de documento -->
+          <input type="text" name="receiptType" data-testid="input-receipt-type" />
+
+          <!-- TC-FRM-001: Verificar data de emissão inicial -->
+          <!-- TC-INF-002: Preenchimento e formatação de data -->
+          <input type="date" name="issueDate" data-testid="input-date" />
+
+          <!-- SEÇÃO: LOGO (TC-LOG-001 a TC-LOG-006) -->
+          <button data-testid="btn-tab-upload">Upload</button>
+          <button data-testid="btn-tab-url">URL</button>
+          
+          <div data-testid="dropzone-logo">
+            <input type="file" data-testid="input-logo-file" />
+            <button data-testid="btn-remove-logo">Remover</button>
+          </div>
+          <input type="text" data-testid="input-logo-url" />
+        </div>
+
+        <!-- SEÇÃO: CLIENTE (TC-CLI-001 a TC-CLI-005) -->
+        <div class="card">
+          <input type="text" data-testid="input-client-name" /> <!-- TC-CLI-002: Nome Mínimo -->
+          <input type="text" data-testid="input-client-document" /> <!-- TC-CLI-003/004: CPF -->
+          <input type="text" data-testid="input-client-phone" /> <!-- TC-CLI-005: Celular -->
+        </div>
+
+        <!-- SEÇÃO: BENEFICIÁRIO (TC-BEN-001 a TC-BEN-003) -->
+        <div class="card">
+          <input type="text" data-testid="input-beneficiary-name" />
+          <input type="text" data-testid="input-beneficiary-document" /> <!-- TC-BEN-002/003: CNPJ -->
+          <input type="text" data-testid="input-beneficiary-phone" />
+        </div>
+
+        <!-- SEÇÃO: VEÍCULO (TC-VEI-001 a TC-VEI-004) -->
+        <div class="card">
+          <input type="text" data-testid="input-vehicle-model" />
+          <input type="text" data-testid="input-vehicle-plate" /> <!-- TC-MSK-005: Máscara Placa -->
+          <input type="text" data-testid="input-vehicle-year" /> <!-- TC-VEI-003: Validação Ano -->
+        </div>
+
+        <!-- SEÇÃO: ESTABELECIMENTO (TC-EST-001 a TC-EST-003) -->
+        <div class="card">
+          <input type="text" data-testid="input-establishment-name" />
+          <select data-testid="select-establishment-state"></select> <!-- TC-EST-002: Dinâmico -->
+          <select data-testid="select-establishment-city"></select>
+          <input type="text" data-testid="input-establishment-neighborhood" />
+          <input type="text" data-testid="input-establishment-zipcode" /> <!-- TC-MSK-004: CEP -->
+          <input type="text" data-testid="input-establishment-street" />
+          <input type="text" data-testid="input-establishment-number" />
+        </div>
+
+        <!-- SEÇÃO: SERVIÇOS (TC-SRV-001 a TC-SRV-006) -->
+        <div class="card">
+          <!-- TC-FRM-001: Verificar 1 linha de serviço inicial -->
+          <input type="text" data-testid="input-service-name" />
+          <input type="number" data-testid="input-service-value" />
+          <button data-testid="btn-remove-service">×</button> <!-- TC-SRV-003: Restrição Remoção -->
+          
+          <button data-testid="btn-add-service">+ Adicionar</button>
+          <textarea data-testid="input-observations"></textarea> <!-- TC-OBS-001: Opcional -->
+        </div>
+
+        <!-- FINALIZAÇÃO -->
+        <div class="check-row">
+          <!-- TC-FRM-002: Habilitação do Botão ao Marcar -->
+          <input type="checkbox" data-testid="input-privacy" />
+        </div>
+
+        <!-- TC-FRM-001: Verificar estado inicial (desabilitado) -->
+        <!-- TC-FRM-003: Submissão (Gerar Recibo) -->
+        <button type="submit" data-testid="btn-generate">Gerar Recibo Agora</button>
+      </form>
+    </main>
+
+    <!-- MODAL PREVIEW (TC-GER-001 a TC-GER-003) -->
+    <div id="printContainer">
+      <button data-testid="btn-close-preview">✕ Fechar</button> <!-- TC-FRM-004: Reset -->
+      <button data-testid="btn-print-receipt">🖨️ Imprimir</button> <!-- TC-IMP-001/004 -->
+    </div>
+  </body>
+</html>
