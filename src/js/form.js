@@ -77,74 +77,63 @@ function handleFormSubmit(e) {
   // Validação de campos obrigatórios — SDD §3.11
   let firstInvalid = null;
 
-  function markField(id, condition, errId, msg) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const errEl = errId ? document.getElementById(errId) : null;
-    if (!condition) {
-      el.classList.add("field-invalid");
-      if (errEl) {
-        errEl.textContent = msg || errEl.textContent;
-        errEl.classList.add("visible");
-      }
-      if (!firstInvalid) firstInvalid = el;
-    } else {
-      el.classList.remove("field-invalid");
-      if (errEl) errEl.classList.remove("visible");
-    }
-    return condition;
-  }
-
   const fd = new FormData(e.target);
   const d = Object.fromEntries(fd.entries());
 
+  // Helper local para capturar o primeiro campo inválido para o scroll
+  const validate = (id, condition, errId, msg) => {
+    const ok = Validator.markField(id, condition, errId, msg);
+    if (!ok && !firstInvalid) {
+      firstInvalid = document.getElementById(id);
+    }
+    return ok;
+  };
+
   // Validar campos
-  markField("receiptType", d.receiptType && d.receiptType !== "", null, "");
-  markField("issueDate", !!d.issueDate, null, "");
-  markField(
+  validate("receiptType", d.receiptType && d.receiptType !== "", null, "");
+  validate("issueDate", !!d.issueDate, null, "");
+  validate(
     "clientName",
     d.clientName?.trim().length >= 3,
     "clientNameErr",
     "Mínimo 3 caracteres"
   );
-  markField(
+  validate(
     "clientPhone",
-    /^\(\d{2}\) \d{4,5}-\d{4}$/.test(d.clientPhone || ""),
+    Validator.isValidPhone(d.clientPhone || ""),
     "clientPhoneErr",
     "Celular inválido"
   );
-  markField(
+  validate(
     "providerName",
     d.providerName?.trim().length >= 3,
     "providerNameErr",
     "Mínimo 3 caracteres"
   );
-  markField(
+  validate(
     "carModel",
     d.carModel?.trim().length >= 2,
     "carModelErr",
     "Mínimo 2 caracteres"
   );
-  markField(
+  validate(
     "carYear",
-    /^\d{4}$/.test(d.carYear || "") &&
-      +d.carYear >= 1900 &&
-      +d.carYear <= new Date().getFullYear() + 1,
+    Validator.isValidYear(d.carYear || ""),
     "carYearErr",
     "Ano inválido"
   );
-  markField(
+  validate(
     "estName",
     d.estName?.trim().length > 0,
     "estNameErr",
     "Campo obrigatório"
   );
-  markField("estStateSelect", !!d.estState, null, "");
-  markField("estCitySelect", !!d.estCity, null, "");
-  markField("estNeighborhood", d.estNeighborhood?.trim().length > 0, null, "");
-  markField("estStreet", d.estStreet?.trim().length > 0, null, "");
-  markField("estNumber", d.estNumber?.trim().length > 0, null, "");
-  markField("estCep", /^\d{5}-\d{3}$/.test(d.estCep || ""), null, "");
+  validate("estStateSelect", !!d.estState, null, "");
+  validate("estCitySelect", !!d.estCity, null, "");
+  validate("estNeighborhood", d.estNeighborhood?.trim().length > 0, null, "");
+  validate("estStreet", d.estStreet?.trim().length > 0, null, "");
+  validate("estNumber", d.estNumber?.trim().length > 0, null, "");
+  validate("estCep", Validator.isValidCep(d.estCep || ""), null, "");
 
   // Validar serviços
   const names = fd.getAll("serviceName[]");
@@ -159,16 +148,12 @@ function handleFormSubmit(e) {
 
   // Validar CPF/CNPJ se preenchido
   if (d.clientDoc) {
-    const n = d.clientDoc.replace(/\D/g, "");
-    if (n.length === 11 && !Validator.validateCpf(n)) {
-      document.getElementById("clientDocErr")?.classList.add("visible");
+    if (!Validator.validateDoc(document.getElementById("clientDoc"), "clientDocErr")) {
       if (!firstInvalid) firstInvalid = document.getElementById("clientDoc");
     }
   }
   if (d.providerDoc) {
-    const n = d.providerDoc.replace(/\D/g, "");
-    if (n.length === 14 && !Validator.validateCnpj(n)) {
-      document.getElementById("providerDocErr")?.classList.add("visible");
+    if (!Validator.validateDoc(document.getElementById("providerDoc"), "providerDocErr")) {
       if (!firstInvalid) firstInvalid = document.getElementById("providerDoc");
     }
   }
@@ -203,10 +188,21 @@ function handleFormSubmit(e) {
 }
 
 /**
- * Inicializa validação em tempo real
+ * Inicializa validação em tempo real e comportamentos de UI
  */
 function initValidation() {
   const form = document.getElementById("receiptForm");
+  const submitBtn = form.querySelector(".btn-submit");
+  const privacyCheck = document.getElementById("privacy");
+
+  // Gerenciar estado do botão de submit baseado no checkbox de privacidade — SDD §3.1
+  if (privacyCheck && submitBtn) {
+    const updateSubmitState = () => {
+      submitBtn.disabled = !privacyCheck.checked;
+    };
+    privacyCheck.addEventListener("change", updateSubmitState);
+    updateSubmitState(); // Estado inicial
+  }
 
   // Validação em blur
   form.addEventListener(
