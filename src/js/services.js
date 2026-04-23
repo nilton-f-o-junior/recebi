@@ -18,13 +18,13 @@ function addService(first = false) {
   div.innerHTML = `
         <div class="field">
             ${first ? "<label>Serviço / Produto</label>" : ""}
-            <input type="text" name="serviceName[]" placeholder="Descrição" required>
+            <input type="text" name="serviceName[]" placeholder="Descrição" required data-testid="input-service-name">
         </div>
         <div class="field">
             ${first ? "<label>Valor (R$)</label>" : ""}
-            <input type="number" step="0.01" name="serviceValue[]" placeholder="0,00" required oninput="Services.updateTotal(); updateProgress();">
+            <input type="number" step="0.01" name="serviceValue[]" placeholder="0,00" required oninput="Services.updateTotal(); updateProgress();" data-testid="input-service-value">
         </div>
-        <button type="button" class="btn-remove" onclick="Services.removeService(this.parentElement)">×</button>
+        <button type="button" class="btn-remove" onclick="Services.removeService(this.parentElement)" data-testid="btn-remove-service">×</button>
     `;
   container.appendChild(div);
 }

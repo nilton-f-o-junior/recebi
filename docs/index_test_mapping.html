@@ -1,0 +1,42 @@
+<!-- 
+  MAPEAMENTO DE TESTES - LANDING PAGE (index.html)
+  Este arquivo é uma cópia para referência de QA, indicando quais testes (TC) 
+  se aplicam a cada elemento data-testid.
+-->
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <!-- ... (metatags e fontes) ... -->
+    <title>recibi - Mapeamento de Testes (Landing Page)</title>
+  </head>
+  <body>
+    <header role="banner">
+      <!-- ... -->
+    </header>
+
+    <main role="main">
+      <!-- 
+        TC-FRM-001 Step 1: Abrir a aplicação no navegador.
+        Este é o ponto de partida para todos os testes funcionais.
+      -->
+      <img src="src/assets/images/img-home.svg" alt="" />
+      <p>
+        Crie recibos profissionais para sua Estética ou Lava Jato — 100% grátis
+        e sem cadastro.
+      </p>
+
+      <!-- 
+        FLUXO DE NAVEGAÇÃO:
+        O clique neste botão leva ao formulário onde a maioria dos 
+        casos de teste (TC-FRM, TC-INF, etc.) serão executados.
+      -->
+      <a href="/src/html/form.html">
+        <button data-testid="btn-start-form">Gerar Recibo</button>
+      </a>
+    </main>
+
+    <footer role="contentinfo">
+      <!-- ... -->
+    </footer>
+  </body>
+</html>

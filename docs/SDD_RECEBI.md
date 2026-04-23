@@ -80,31 +80,36 @@ A arquitetura segue o padrão de **página HTML autônoma** (single-file applica
 
 ```
 recebi/
-├── index.html                  # Aplicação completa — formulário + geração do recibo
+├── index.html                  # Landing page da aplicação
 ├── manifest.json               # Configuração PWA
 ├── robots.txt                  # Instruções para crawlers
 ├── sitemap.xml                 # URL para indexação
-└── assets/
+├── docs/                       # Documentação técnica e testes
+│   ├── SDD_RECEBI.md           # Documento de Design de Software
+│   └── TC_Recebi_Casos_de_Teste.md # Casos de Teste
+├── img/                        # Assets de design e código-fonte de imagens
+└── src/
+    ├── assets/
+    │   └── images/             # Ícones e ilustrações (SVG/PNG)
     ├── css/
-    │   ├── global.css          # Estilos globais, reset e variáveis CSS
-    │   ├── form.css            # Estilos do formulário e seus componentes
+    │   ├── home.css            # Estilos exclusivos da landing page
+    │   ├── main.css            # Estilos globais, reset e tipografia
+    │   ├── politica-privacidade.css # Estilos da página de privacidade
     │   ├── receipt.css         # Estilos do recibo gerado (tela e impressão)
-    │   └── print.css           # Regras @media print exclusivas
-    ├── js/
-    │   ├── form.js             # Controle do formulário (campos dinâmicos, máscaras)
-    │   ├── services.js         # Lógica de adição/remoção de serviços e cálculo de total
-    │   ├── logo.js             # Upload, validação e leitura de logo (File API + URL)
-    │   ├── receipt-builder.js  # Montagem do HTML do recibo a partir dos dados do form
-    │   ├── location.js         # Carregamento dinâmico de cidades por estado (IBGE API ou JSON local)
-    │   ├── validator.js        # Validação de campos obrigatórios, CPF/CNPJ e formato
-    │   ├── masks.js            # Máscaras de input: CPF, CNPJ, CEP, celular, placa, valor
-    │   └── utils.js            # Funções utilitárias (formatação de moeda, data, strings)
-    ├── icons/
-    │   ├── favicon.ico
-    │   ├── icon-192.png
-    │   └── icon-512.png
-    └── og/
-        └── recebi-og.jpg       # Imagem Open Graph (1200×630px)
+    │   └── template.css        # Variáveis e componentes base do formulário
+    ├── html/
+    │   ├── form.html           # Interface do gerador de recibo
+    │   └── politica-privacidade.html # Texto da Política de Privacidade
+    └── js/
+        ├── form.js             # Controle principal do formulário e estados
+        ├── location.js         # Lógica de cidades e integração com API de CEP
+        ├── logo.js             # Upload, validação e preview de logo
+        ├── masks.js            # Máscaras de input (CPF, CNPJ, CEP, Placa, etc.)
+        ├── politica-privacidade.js # Lógica da página de privacidade
+        ├── receipt-builder.js  # Montagem do HTML do recibo a partir dos dados
+        ├── services.js         # Lógica de itens dinâmicos e cálculo de totais
+        ├── utils.js            # Funções utilitárias e formatadores
+        └── validator.js        # Validação de regras de negócio e campos
 ```
 
 ### 2.3 Fluxo Principal da Aplicação
@@ -186,14 +191,14 @@ Responsável pelo controle geral do formulário: inicialização dos campos, ger
 
 **Campos:**
 
-| Campo           | Tipo     | Obrigatório | Regras                                                                |
-| --------------- | -------- | ----------- | --------------------------------------------------------------------- |
-| Tipo do Recibo  | `select` | Sim         | Opções: Recibo, Orçamento, Ordem de Serviço, Comprovante de Pagamento |
-| Data de Emissão | `date`   | Sim         | Pré-preenchido com a data atual; editável pelo usuário                |
+| Campo           | Tipo   | Obrigatório | Regras                                                                                    |
+| --------------- | ------ | ----------- | ----------------------------------------------------------------------------------------- |
+| Tipo do Recibo  | `text` | Sim         | Valor padrão: "Recibo de Pagamento". Permite edição livre para outros tipos de documento. |
+| Data de Emissão | `date` | Sim         | Pré-preenchido com a data atual; editável pelo usuário                                    |
 
 **Comportamento:**
 
-- O valor selecionado no campo "Tipo do Recibo" torna-se o título principal do documento gerado (ex: "ORDEM DE SERVIÇO").
+- O valor preenchido no campo "Tipo do Recibo" torna-se o título principal do documento gerado (ex: "ORDEM DE SERVIÇO").
 - A data de emissão é formatada em português (ex: "16 de abril de 2026") no documento final.
 
 ---
@@ -474,12 +479,13 @@ Botão de largura total com estado desabilitado (cinza, cursor `not-allowed`) e 
 
 ### 5.7 Acessibilidade (a11y)
 
-- Todos os campos possuem `<label>` associado corretamente via `for`/`id`
-- Mensagens de erro associadas ao campo via `aria-describedby`
-- Navegação completa por teclado (Tab, Enter, Espaço)
-- Contraste mínimo WCAG AA (4.5:1) em ambos os temas
-- Campos obrigatórios indicados com `aria-required="true"` e marcador visual `*`
-- Status de geração anunciado para leitores de tela via `aria-live="polite"`
+- **Labels e Identificação:** Todos os campos possuem `<label>` associado corretamente via `for`/`id`.
+- **Feedback de Erro:** Mensagens de erro são associadas ao campo via `aria-describedby` para leitura contextual.
+- **Navegação:** Navegação completa por teclado (Tab, Enter, Espaço) com foco visível.
+- **Gerenciamento de Modal:** Ao abrir o preview do recibo, o foco é transferido automaticamente para o primeiro botão de ação do modal. O fundo da página é bloqueado para evitar scroll indesejado.
+- **Anúncios Dinâmicos:** Status de geração, remoção de itens e erros são anunciados para usuários de tecnologias assistivas via regiões `aria-live="polite"`.
+- **Contraste:** Conformidade com WCAG AA (mínimo 4.5:1).
+- **Indicadores:** Campos obrigatórios indicados com `aria-required="true"` e marcador visual `*`.
 
 ---
 
@@ -633,6 +639,10 @@ Cada fase deve atender aos seguintes critérios antes de ser considerada conclu�
 - **WCAG 2.1 Guidelines:** https://www.w3.org/TR/WCAG21/
 - **Schema.org WebApplication:** https://schema.org/WebApplication
 - **Canvas.toDataURL (MDN):** https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL
+
+---
+
+_Recebi — SDD v1.0_
 
 ---
 
