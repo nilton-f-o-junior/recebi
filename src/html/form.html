@@ -15,26 +15,6 @@
     <link rel="stylesheet" href="/src/css/template.css" />
     <link rel="stylesheet" href="/src/css/receipt.css" />
 
-    <style>
-      .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-      }
-      .field-hint {
-        display: block;
-        margin-top: 4px;
-        font-size: 0.68rem;
-        color: var(--text-muted);
-      }
-    </style>
-
     <title>recibi - Gerador de Recibo Online</title>
   </head>
 
@@ -63,12 +43,13 @@
                 name="receiptType"
                 value="Recibo de Pagamento"
                 required
+                data-testid="input-receipt-type"
               />
             </div>
 
             <div class="field">
               <label>Data de Emissão</label>
-              <input type="date" name="issueDate" required />
+              <input type="date" name="issueDate" required data-testid="input-date" />
             </div>
 
             <!-- Logo com abas -->
@@ -80,6 +61,7 @@
                   class="logo-tab active"
                   id="tabUpload"
                   onclick="switchLogoTab('upload')"
+                  data-testid="btn-tab-upload"
                 >
                   <img src="/src/assets/images/icon-folder.svg" alt="" /> Enviar
                   do computador
@@ -89,6 +71,7 @@
                   class="logo-tab"
                   id="tabUrl"
                   onclick="switchLogoTab('url')"
+                  data-testid="btn-tab-url"
                 >
                   <img src="/src/assets/images/icon-url.svg" alt="" /> Inserir
                   link (URL)
@@ -97,12 +80,13 @@
 
               <!-- Painel Upload -->
               <div id="panelUpload">
-                <div class="logo-upload-area" id="logoDropArea">
+                <div class="logo-upload-area" id="logoDropArea" data-testid="dropzone-logo">
                   <input
                     type="file"
                     id="logoFileInput"
                     accept="image/png,image/jpeg,image/webp,image/svg+xml"
                     onchange="handleLogoFile(this)"
+                    data-testid="input-logo-file"
                   />
                   <div class="logo-placeholder" id="logoPlaceholder">
                     <div class="up-icon">
@@ -119,6 +103,7 @@
                       type="button"
                       id="logoClearBtn"
                       onclick="clearLogo(event)"
+                      data-testid="btn-remove-logo"
                     >
                       Remover imagem
                     </button>
@@ -133,6 +118,7 @@
                   name="logoUrl"
                   id="logoUrlInput"
                   placeholder="https://suaempresa.com.br/logo.png"
+                  data-testid="input-logo-url"
                 />
               </div>
             </div>
@@ -159,6 +145,7 @@
                   required
                   aria-required="true"
                   aria-describedby="clientNameErr"
+                  data-testid="input-client-name"
                 />
                 <span class="field-error" id="clientNameErr">Mínimo 3 caracteres</span>
               </div>
@@ -173,6 +160,7 @@
                   aria-describedby="clientDocErr"
                   oninput="maskCpfCnpj(this)"
                   onblur="validateDoc(this, 'clientDocErr')"
+                  data-testid="input-client-document"
                 />
                 <span class="field-error" id="clientDocErr"
                   >CPF ou CPNJ inválidos</span
@@ -190,6 +178,7 @@
                   aria-required="true"
                   aria-describedby="clientPhoneErr"
                   oninput="maskPhone(this)"
+                  data-testid="input-client-phone"
                 />
               </div>
             </div>
@@ -213,6 +202,7 @@
                   required
                   aria-required="true"
                   aria-describedby="providerNameErr"
+                  data-testid="input-beneficiary-name"
                 />
                 <span class="field-error" id="providerNameErr">Mínimo 3 caracteres</span>
               </div>
@@ -227,6 +217,7 @@
                   aria-describedby="providerDocErr"
                   oninput="maskCpfCnpj(this)"
                   onblur="validateDoc(this, 'providerDocErr')"
+                  data-testid="input-beneficiary-document"
                 />
                 <span class="field-error" id="providerDocErr"
                   >CPF ou CNPJ inválido</span
@@ -244,6 +235,7 @@
                   aria-required="true"
                   aria-describedby="providerPhoneErr"
                   oninput="maskPhone(this)"
+                  data-testid="input-beneficiary-phone"
                 />
               </div>
             </div>
@@ -269,6 +261,7 @@
                 required
                 aria-required="true"
                 aria-describedby="carModelErr"
+                data-testid="input-vehicle-model"
               />
               <span class="field-error" id="carModelErr">Mínimo 2 caracteres</span>
             </div>
@@ -283,6 +276,7 @@
                 aria-required="true"
                 oninput="maskPlate(this)"
                 required
+                data-testid="input-vehicle-plate"
               />
             </div>
 
@@ -296,6 +290,7 @@
                 required
                 aria-required="true"
                 aria-describedby="carYearErr"
+                data-testid="input-vehicle-year"
               />
               <span class="field-error" id="carYearErr">Ano inválido</span>
             </div>
@@ -321,6 +316,7 @@
                 required
                 aria-required="true"
                 aria-describedby="estNameErr"
+                data-testid="input-establishment-name"
               />
               <span class="field-error" id="estNameErr">Campo obrigatório</span>
             </div>
@@ -331,6 +327,7 @@
                 name="estState"
                 id="estStateSelect"
                 onchange="loadCities(this.value)"
+                data-testid="select-establishment-state"
               >
                 <option value="">Selecione ...</option>
                 <option value="AC">Acre</option>
@@ -367,7 +364,13 @@
           <div class="grid-3">
             <div class="field">
               <label for="estCitySelect">Cidade</label>
-              <select name="estCity" id="estCitySelect" disabled aria-required="true">
+              <select
+                name="estCity"
+                id="estCitySelect"
+                disabled
+                aria-required="true"
+                data-testid="select-establishment-city"
+              >
                 <option value="">Selecione o estado primeiro</option>
               </select>
             </div>
@@ -381,6 +384,7 @@
                 placeholder="Centro"
                 required
                 aria-required="true"
+                data-testid="input-establishment-neighborhood"
               />
             </div>
 
@@ -403,6 +407,7 @@
                 aria-required="true"
                 oninput="formatCep(this)"
                 onblur="fetchCep(this.value)"
+                data-testid="input-establishment-zipcode"
               />
             </div>
 
@@ -415,6 +420,7 @@
                 placeholder="Rua das Flores"
                 required
                 aria-required="true"
+                data-testid="input-establishment-street"
               />
             </div>
 
@@ -427,6 +433,7 @@
                 placeholder="100"
                 required
                 aria-required="true"
+                data-testid="input-establishment-number"
               />
             </div>
           </div>
@@ -441,7 +448,12 @@
             Serviços/Produtos
           </div>
           <div id="servicesContainer"></div>
-          <button type="button" class="btn-add" onclick="addService()">
+          <button
+            type="button"
+            class="btn-add"
+            onclick="addService()"
+            data-testid="btn-add-service"
+          >
             + Adicionar serviço
           </button>
             <div>
@@ -453,6 +465,7 @@
                 placeholder="Algum detalhe adicional sobre o serviço ou pagamento..."
                 maxlength="500"
                 aria-describedby="observationsCount"
+                data-testid="input-observations"
               ></textarea>
               <span id="observationsCount" class="field-hint"></span>
             </div>
@@ -482,7 +495,7 @@
           </p>
         </div>
         <div class="check-row">
-          <input type="checkbox" id="privacy" required />
+          <input type="checkbox" id="privacy" required data-testid="input-privacy" />
           <label for="privacy"
             >Li e concordo com a
             <a href="/src/html/politica-privacidade.html"
@@ -490,7 +503,7 @@
             ></label
           >
         </div>
-        <button type="submit" class="btn-submit">Gerar Recibo Agora</button>
+        <button type="submit" class="btn-submit" data-testid="btn-generate">Gerar Recibo Agora</button>
       </form>
 
       <footer>© 2026 Nilton F. O. Júnior</footer>
@@ -532,10 +545,10 @@
         <div id="receiptContent"></div>
       </div>
       <div class="print-actions">
-        <button class="btn-close-preview" onclick="Form.closePreview()">
+        <button class="btn-close-preview" onclick="Form.closePreview()" data-testid="btn-close-preview">
           ✕ Fechar
         </button>
-        <button class="btn-print-preview" onclick="Form.printReceipt()">
+        <button class="btn-print-preview" onclick="Form.printReceipt()" data-testid="btn-print-receipt">
           🖨️ Imprimir / Salvar PDF
         </button>
       </div>
