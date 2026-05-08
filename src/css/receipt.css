@@ -1,5 +1,6 @@
 /* wrapper principal */
 .receipt-wrapper {
+    --receipt-accent: #6cacfb;
     font-family: "DM Sans", sans-serif;
     background: white;
     padding: 0;
@@ -7,7 +8,7 @@
 
 /* cabeçalho azul */
 .receipt-header {
-    background: #6cacfb;
+    background: var(--receipt-accent);
     padding: 28px 36px;
     display: flex;
     justify-content: space-between;
@@ -26,8 +27,6 @@
     max-height: 52px;
     max-width: 120px;
     object-fit: contain;
-    background: white;
-    padding: 4px;
     border-radius: 6px;
 }
 
@@ -89,8 +88,8 @@
 }
 
 .receipt-party-card {
-    background: #f9fafb;
-    border: 1px solid #f3f4f6;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
     border-radius: 10px;
     padding: 16px;
 }
@@ -119,8 +118,8 @@
 
 /* card veículo */
 .receipt-vehicle-card {
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
     border-radius: 10px;
     padding: 14px 16px;
     margin-bottom: 24px;
@@ -129,7 +128,7 @@
 .receipt-vehicle-label {
     font-size: 10px;
     font-weight: 700;
-    color: #6cacfb;
+    color: #6b7280;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 8px;
@@ -185,7 +184,7 @@
 }
 
 .receipt-total-box {
-    background: #6cacfb;
+    background: var(--receipt-accent);
     border-radius: 10px;
     padding: 14px 24px;
     text-align: right;
@@ -275,6 +274,7 @@
     font-size: 10px;
     color: #d1d5db;
     margin-top: 28px;
+    padding-bottom: 20px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
@@ -390,15 +390,16 @@
 
     /* Cabeçalho azul */
     .receipt-header {
-        background: #6cacfb !important;
+        background: var(--receipt-accent) !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         color-adjust: exact;
     }
 
+
     /* Box do total azul */
     .receipt-total-box {
-        background: #6cacfb !important;
+        background: var(--receipt-accent) !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         color-adjust: exact;
@@ -406,8 +407,8 @@
 
     /* Card de veículo azul claro */
     .receipt-vehicle-card {
-        background: #eff6ff !important;
-        border: 1px solid #bfdbfe !important;
+        background: #f3f4f6 !important;
+        border: 1px solid #e5e7eb !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         color-adjust: exact;
@@ -415,8 +416,8 @@
 
     /* Cards de cliente/beneficiário */
     .receipt-party-card {
-        background: #f9fafb !important;
-        border: 1px solid #f3f4f6 !important;
+        background: #f3f4f6 !important;
+        border: 1px solid #e5e7eb !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         color-adjust: exact;
@@ -456,7 +457,7 @@
     }
 
     .receipt-vehicle-label {
-        color: #6cacfb !important;
+        color: #6b7280 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
