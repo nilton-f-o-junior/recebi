@@ -122,7 +122,7 @@
     border: 1px solid #e5e7eb;
     border-radius: 10px;
     padding: 14px 16px;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
 }
 
 .receipt-vehicle-label {
@@ -180,7 +180,7 @@
 .receipt-total-wrapper {
     display: flex;
     justify-content: flex-end;
-    margin-top: 12px;
+    margin-top: 24px;
 }
 
 .receipt-total-box {
@@ -200,7 +200,7 @@
 
 .receipt-total-value {
     color: white;
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 700;
     letter-spacing: -0.02em;
 }
@@ -273,7 +273,7 @@
     text-align: center;
     font-size: 10px;
     color: #d1d5db;
-    margin-top: 28px;
+    margin-top: 32px;
     padding-bottom: 20px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -281,7 +281,7 @@
 
 /* rodapé estilo assinatura de email */
 .receipt-footer-signature-email {
-    margin-top: 32px;
+    margin-top: 64px;
     padding-top: 20px;
     border-top: 1px solid #e5e7eb;
     text-align: center;
@@ -334,7 +334,7 @@
     text-align: center;
     font-size: 10px;
     color: #d1d5db;
-    margin-top: 14px;
+    margin-top: 32px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
