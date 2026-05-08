@@ -62,8 +62,6 @@ function buildReceiptHTML(data, resolvedLogo) {
       ? `
         <div class="receipt-footer-signature-email">
           <div class="receipt-footer-sig-inner">
-            ${resolvedLogo ? `<img src="${resolvedLogo}" alt="Logo" class="receipt-footer-sig-logo" onerror="this.style.display='none'">` : ""}
-            ${resolvedLogo ? `<div class="receipt-footer-sig-divider"></div>` : ""}
             <div class="receipt-footer-sig-info">
               <p class="receipt-footer-sig-name">${e(data.estName)}</p>
               ${data.providerDoc ? `<p class="receipt-footer-sig-detail"><span>CPF/CNPJ:</span> ${e(data.providerDoc)}</p>` : ""}
@@ -91,8 +89,9 @@ function buildReceiptHTML(data, resolvedLogo) {
             <p class="receipt-footer-timestamp">Gerado em ${now} — Recebi</p>`;
 
   // Montar HTML final
+  const accentColor = data.accentColorHex || "#6CACFB";
   const html = `
-        <div class="receipt-wrapper">
+        <div class="receipt-wrapper" style="--receipt-accent: ${accentColor}">
             <div class="receipt-header">
                 <div class="receipt-header-left">
                     ${resolvedLogo ? `<img src="${resolvedLogo}" alt="Logo da empresa" class="receipt-logo" onerror="this.style.display='none'">` : ""}

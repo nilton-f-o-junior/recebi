@@ -471,6 +471,30 @@
             </div>
           </div>
         </div>
+        <!-- cor do recibo -->
+        <div class="card">
+          <div class="section-title">
+            <span class="icon">🎨</span>
+            Cor do Recibo
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label>Cores Sugeridas</label>
+              <div class="color-presets">
+                <button type="button" class="color-preset" data-color="#6CACFB" style="background: #6CACFB;" title="Azul"></button>
+                <button type="button" class="color-preset" data-color="#4CAF50" style="background: #4CAF50;" title="Verde"></button>
+                <button type="button" class="color-preset" data-color="#F44336" style="background: #F44336;" title="Vermelho"></button>
+                <button type="button" class="color-preset" data-color="#FF9800" style="background: #FF9800;" title="Laranja"></button>
+                <button type="button" class="color-preset" data-color="#9C27B0" style="background: #9C27B0;" title="Roxo"></button>
+                <button type="button" class="color-preset" data-color="#000000" style="background: #000000;" title="Preto"></button>
+              </div>
+            </div>
+            <div class="field">
+              <label>Cor Personalizada</label>
+              <input type="color" id="customColor" oninput="updateAccentColor(this.value)" value="#6CACFB">
+            </div>
+          </div>
+        </div>
 
         <input
           type="hidden"

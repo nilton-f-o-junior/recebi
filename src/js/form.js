@@ -44,6 +44,17 @@ function printReceipt() {
 }
 
 /**
+ * Atualiza a cor de destaque do recibo
+ * @param {string} color - Hexadecimal da cor
+ */
+function updateAccentColor(color) {
+  const hiddenInput = document.getElementById("accentColorHex");
+  const customInput = document.getElementById("customColor");
+  if (hiddenInput) hiddenInput.value = color;
+  if (customInput) customInput.value = color;
+}
+
+/**
  * Inicializa o formulário
  */
 function initForm() {
@@ -65,6 +76,13 @@ function initForm() {
   // Configurar abas de logo
   document.getElementById("panelUpload").style.display = "block";
   document.getElementById("panelUrl").style.display = "none";
+
+  // Configurar presets de cores
+  document.querySelectorAll(".color-preset").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      updateAccentColor(btn.dataset.color);
+    });
+  });
 }
 
 /**

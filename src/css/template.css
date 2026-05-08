@@ -475,7 +475,30 @@ input.field-valid {
   border-style: solid;
 }
 
-/* utilitários finais */
+/* botões de cores */
+.color-presets {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.color-preset {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px var(--border-color);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.color-preset:hover {
+  transform: scale(1.1);
+}
+
+.color-preset:active {
+  transform: scale(0.95);
+}
 .field-hint {
   display: block;
   margin-top: 4px;
