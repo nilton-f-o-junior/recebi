@@ -90,24 +90,94 @@ function buildReceiptHTML(data, resolvedLogo) {
 
   // Montar HTML final
   const accentColor = data.accentColorHex || "#6CACFB";
-  const html = `
-        <div class="receipt-wrapper" style="--receipt-accent: ${accentColor}">
-            <div class="receipt-header">
-                <div class="receipt-header-left">
-                    ${resolvedLogo ? `<img src="${resolvedLogo}" alt="Logo da empresa" class="receipt-logo" onerror="this.style.display='none'">` : ""}
-                    <div>
-                        <p class="receipt-type">${e(data.receiptType)}</p>
-                        <h1 class="receipt-est-name">${e(data.estName)}</h1>
-                        <p class="receipt-est-address">${e([data.estStreet, data.estNumber].filter(Boolean).join(", "))}${data.estNeighborhood ? " — " + e(data.estNeighborhood) : ""}</p>
-                    </div>
-                </div>
-                <div class="receipt-header-right">
-                    <p class="receipt-date-label">Emissão</p>
-                    <p class="receipt-date-value">${issueDate}</p>
-                    <p class="receipt-city">${e(data.estCity || "")}${stateValue ? ", " + e(stateValue) : ""}</p>
-                </div>
+  const template = data.receiptTemplate || "default";
+
+  let bodyHtml = "";
+
+  if (template === "detailed") {
+    bodyHtml = `
+        <div class="receipt-detailed-section">
+            <p class="receipt-detailed-title"><strong>Dados do Recibo</strong></p>
+            <div class="receipt-detailed-row">
+                <span class="receipt-detailed-label">Data de Emissão</span>
+                <span class="receipt-detailed-value">${issueDate}</span>
             </div>
-            <div class="receipt-body">
+        </div>
+
+        <div class="receipt-detailed-section">
+            <p class="receipt-detailed-title"><strong>Dados do Cliente</strong></p>
+            <div class="receipt-detailed-row">
+                <span class="receipt-detailed-label">Nome</span>
+                <span class="receipt-detailed-value">${e(data.clientName)}</span>
+            </div>
+            <div class="receipt-detailed-row">
+                <span class="receipt-detailed-label">Celular</span>
+                <span class="receipt-detailed-value">${e(data.clientPhone || "")}</span>
+            </div>
+            <div class="receipt-detailed-row">
+                <span class="receipt-detailed-label">CPF/CNPJ</span>
+                <span class="receipt-detailed-value">${e(data.clientDoc || "")}</span>
+            </div>
+        </div>
+
+        <div class="receipt-detailed-section">
+            <p class="receipt-detailed-title"><strong>Dados do Beneficiário</strong></p>
+            <div class="receipt-detailed-row">
+                <span class="receipt-detailed-label">Nome</span>
+                <span class="receipt-detailed-value">${e(data.providerName)}</span>
+            </div>
+            <div class="receipt-detailed-row">
+                <span class="receipt-detailed-label">Celular</span>
+                <span class="receipt-detailed-value">${e(data.providerPhone || "")}</span>
+            </div>
+            <div class="receipt-detailed-row">
+                <span class="receipt-detailed-label">CPF/CNPJ</span>
+                <span class="receipt-detailed-value">${e(data.providerDoc || "")}</span>
+            </div>
+        </div>
+
+        <div class="receipt-detailed-section">
+            <p class="receipt-detailed-title"><strong>Informações do Veículo</strong></p>
+            <div class="receipt-detailed-row">
+                <span class="receipt-detailed-label">Modelo</span>
+                <span class="receipt-detailed-value">${e(data.carModel || "")}</span>
+            </div>
+            ${data.carPlate ? `
+            <div class="receipt-detailed-row">
+                <span class="receipt-detailed-label">Placa</span>
+                <span class="receipt-detailed-value">${e(data.carPlate)}</span>
+            </div>` : ""}
+            ${data.carYear ? `
+            <div class="receipt-detailed-row">
+                <span class="receipt-detailed-label">Ano</span>
+                <span class="receipt-detailed-value">${e(data.carYear)}</span>
+            </div>` : ""}
+        </div>
+ 
+        ${data.observations ? `
+        <div class="receipt-detailed-section">
+            <p class="receipt-detailed-title"><strong>Observações</strong></p>
+            <div class="receipt-detailed-row">
+                <span class="receipt-detailed-observations">${e(data.observations)}</span>
+            </div>
+        </div>` : ""}
+ 
+        <div class="receipt-detailed-section">
+            <p class="receipt-detailed-title"><strong>Descrição do Serviço</strong></p>
+            <table class="receipt-table">
+                <tbody>${servicesRows}</tbody>
+            </table>
+        </div>
+
+        <div class="receipt-detailed-total-row">
+            <span>Valor Total:</span> <span class="receipt-detailed-value">R$ ${total.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span>
+        </div>
+
+
+        ${footerHtml}
+    `;
+  } else {
+    bodyHtml = `
                 <div class="receipt-parties">
                     <div class="receipt-party-card">
                         <p class="receipt-section-label">Cliente</p>
@@ -156,12 +226,34 @@ function buildReceiptHTML(data, resolvedLogo) {
                   data.observations
                     ? `
                 <div class="receipt-observations">
-                    <p class="receipt-observations-label">Observações</p>
+                    <p class="receipt-observations-label"><strong>Observações</strong></p>
                     <p class="receipt-observations-text">${e(data.observations)}</p>
                 </div>`
                     : ""
                 }
                 ${footerHtml}
+    `;
+  }
+
+  const html = `
+        <div class="receipt-wrapper" style="--receipt-accent: ${accentColor}">
+            <div class="receipt-header">
+                <div class="receipt-header-left">
+                    ${resolvedLogo ? `<img src="${resolvedLogo}" alt="Logo da empresa" class="receipt-logo" onerror="this.style.display='none'">` : ""}
+                    <div>
+                        <p class="receipt-type">${e(data.receiptType)}</p>
+                        <h1 class="receipt-est-name">${e(data.estName)}</h1>
+                        <p class="receipt-est-address">${e([data.estStreet, data.estNumber].filter(Boolean).join(", "))}${data.estNeighborhood ? " — " + e(data.estNeighborhood) : ""}</p>
+                    </div>
+                </div>
+                <div class="receipt-header-right">
+                    <p class="receipt-date-label">Emissão</p>
+                    <p class="receipt-date-value">${issueDate}</p>
+                    <p class="receipt-city">${e(data.estCity || "")}${stateValue ? ", " + e(stateValue) : ""}</p>
+                </div>
+            </div>
+            <div class="receipt-body">
+                ${bodyHtml}
             </div>
         </div>`;
 
