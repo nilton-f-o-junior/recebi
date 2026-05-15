@@ -166,7 +166,7 @@
 }
 
 .receipt-table-cell {
-    padding: 10px 0;
+    padding: 8px 0;
     font-size: 14px;
     color: #374151;
     border-bottom: 1px solid #f3f4f6;
@@ -339,10 +339,57 @@
     text-transform: uppercase;
 }
 
-/* ============================================================
-   REGRAS DE IMPRESSÃO
-   Garante que o PDF/impressão fique idêntico ao preview
-   ============================================================ */
+/* Detalhado - Estilos Adicionais */
+.receipt-detailed-section {
+    margin-bottom: 20px;
+}
+.receipt-detailed-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 4px;
+}
+.receipt-detailed-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+    font-size: 13px;
+}
+.receipt-detailed-label {
+    color: #6b7280;
+    flex-shrink: 0;
+}
+.receipt-detailed-observations {
+    color: #6b7280;
+    text-align: left;
+    flex-grow: 1;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.receipt-detailed-value {
+    color: #111827;
+    font-weight: 400;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    text-align: right;
+}
+.receipt-detailed-value--left {
+    text-align: left;
+    flex-grow: 1;
+}
+.receipt-detailed-total-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 32px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+}
+
 @media print {
     /* Remove margens e padding da página */
     @page {
