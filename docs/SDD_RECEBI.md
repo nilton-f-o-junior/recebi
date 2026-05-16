@@ -44,6 +44,7 @@ Pequenos negócios do setor automotivo — lava-jatos, estéticas automotivas e 
 | -------------------------------- | ---------------------------------------------------------------------- |
 | 🧾 Recibos personalizados        | Criação de recibos completos em poucos cliques                         |
 | 🚗 Registro de serviços          | Descrição detalhada de serviços e valores com soma automática          |
+| 📉 Gestão de descontos            | Aplicação de descontos no valor total do documento                      |
 | 🏢 Dados do negócio e do cliente | Cadastro completo de beneficiário, cliente e estabelecimento           |
 | 🖼️ Logo personalizada            | Upload de logotipo para identidade visual profissional                 |
 | 📄 Múltiplos tipos de documento  | Recibo, orçamento, ordem de serviço, comprovante de pagamento e outros |
@@ -86,7 +87,9 @@ recebi/
 ├── sitemap.xml                 # URL para indexação
 ├── docs/                       # Documentação técnica e testes
 │   ├── SDD_RECEBI.md           # Documento de Design de Software
-│   └── TC_Recebi_Casos_de_Teste.md # Casos de Teste
+│   ├── TC_Recebi_Casos_de_Teste.md # Casos de Teste
+│   ├── form_test_mapping.html  # Mapeamento de IDs para automação (Formulário)
+│   └── index_test_mapping.html # Mapeamento de IDs para automação (Landing Page)
 ├── img/                        # Assets de design e código-fonte de imagens
 └── src/
     ├── assets/
@@ -305,7 +308,7 @@ Seção destinada a lava-jatos e estéticas automotivas para identificação do 
 
 ### 3.8 Módulo: Serviços/Produtos (`services.js`)
 
-Permite ao usuário adicionar uma lista dinâmica de serviços ou produtos com seus respectivos valores. O total é calculado automaticamente.
+Permite ao usuário adicionar uma lista dinâmica de serviços ou produtos com seus respectivos valores. O total é calculado automaticamente, permitindo a aplicação de descontos.
 
 **Campos por item:**
 
@@ -314,14 +317,20 @@ Permite ao usuário adicionar uma lista dinâmica de serviços ou produtos com s
 | Serviço/Produto | `text`   | Sim         | Mínimo 1 caractere                |
 | Valor (R$)      | `number` | Sim         | Positivo, máximo 2 casas decimais |
 
+**Funcionalidades de Cálculo:**
+
+- **Soma Automática:** O sistema soma todos os valores unitários dos serviços.
+- **Campo de Desconto:** Opção para inserir um valor de desconto que é subtraído do total bruto.
+- **Cálculo do Total Líquido:** `Total Geral = (Soma dos Serviços) - Desconto`.
+
 **Comportamento:**
 
 - A página inicia com **1 linha de serviço** pré-adicionada
 - Botão **"+ Adicionar serviço"** insere nova linha ao final da lista
 - Botão **"×"** (por linha) remove o item correspondente; a primeira linha não pode ser removida se for a única
-- O **total** é recalculado em tempo real a cada alteração de valor
+- O **total** é recalculado em tempo real a cada alteração de valor ou desconto
 - Valores são formatados como moeda BRL (`R$ 1.250,00`) usando `Intl.NumberFormat`
-- No recibo gerado, cada linha exibe: descrição + valor unitário. Ao final: **Total Geral**
+- No recibo gerado, cada linha exibe: descrição + valor unitário. Ao final: **Subtotal, Desconto (se houver) e Total Geral**
 
 ---
 
@@ -337,26 +346,36 @@ Campo de texto livre e opcional para informações adicionais ao recibo.
 
 ### 3.10 Módulo: Geração do Recibo (`receipt-builder.js`)
 
-Responsável por transformar os dados do formulário em um documento HTML formatado, pronto para impressão ou salvamento como PDF.
+Responsável por transformar os dados do formulário em um documento HTML formatado, pronto para impressão ou salvamento como PDF. O sistema suporta diferentes modelos de visualização.
+
+**Modelos de Recibo:**
+
+- **Modelo Padrão:** Layout otimizado para rapidez, com cards de partes (Cliente/Beneficiário) e tabela de serviços simples.
+- **Modelo Detalhado:** Layout mais formal e extenso, com seções explicitamente rotuladas ("Dados do Cliente", "Informações do Veículo", etc.), ideal para documentos que exigem maior rigor documental.
 
 **Fluxo de geração:**
 
 1. `receipt-builder` recebe o objeto de dados coletados do formulário
 2. Monta a estrutura HTML do recibo (template strings ou DOM manipulation)
 3. Insere os dados campo a campo, respeitando visibilidade condicional:
-   - Logo: exibida apenas se fornecida
-   - Seção veículo: exibida apenas se ao menos um campo preenchido
-   - Estabelecimento: exibida apenas se ao menos um campo preenchido
-   - Observações: exibidas apenas se preenchidas
+   - **Logo:** exibida apenas se fornecida, com altura ajustada para 64px e sem padding.
+   - **Seção veículo:** exibida apenas se ao menos um campo preenchido.
+   - **Estabelecimento:** exibida apenas se ao menos um campo preenchido.
+   - **Observações:** exibidas apenas se preenchidas.
+   - **Marca d'água:** inserida no fundo do documento para autenticidade visual.
 4. Renderiza o recibo em uma `<div id="receipt-preview">` oculta (visível apenas via `@media print` ou ao expandir a prévia)
 5. Aciona `window.print()` para abrir o diálogo de impressão do navegador
 
-**Estratégia de impressão/PDF:**
+**Estratégia de Visual e Impressão:**
 
-- A `<div id="receipt-preview">` usa `@media print` com `display: block`
-- O formulário e o header da página usam `@media print` com `display: none`
-- O usuário usa a funcionalidade nativa do navegador ("Salvar como PDF" ou impressora física)
-- Não há dependência de bibliotecas de geração de PDF (jsPDF, pdf-lib), mantendo a stack enxuta
+- **Personalização:** Suporte a cores de destaque (accent colors) configuráveis.
+- **Estilização de Seções:** Cores de fundo das seções atualizadas para cinza claro para melhor legibilidade.
+- **Rodapé:** Opções de estilo de rodapé (Minimalista ou Detalhado com blocos de assinatura).
+- **Impressão/PDF:** 
+  - A `<div id="receipt-preview">` usa `@media print` com `display: block`.
+  - Ajuste de margens e espaçamentos específicos para suportar PDFs com múltiplas páginas sem quebras abruptas.
+  - O formulário e o header da página usam `@media print` com `display: none`.
+- Não há dependência de bibliotecas de geração de PDF (jsPDF, pdf-lib), mantendo a stack enxuta.
 
 ---
 
@@ -415,7 +434,10 @@ Responsável por validar os dados do formulário antes da geração do recibo.
 - **Sem autenticação:** não há coleta de e-mail, senha ou qualquer dado de conta
 - **Processamento local total:** toda a lógica roda no dispositivo do usuário
 
-### 4.2 Content Security Policy (CSP)
+### 4.2 Segurança e Proteção de Dados
+
+- **Escapamento de HTML:** Todo dado inserido pelo usuário é submetido a um processo de escapamento de caracteres HTML antes de ser renderizado no recibo, prevenindo ataques de XSS (Cross-Site Scripting).
+- **Content Security Policy (CSP):**
 
 ```http
 Content-Security-Policy:
@@ -447,10 +469,10 @@ O checkbox de consentimento ("Li e concordo com a Política de Privacidade") é 
 Card com título de seção, borda superior colorida e espaçamento interno consistente. Cada grupo lógico de campos (cliente, beneficiário, veículo, etc.) é encapsulado em um desses cards.
 
 **Campo de Input com Label**
-Label acima do campo, mensagem de erro abaixo (visível apenas em estado de erro), placeholder descritivo. Suporte a ícone prefixado (ex: ícone de R$ no campo de valor).
+Label acima do campo, mensagem de erro abaixo (visível apenas em estado de erro), placeholder descritivo. Suporte a ícone prefixado (ex: ícone de R$ no campo de valor). Inclui contador de caracteres para campos de texto longo.
 
 **Lista de Serviços**
-Container dinâmico com linha por serviço. Cada linha tem: campo de descrição (flex-grow), campo de valor (largura fixa), botão de remoção. Linha de total fixada ao final, atualizada em tempo real.
+Container dinâmico com linha por serviço. Cada linha tem: campo de descrição (flex-grow), campo de valor (largura fixa), botão de remoção. Inclui campo de desconto e linha de total fixada ao final, atualizada em tempo real.
 
 **Dropzone de Logo**
 Área de arrastar e soltar com borda tracejada. Exibe ícone + instruções no estado vazio. Substitui por miniatura da imagem após upload bem-sucedido. Botão "Remover" visível no estado com imagem.
@@ -475,7 +497,8 @@ Botão de largura total com estado desabilitado (cinza, cursor `not-allowed`) e 
 - O `<div id="receipt-preview">` é exibido e ocupa toda a página
 - Fonte ajustada para 11pt, margens de 15mm
 - Cores adaptadas para impressão monocromática (bordas em cinza, sem fundos coloridos)
-- Logo inserida no canto superior esquerdo ou centralizada, com altura máxima de 60px
+- Logo inserida no canto superior esquerdo ou centralizada, com altura máxima de 64px e sem padding
+- **Suporte a Múltiplas Páginas:** Ajuste de margens e quebras de página (`page-break-inside: avoid`) para garantir que a tabela de serviços e o total não sejam cortados entre páginas.
 
 ### 5.7 Acessibilidade (a11y)
 
@@ -484,6 +507,7 @@ Botão de largura total com estado desabilitado (cinza, cursor `not-allowed`) e 
 - **Navegação:** Navegação completa por teclado (Tab, Enter, Espaço) com foco visível.
 - **Gerenciamento de Modal:** Ao abrir o preview do recibo, o foco é transferido automaticamente para o primeiro botão de ação do modal. O fundo da página é bloqueado para evitar scroll indesejado.
 - **Anúncios Dinâmicos:** Status de geração, remoção de itens e erros são anunciados para usuários de tecnologias assistivas via regiões `aria-live="polite"`.
+- **Atributos ARIA:** Implementação extensiva de atributos ARIA (`aria-required`, `aria-invalid`, `aria-expanded`) para descrever estados dinâmicos da interface.
 - **Contraste:** Conformidade com WCAG AA (mínimo 4.5:1).
 - **Indicadores:** Campos obrigatórios indicados com `aria-required="true"` e marcador visual `*`.
 
@@ -588,14 +612,15 @@ Botão de largura total com estado desabilitado (cinza, cursor `not-allowed`) e 
 
 ### 7.1 Fases de Desenvolvimento
 
-| Fase                   | Entregas                                                                                          | Prioridade |
-| ---------------------- | ------------------------------------------------------------------------------------------------- | ---------- |
-| Fase 1 — MVP           | `index.html` funcional: formulário completo + geração de recibo + impressão via `window.print()`  | Alta       |
-| Fase 2 — Qualidade     | Validação robusta (CPF/CNPJ), máscaras de input, tratamento de erros inline                       | Alta       |
-| Fase 3 — Logo e Visual | Upload de logo (File API + URL), dropzone, pré-visualização, integração no recibo                 | Alta       |
-| Fase 4 — Localização   | Carregamento dinâmico de cidades por estado (JSON local com todos os municípios brasileiros)      | Média      |
-| Fase 5 — PWA e SEO     | `manifest.json`, service worker básico, metadados completos, JSON-LD, `robots.txt`, `sitemap.xml` | Média      |
-| Fase 6 — Polimento     | Tema escuro, testes de acessibilidade, otimização de performance, Lighthouse > 95                 | Baixa      |
+| Fase                   | Entregas                                                                                          | Prioridade | Status |
+| ---------------------- | ------------------------------------------------------------------------------------------------- | ---------- | ------ |
+| Fase 1 — MVP           | `index.html` funcional: formulário completo + geração de recibo + impressão via `window.print()`  | Alta       | Concluído |
+| Fase 2 — Qualidade     | Validação robusta (CPF/CNPJ), máscaras de input, tratamento de erros inline                       | Alta       | Concluído |
+| Fase 3 — Logo e Visual | Upload de logo (File API + URL), dropzone, pré-visualização, integração no recibo                 | Alta       | Concluído |
+| Fase 4 — Localização   | Carregamento dinâmico de cidades por estado (JSON local com todos os municípios brasileiros)      | Média      | Concluído |
+| Fase 5 — PWA e SEO     | `manifest.json`, service worker básico, metadados completos, JSON-LD, `robots.txt`, `sitemap.xml` | Média      | Concluído |
+| Fase 6 — Polimento     | Tema escuro, testes de acessibilidade, otimização de performance, Lighthouse > 95                 | Baixa      | Em Andamento |
+| Fase 7 — Avançado      | Gestão de descontos, marca d'água, suporte a PDFs multipáginas, automação (data-testid)           | Média      | Concluído |
 
 ### 7.2 Critérios de Aceite
 
