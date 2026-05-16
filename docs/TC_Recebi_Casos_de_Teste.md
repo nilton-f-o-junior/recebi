@@ -878,29 +878,51 @@ Este documento apresenta o plano detalhado de casos de teste para o sistema **Re
 
 ---
 
-#### TC-SRV-006: Formatação de Valor Monetário
-
+#### TC-SRV-007: Aplicação de Desconto
+ 
 | Campo | Valor |
 |-------|-------|
-| **ID do Caso de Teste** | TC-SRV-006 |
+| **ID do Caso de Teste** | TC-SRV-007 |
 | **Módulo** | Serviços/Produtos (services.js) |
-| **Título** | Valores formatados em Real brasileiro |
-| **Prioridade** | P2 — Alta |
-| **Pré-condições** | Campo de valor visível |
-
+| **Título** | Aplicação de desconto no valor total |
+| **Prioridade** | P1 — Crítica |
+| **Pré-condições** | Pelo menos um serviço adicionado |
+ 
 **Caso de Teste:**
-
+ 
 | Step | Descrição | Dados de Teste | Resultado Esperado |
 |------|-----------|----------------|-------------------|
-| 1 | Inserir valor sem separador | 1000 | Exibido como: R$ 1.000,00 |
-| 2 | Inserir valor com separador | 1.500,50 | Exibido como: R$ 1.500,50 |
-| 3 | Inserir valor negativo | -50 | Erro: "Valor deve ser positivo" |
-| 4 | Inserir valor zero | 0 | Erro: "Valor deve ser positivo" |
-
-**Critério de Aceite:** Valores positivos aceitos, formato BRL consistente.
-
+| 1 | Inserir valor de desconto | 10.00 | Campo aceita valor |
+| 2 | Verificar total líquido | Serviços: 50.00, Desc: 10.00 | Total: R$ 40,00 |
+| 3 | Inserir desconto maior que total | 60.00 | Total: R$ 0,00 ou aviso de valor negativo |
+| 4 | Remover desconto | Apagar campo | Total retorna ao valor bruto |
+ 
+**Critério de Aceite:** Desconto subtraído corretamente do total bruto.
+ 
 ---
-
+ 
+#### TC-SRV-008: Exibição de Desconto no Recibo
+ 
+| Campo | Valor |
+|-------|-------|
+| **ID do Caso de Teste** | TC-SRV-008 |
+| **Módulo** | Serviços/Produtos (services.js) |
+| **Título** | Exibição detalhada do desconto no recibo |
+| **Prioridade** | P2 — Alta |
+| **Pré-condições** | Desconto preenchido |
+ 
+**Caso de Teste:**
+ 
+| Step | Descrição | Dados de Teste | Resultado Esperado |
+|------|-----------|----------------|-------------------|
+| 1 | Gerar recibo com desconto | 10.00 | Recibo renderizado |
+| 2 | Verificar seção de totais | — | Exibe: Subtotal, Desconto e Total Geral |
+| 3 | Gerar recibo sem desconto | — | Seção de desconto omitida, exibe apenas Total |
+ 
+**Critério de Aceite:** Detalhamento financeiro correto no documento final.
+ 
+---
+ 
 ### 4.9 Módulo: Observações
 
 #### TC-OBS-001: Campo de Observações Opcional
@@ -1002,28 +1024,51 @@ Este documento apresenta o plano detalhado de casos de teste para o sistema **Re
 
 ---
 
-#### TC-GER-003: Geração via window.print()
-
+#### TC-GER-004: Modelo de Recibo Detalhado
+ 
 | Campo | Valor |
 |-------|-------|
-| **ID do Caso de Teste** | TC-GER-003 |
+| **ID do Caso de Teste** | TC-GER-004 |
 | **Módulo** | Geração do Recibo (receipt-builder.js) |
-| **Título** | Acionamento do diálogo de impressão |
-| **Prioridade** | P1 — Crítica |
-| **Pré-condições** | Recibo gerado |
-
+| **Título** | Validação do layout do modelo detalhado |
+| **Prioridade** | P2 — Alta |
+| **Pré-condições** | Selecionar "Modelo Detalhado" no formulário |
+ 
 **Caso de Teste:**
-
+ 
 | Step | Descrição | Dados de Teste | Resultado Esperado |
 |------|-----------|----------------|-------------------|
-| 1 | Clicar em "Imprimir / Salvar PDF" | — | window.print() executado |
-| 2 | Verificar diálogo do navegador | — | Diálogo nativo aberto |
-| 3 | Cancelar impressão | — | Formulário permanece intacto |
-
-**Critério de Aceite:** Diálogo de impressão abre corretamente.
-
+| 1 | Gerar recibo no modelo detalhado | Dados completos | Recibo renderizado com seções rotuladas |
+| 2 | Verificar estrutura | — | Seções "Dados do Cliente", "Beneficiário", "Veículo" visíveis |
+| 3 | Verificar rodapé detalhado | — | Exibe blocos de assinatura para Cliente e Beneficiário |
+| 4 | Testar conteúdo longo | Muitas linhas de serviço | Layout ajusta padding para evitar quebras bruscas |
+ 
+**Critério de Aceite:** Modelo detalhado renderizado corretamente com todas as seções e assinaturas.
+ 
 ---
-
+ 
+#### TC-GER-005: Marca d'água e Estética
+ 
+| Campo | Valor |
+|-------|-------|
+| **ID do Caso de Teste** | TC-GER-005 |
+| **Módulo** | Geração do Recibo (receipt-builder.js) |
+| **Título** | Verificação de marca d'água e cores de destaque |
+| **Prioridade** | P3 — Média |
+| **Pré-condições** | Gerar qualquer modelo de recibo |
+ 
+**Caso de Teste:**
+ 
+| Step | Descrição | Dados de Teste | Resultado Esperado |
+|------|-----------|----------------|-------------------|
+| 1 | Verificar fundo do recibo | — | Marca d'água visível e discreta |
+| 2 | Alterar cor de destaque | #FF0000 (Vermelho) | Elementos de destaque (bordas, títulos) assumem a cor |
+| 3 | Verificar cores de seção | — | Fundo das seções em cinza claro |
+ 
+**Critério de Aceite:** Marca d'água presente e cores de destaque aplicadas corretamente.
+ 
+---
+ 
 ### 4.11 Módulo: Validação de Campos
 
 #### TC-VAL-001: Validação em Tempo Real (on-blur)
