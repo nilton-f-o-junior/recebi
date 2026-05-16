@@ -35,7 +35,7 @@
 }
 
 .receipt-logo {
-    max-height: 52px;
+    max-height: 64px;
     max-width: 120px;
     object-fit: contain;
     border-radius: 6px;
@@ -307,7 +307,7 @@
 }
 
 .receipt-footer-sig-logo {
-    max-height: 52px;
+    max-height: 64px;
     max-width: 120px;
     object-fit: contain;
 }
