@@ -35,6 +35,13 @@ function buildReceiptHTML(data, resolvedLogo) {
             </tr>`;
   });
 
+  // Aplicar desconto
+  const discountInput = document.getElementById("discountValue");
+  const discountPercent = parseFloat(discountInput?.value) || 0;
+  const discountAmount = total * (discountPercent / 100);
+  total -= discountAmount;
+  if (total < 0) total = 0;
+
   // Formatar data de emissão
   const issueDate = new Date(data.issueDate + "T12:00:00").toLocaleDateString("pt-BR");
   const now = new Date().toLocaleString("pt-BR");

@@ -30,6 +30,16 @@ function addService(first = false) {
 }
 
 /**
+ * Exibe o campo de desconto
+ */
+function addDiscount() {
+  const container = document.getElementById("discountContainer");
+  if (container) {
+    container.style.display = "block";
+  }
+}
+
+/**
  * Remove uma linha de serviço
  * @param {HTMLElement} rowElement
  */
@@ -80,7 +90,15 @@ function getServices() {
  */
 function calculateTotal() {
   const services = getServices();
-  return services.reduce((sum, service) => sum + service.value, 0);
+  let subtotal = services.reduce((sum, service) => sum + service.value, 0);
+
+  const discountInput = document.getElementById("discountValue");
+  const discountPercent = parseFloat(discountInput?.value) || 0;
+  const discountAmount = subtotal * (discountPercent / 100);
+  
+  let total = subtotal - discountAmount;
+
+  return total < 0 ? 0 : total;
 }
 
 /**
@@ -101,4 +119,5 @@ window.Services = {
   calculateTotal,
   hasValidService,
   updateTotal: updateServiceTotal,
+  addDiscount,
 };
