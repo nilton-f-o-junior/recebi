@@ -92,6 +92,34 @@ function buildReceiptHTML(data, resolvedLogo) {
   const accentColor = data.accentColorHex || "#6CACFB";
   const template = data.receiptTemplate || "default";
 
+  const headerHtml = template === "detailed"
+    ? `
+                <div class="receipt-header">
+                    <div class="receipt-header-left">
+                        ${resolvedLogo ? `<img src="${resolvedLogo}" alt="Logo da empresa" class="receipt-logo" onerror="this.style.display='none'">` : ""}
+                    </div>
+                    <div class="receipt-header-center">
+                        <h1 class="receipt-est-name">${e(data.receiptType)}</h1>
+                    </div>
+                    <div class="receipt-header-right"></div>
+                </div>`
+    : `
+                <div class="receipt-header">
+                    <div class="receipt-header-left">
+                        ${resolvedLogo ? `<img src="${resolvedLogo}" alt="Logo da empresa" class="receipt-logo" onerror="this.style.display='none'">` : ""}
+                        <div>
+                            <p class="receipt-type">${e(data.receiptType)}</p>
+                            <h1 class="receipt-est-name">${e(data.estName)}</h1>
+                            <p class="receipt-est-address">${e([data.estStreet, data.estNumber].filter(Boolean).join(", "))}${data.estNeighborhood ? " — " + e(data.estNeighborhood) : ""}</p>
+                        </div>
+                    </div>
+                    <div class="receipt-header-right">
+                        <p class="receipt-date-label">Emissão</p>
+                        <p class="receipt-date-value">${issueDate}</p>
+                        <p class="receipt-city">${e(data.estCity || "")}${stateValue ? ", " + e(stateValue) : ""}</p>
+                    </div>
+                </div>`;
+
   let bodyHtml = "";
 
   if (template === "detailed") {
@@ -237,21 +265,7 @@ function buildReceiptHTML(data, resolvedLogo) {
 
   const html = `
         <div class="receipt-wrapper" style="--receipt-accent: ${accentColor}">
-            <div class="receipt-header">
-                <div class="receipt-header-left">
-                    ${resolvedLogo ? `<img src="${resolvedLogo}" alt="Logo da empresa" class="receipt-logo" onerror="this.style.display='none'">` : ""}
-                    <div>
-                        <p class="receipt-type">${e(data.receiptType)}</p>
-                        <h1 class="receipt-est-name">${e(data.estName)}</h1>
-                        <p class="receipt-est-address">${e([data.estStreet, data.estNumber].filter(Boolean).join(", "))}${data.estNeighborhood ? " — " + e(data.estNeighborhood) : ""}</p>
-                    </div>
-                </div>
-                <div class="receipt-header-right">
-                    <p class="receipt-date-label">Emissão</p>
-                    <p class="receipt-date-value">${issueDate}</p>
-                    <p class="receipt-city">${e(data.estCity || "")}${stateValue ? ", " + e(stateValue) : ""}</p>
-                </div>
-            </div>
+            ${headerHtml}
             <div class="receipt-body">
                 ${bodyHtml}
             </div>
