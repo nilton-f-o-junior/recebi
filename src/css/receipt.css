@@ -294,8 +294,25 @@
 .receipt-footer-signature-email {
     margin-top: 64px;
     padding-top: 20px;
-    border-top: 1px solid #e5e7eb;
     text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.receipt-footer-signature-email::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/images/img-baseboard.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.5;
+    z-index: -1;
+    pointer-events: none;
 }
 
 .receipt-footer-sig-inner {
@@ -320,7 +337,7 @@
 }
 
 .receipt-footer-sig-info {
-    text-align: left;
+    text-align: center;
 }
 
 .receipt-footer-sig-name {
@@ -563,6 +580,11 @@
     .receipt-footer-signature-email {
         break-inside: avoid;
         page-break-inside: avoid;
+    }
+
+    .receipt-footer-signature-email::before {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
 }
 
