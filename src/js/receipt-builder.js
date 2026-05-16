@@ -63,11 +63,9 @@ function buildReceiptHTML(data, resolvedLogo) {
         <div class="receipt-footer-signature-email">
           <div class="receipt-footer-sig-inner">
             <div class="receipt-footer-sig-info">
-              <p class="receipt-footer-sig-name">${e(data.estName)}</p>
-              ${data.providerDoc ? `<p class="receipt-footer-sig-detail"><span>CPF/CNPJ:</span> ${e(data.providerDoc)}</p>` : ""}
-              ${data.providerPhone ? `<p class="receipt-footer-sig-detail"><span>Telefone:</span> ${e(data.providerPhone)}</p>` : ""}
-              ${estAddress ? `<p class="receipt-footer-sig-detail"><span>Localizado:</span> ${e(estAddress)}</p>` : ""}
-            </div>
+               <p class="receipt-footer-sig-name">${e(data.estName)}</p>
+               ${estAddress ? `<p class="receipt-footer-sig-detail">${e(estAddress)}</p>` : ""}
+             </div>
           </div>
           <p class="receipt-footer-timestamp">Documento emitido em ${now}</p>
         </div>`
