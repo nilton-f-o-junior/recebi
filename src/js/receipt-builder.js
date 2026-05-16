@@ -285,6 +285,11 @@ function showReceiptPreview(html) {
   document.body.style.overflow = "hidden";
   window.scrollTo(0, 0);
 
+  // Aplica padding extra se o Modelo Detalhado exceder 2 páginas
+  setTimeout(() => {
+    checkAndApplyLongContentPadding();
+  }, 50);
+
   // Move foco para o primeiro botão de ação do modal — SDD §5.6
   const firstBtn = container.querySelector(".print-actions button");
   if (firstBtn) {
@@ -297,6 +302,21 @@ function showReceiptPreview(html) {
   if (live)
     live.textContent =
       "Recibo gerado com sucesso. Use os botões abaixo para imprimir ou fechar.";
+}
+
+function checkAndApplyLongContentPadding() {
+  const wrapper = document.querySelector("#receiptContent .receipt-wrapper");
+  if (!wrapper) return;
+
+  // Só aplica ao Modelo Detalhado
+  if (!wrapper.querySelector(".receipt-detailed-section")) return;
+
+  const PAGE_HEIGHT = 1122; // A4 height at 96dpi
+  const TWO_PAGES_HEIGHT = PAGE_HEIGHT * 2;
+
+  if (wrapper.offsetHeight > TWO_PAGES_HEIGHT) {
+    wrapper.classList.add("receipt-long-content");
+  }
 }
 
 /**
