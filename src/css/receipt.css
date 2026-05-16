@@ -404,8 +404,16 @@
 @media print {
     /* Remove margens e padding da página */
     @page {
-        margin: 0;
+        margin-top: 24mm;
+        margin-bottom: 24mm;
+        margin-left: 0;
+        margin-right: 0;
         size: A4;
+    }
+
+    @page :first {
+        margin: 0;
+        margin-bottom: 24mm;
     }
 
     /* Esconde tudo que não é o recibo */
@@ -556,6 +564,11 @@
         break-inside: avoid;
         page-break-inside: avoid;
     }
+}
+
+.receipt-long-content {
+    padding-bottom: 256px !important;
+}
 
     /* Rodapé assinatura email */
     .receipt-footer-sig-name {
