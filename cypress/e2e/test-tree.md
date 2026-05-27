@@ -1,3 +1,5 @@
+<!-- ELECTRON_OZONE_PLATFORM_HINT=auto npx cypress open -->
+
 /modules
 form.cy.js
     TC-FRM-001: Carregamento Inicial do Formulário
