@@ -28,7 +28,7 @@ describe('TC-EST-001', () => {
 // | 1 | Verificar estado inicial da cidade | — | Campo desabilitado com "Selecione o estado primeiro" |
 // | 2 | Selecionar Estado | Rio de Janeiro | Campo cidade habilitado, cidades do RJ listadas |
 // | 3 | Selecionar Estado | Minas Gerais | Campo cidade habilitado, cidades de MG listadas |
-// | 4 | Selecionar Estado | Amazonas | Campo cidade habilitado, cidades de AM listadas |
+// | 4 | Selecionar Estado | Amazonas | Campo cidade habilitado, cidades do AM listadas |
 // | 5 | Alterar Estado | De MG para SP | Campo cidade limpa e repopula com cidades de SP |
 
 // **Critério de Aceite:** Cidades populadas dinamicamente, correspondentes ao estado.
