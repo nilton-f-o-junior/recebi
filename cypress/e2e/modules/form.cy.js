@@ -18,7 +18,7 @@ describe('TC-FRM-001', () => {
   it('Carregamento Inicial do Formulário', () => {
     
     // | 1 | Abrir a aplicação no navegador | URL: localhost:3000 | Página carrega completamente |
-    cy.visit('https://recebi-ten.vercel.app/')
+    cy.visit('/')
     cy.get('[data-testid="btn-start-form"]').click()
     cy.document().its('readyState').should('eq', 'complete')
 
