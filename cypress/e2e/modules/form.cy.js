@@ -35,15 +35,27 @@ describe('TC-FRM-001', () => {
     cy.get('[data-testid="input-vehicle-plate"]').should('be.visible')
     cy.get('[data-testid="input-vehicle-year"]').should('be.visible')
     cy.get('[data-testid="input-establishment-name"]').should('be.visible')
-//    cy.get('[data-testid="select-establishment-state"]').should('be.visible')
-//    cy.get('[data-testid="select-establishment-city"]').should('be.visible')
-//    cy.get('[input-establishment-neighborhood]').should('be.visible')
-//    cy.get('[input-establishment-zipcode]').should('be.visible')
-//    cy.get('[input-establishment-street]').should('be.visible')
-//    cy.get('[input-establishment-number]').should('be.visible')
-//     cy.get('[input-service-name]').should('be.visible')
-//     cy.get('[input-service-value]').should('be.visible')
-//     cy.get('[input-observations]').should('be.visible')
+    cy.get('[data-testid="select-establishment-state"]').should('be.visible')
+    cy.get('[data-testid="select-establishment-city"]').should('be.visible')
+    cy.get('[data-testid="input-establishment-neighborhood"]').should('be.visible')
+    cy.get('[data-testid="input-establishment-zipcode"]').should('be.visible')
+    cy.get('[data-testid="input-establishment-street"]').should('be.visible')
+    cy.get('[data-testid="input-establishment-number"]').should('be.visible')
+    cy.get('[data-testid="input-service-name"]').should('be.visible')
+    cy.get('[data-testid="input-service-value"]').should('be.visible')
+    cy.get('[data-testid="input-observations"]').should('be.visible')
+
+    // | 3 | Verificar estado inicial do botão | — | Botão "Gerar Recibo" está desabilitado |
+    cy.get('[data-testid="btn-generate"]').should('be.disabled')
+
+    // | 4 | Verificar estado do checkbox | — | Checkbox de privacidade está desmarcado |
+    cy.get('[data-testid="input-privacy"]').should('not.be.checked')
+
+    // | 5 | Verificar quantidade de linhas de serviço | — | 1 linha de serviço pré-adicionada |
+    cy.get('.service-row').should('have.length', 1)
+
+    // | 6 | Verificar data de emissão | — | Campo pré-preenchido com data atual |
+    cy.get('[data-testid="input-date"]').should('have.value', new Date().toISOString().split('T')[0])
   })
   
 })
