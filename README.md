@@ -48,6 +48,16 @@ Simples assim. Sem sistema, sem mensalidade, sem complicação.
 - CSS3
 - JavaScript Vanilla
 
+## 🧪 Testes
+
+Os testes end-to-end (E2E) usam [Cypress](https://www.cypress.io/) e estão em `cypress/e2e/modules/`. Após instalar as dependências com `npm install`, abra a interface do Cypress com:
+
+```bash
+ELECTRON_OZONE_PLATFORM_HINT=auto npx cypress open
+```
+
+O plano de testes fica em `cypress/e2e/test-tree.md`.
+
 ## 🤝 Como Contribuir
 
 - ⭐ **Dê uma estrela no repositório** — isso ajuda o projeto a crescer!
