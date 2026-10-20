@@ -1,0 +1,10 @@
+# Dependências
+node_modules/
+
+# Artefatos do Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# Segredos locais do Cypress (nunca versionar)
+cypress.env.json
