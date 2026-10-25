@@ -56,6 +56,8 @@ Os testes end-to-end (E2E) usam [Cypress](https://www.cypress.io/) e estão em `
 ELECTRON_OZONE_PLATFORM_HINT=auto npx cypress open
 ```
 
+> **Versão do Cypress:** usamos o Cypress 14.5.4 do nixpkgs estável. O nixos-unstable traz o 15.19.0, marcado como inseguro pelo nixpkgs (Electron 37 EOL com CVEs). Migrar para o 15 quando o nixpkgs lançar uma versão com Electron atualizado.
+
 O plano de testes fica em `cypress/e2e/test-tree.md`.
 
 ## 🤝 Como Contribuir

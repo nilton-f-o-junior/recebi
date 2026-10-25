@@ -4,7 +4,7 @@
 **Data de Atualização:** Outubro 2026
 **Sistema:** Recebi — Gerador de Recibos Online
 **Tipo:** Aplicação Web Client-Side (HTML/CSS/JS puro, sem build)
-**Ferramenta de automação:** Cypress 15 (E2E)
+**Ferramenta de automação:** Cypress 14.5.4 (E2E)
 **Critério de Qualidade:** ISO 29119 / IEEE 829
 
 > **O que mudou em relação à v1.0.** A v1.0 foi escrita a partir do SDD, antes da implementação. A v2.0 foi reescrita a partir do **comportamento real da aplicação**, verificado no código-fonte e executado em Chromium. Os resultados esperados agora descrevem o que o app faz; quando o app diverge do SDD, o caso é marcado como **defeito conhecido (DEF-xx)** e listado na [seção 10](#10-defeitos-conhecidos-e-pendências). Também foram corrigidos dados de teste inválidos (CPF/CNPJ), adicionados os módulos que não existiam (Home, Preview, Personalização, Política de Privacidade, SEO/PWA) e incluídas dicas de implementação em Cypress.
@@ -125,7 +125,7 @@ Este documento apresenta o plano detalhado de casos de teste do sistema **Recebi
 | Componente | Especificação |
 |------------|---------------|
 | Aplicação | `https://recebi-ten.vercel.app` (padrão) ou `http://localhost:<porta>` servindo a **raiz do repositório** (o app usa caminhos absolutos como `/src/html/form.html`) |
-| Cypress | 15.x; `baseUrl` em `cypress.config.js` |
+| Cypress | 14.5.4; `baseUrl` em `cypress.config.js` |
 | Chrome / Edge / Firefox | Versão estável atual |
 | Safari / iOS / Android | Verificação manual (ou WebKit experimental) |
 | Fuso horário | Os testes de data devem calcular a data **local**, nunca fixar valores |
