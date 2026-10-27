@@ -2268,7 +2268,7 @@ cypress/e2e/
 
 **Total:** 101 casos de teste em 21 arquivos. Arquivos novos em relação à v1.0: `modules/home.cy.js`, `modules/preview-recibo.cy.js`, `modules/personalizacao.cy.js`, `modules/politica-privacidade.cy.js` e `seo-pwa.cy.js`.
 
-Para rodar um arquivo por vez: `npx cypress run --spec "cypress/e2e/modules/form.cy.js"`. Para abrir a interface: `ELECTRON_OZONE_PLATFORM_HINT=auto npx cypress open`.
+Para rodar um arquivo por vez: `npx cypress run --spec "cypress/e2e/modules/form.cy.js"`. Para abrir a interface: `npx cypress open` (apenas local, sem configuração Nix). Preferencialmente usar Docker conforme instruções no README.
 
 ---
 
