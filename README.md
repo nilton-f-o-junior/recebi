@@ -50,15 +50,55 @@ Simples assim. Sem sistema, sem mensalidade, sem complicação.
 
 ## 🧪 Testes
 
-Os testes end-to-end (E2E) usam [Cypress](https://www.cypress.io/) e estão em `cypress/e2e/modules/`. Após instalar as dependências com `npm install`, abra a interface do Cypress com:
+Os testes end-to-end (E2E) usam [Cypress](https://www.cypress.io/) e estão em `cypress/e2e/modules/`. O ambiente é **100% Docker** — não é necessário instalar Node, Cypress ou Nix no host.
 
-```bash
-ELECTRON_OZONE_PLATFORM_HINT=auto npx cypress open
-```
-
-> **Versão do Cypress:** usamos o Cypress 14.5.4 do nixpkgs estável. O nixos-unstable traz o 15.19.0, marcado como inseguro pelo nixpkgs (Electron 37 EOL com CVEs). Migrar para o 15 quando o nixpkgs lançar uma versão com Electron atualizado.
+> **Versão do Cypress:** fixada em **16.1.0** pela imagem Docker `cypress/included:16.1.0` e pelo `package.json` (`"cypress": "16.1.0"` sem `^`). Imagem e pacote npm são mantidos na mesma versão.
 
 O plano de testes fica em `cypress/e2e/test-tree.md`.
+
+### Pré-requisitos
+- Docker e Docker Compose instalados
+- Portas disponíveis: `4173` (app)
+
+### Comandos
+
+#### Subir o app (desenvolvimento)
+```bash
+docker compose up -d app
+```
+A aplicação ficará disponível em [http://localhost:4173](http://localhost:4173). As alterações nos arquivos do projeto são refletidas via volume montado.
+
+#### Derrubar tudo
+```bash
+docker compose down
+```
+
+#### Rodar toda a suíte E2E (headless)
+O serviço `cypress` usa o profile `test` para não subir junto com `docker compose up`.
+```bash
+docker compose --profile test run --rm cypress
+```
+Ou via script npm:
+```bash
+npm run test:e2e
+```
+
+#### Rodar um spec individual
+Escreva/rode os testes um por vez durante o TDD. Exemplo:
+```bash
+docker compose --profile test run --rm cypress --spec "cypress/e2e/modules/form.cy.js"
+```
+Ou via script npm:
+```bash
+npm run test:e2e:spec -- "cypress/e2e/modules/form.cy.js"
+```
+
+#### Abrir Cypress (interface gráfica) - opcional/manual
+`cypress open` (modo interativo) não é o padrão neste setup. Caso necessário, só pode ser utilizado manualmente pelo usuário com seu próprio ambiente gráfico (X11/Wayland) e configuração adequada fora do escopo automatizado — não há configuração pronta para isso no `docker-compose.yml`.
+
+#### Screenshots e vídeos
+São gravados dentro do projeto em `cypress/screenshots/` e `cypress/videos/`. Ambos já estão listados no `.gitignore`.
+
 
 ## 🤝 Como Contribuir
 
