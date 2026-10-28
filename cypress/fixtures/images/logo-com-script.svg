@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" onload="alert('xss-onload')">
+  <script type="text/javascript">alert('xss-script')</script>
+  <a href="javascript:alert('xss-href')">
+    <rect width="20" height="20" fill="#6CACFB" />
+  </a>
+</svg>

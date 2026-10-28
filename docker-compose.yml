@@ -23,8 +23,11 @@ services:
       app:
         condition: service_healthy
     environment:
-      - CYPRESS_baseUrl=http://app:4173
+      # localhost evita o bloqueio de Local Network Access do Chrome 142+;
+      # o Cypress compartilha a rede do app para alcançar o nginx.
+      - CYPRESS_baseUrl=http://localhost:4173
       - CI=1
+    network_mode: "service:app"
     working_dir: /e2e
     volumes:
       - .:/e2e

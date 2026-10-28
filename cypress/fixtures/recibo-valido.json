@@ -1,0 +1,25 @@
+{
+  "receiptType": "Recibo de Pagamento",
+  "issueDate": "2020-01-15",
+  "clientName": "João Silva",
+  "clientDoc": "52998224725",
+  "clientPhone": "11999998888",
+  "providerName": "Maria Ltda",
+  "providerDoc": "11444777000161",
+  "providerPhone": "21987654321",
+  "carModel": "Fiat Strada",
+  "carPlate": "ABC1D23",
+  "carYear": "2024",
+  "estName": "Lava-jato Express",
+  "state": "SP",
+  "city": "São Paulo",
+  "neighborhood": "Centro",
+  "cep": "01310100",
+  "street": "Av. Paulista",
+  "number": "1000",
+  "observations": "Garantia de 30 dias",
+  "services": [
+    { "name": "Lavagem completa", "value": "50.00" },
+    { "name": "Cera", "value": "30.00" }
+  ]
+}
