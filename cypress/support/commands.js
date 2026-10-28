@@ -64,11 +64,13 @@ Cypress.Commands.add("preencherFormulario", (sobrescrever = {}) => {
     digitar("input-vehicle-year", d.carYear);
     digitar("input-establishment-name", d.estName);
 
-    cy.get(tid("select-establishment-state"))
-      .select(d.state)
-      .then(() => {
-        if (d.state) cy.wait("@ibge");
-      });
+    // Só dispara (e espera) o IBGE quando o estado realmente muda; repetir o
+    // mesmo valor não emite "change" e o cy.wait ficaria pendente.
+    cy.get(tid("select-establishment-state")).then(($estado) => {
+      if ($estado.val() === d.state) return;
+      cy.wrap($estado).select(d.state);
+      if (d.state) cy.wait("@ibge");
+    });
     cy.get(tid("select-establishment-city"))
       .should("not.be.disabled")
       .select(d.city);
@@ -82,8 +84,21 @@ Cypress.Commands.add("preencherFormulario", (sobrescrever = {}) => {
     const cepDigitos = (d.cep || "").replace(/\D/g, "");
     if (cepDigitos.length === 8) cy.wait("@viacep");
 
+    // Reaproveita as linhas já existentes: o comando pode ser aplicado mais de
+    // uma vez no mesmo teste (ex.: TC-CLI-005) sem acumular linhas vazias, que
+    // bloqueiam o submit pela validação nativa dos campos `required`.
+    cy.get(tid("input-service-name")).then(($linhas) => {
+      const excedentes = $linhas.length - d.services.length;
+      for (let i = 0; i < excedentes; i++) {
+        cy.get(tid("btn-remove-service")).last().click();
+      }
+      const faltam = d.services.length - $linhas.length;
+      for (let i = 0; i < faltam; i++) {
+        cy.get(tid("btn-add-service")).click();
+      }
+    });
+
     d.services.forEach((servico, i) => {
-      if (i > 0) cy.get(tid("btn-add-service")).click();
       cy.get(tid("input-service-name")).eq(i).clear().type(servico.name);
       cy.get(tid("input-service-value")).eq(i).clear().type(servico.value);
     });
