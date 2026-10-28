@@ -1,13 +1,15 @@
 # Plano de Testes — Sistema Recebi
 
-**Versão do Documento:** 2.0
+**Versão do Documento:** 2.1
 **Data de Atualização:** Outubro 2026
 **Sistema:** Recebi — Gerador de Recibos Online
 **Tipo:** Aplicação Web Client-Side (HTML/CSS/JS puro, sem build)
-**Ferramenta de automação:** Cypress 14.5.4 (E2E)
+**Ferramenta de automação:** Cypress 16.1.x (E2E; Node.js 22, 24 ou ≥ 26)
 **Critério de Qualidade:** ISO 29119 / IEEE 829
 
 > **O que mudou em relação à v1.0.** A v1.0 foi escrita a partir do SDD, antes da implementação. A v2.0 foi reescrita a partir do **comportamento real da aplicação**, verificado no código-fonte e executado em Chromium. Os resultados esperados agora descrevem o que o app faz; quando o app diverge do SDD, o caso é marcado como **defeito conhecido (DEF-xx)** e listado na [seção 10](#10-defeitos-conhecidos-e-pendências). Também foram corrigidos dados de teste inválidos (CPF/CNPJ), adicionados os módulos que não existiam (Home, Preview, Personalização, Política de Privacidade, SEO/PWA) e incluídas dicas de implementação em Cypress.
+
+> **O que mudou na v2.1.** O plano foi atualizado do Cypress 14.5.4 para o **16.1.x**. Os resultados esperados dos casos permanecem os mesmos; foram ajustados os pré-requisitos (Node.js 22+, navegador padrão Chrome), as convenções (digitação sem atraso, visibilidade `modern`, rede nativa, queries de cookie/storage), as notas de TC-OBS-001, TC-SEG-001, TC-SEG-003, TC-POL-001 e TC-A11-002, e os apêndices C e D. Resumo em [3.6](#36-atualização-para-o-cypress-161-o-que-muda-nos-testes).
 
 ---
 
@@ -69,11 +71,11 @@ Este documento apresenta o plano detalhado de casos de teste do sistema **Recebi
 ### 1.3 Critérios de Entrada
 
 - [ ] SDD (`docs/SDD_RECEBI.md`) disponível como referência
-- [ ] Dependências instaladas (`npm install`) e Cypress abrindo (`npx cypress open`)
+- [ ] Node.js 22, 24 ou ≥ 26 instalado; dependências instaladas (`npm install`, com `cypress@16.1.1`) e Cypress abrindo (`npx cypress open`)
 - [ ] `baseUrl` configurado em `cypress.config.js` (produção por padrão; sobrescrevível com `CYPRESS_BASE_URL`)
 - [ ] Massa de dados do [Apêndice A](#apêndice-a--massa-de-dados) criada como fixture
 - [ ] Comandos de apoio do [Apêndice C](#apêndice-c--comandos-cypress-de-apoio) em `cypress/support/commands.js`
-- [ ] Navegadores de teste instalados (Chrome, Firefox, Edge; Safari quando aplicável)
+- [ ] Navegadores de teste instalados (Chrome como padrão, Firefox ≥ 140, Edge; Safari quando aplicável). O Electron está deprecado: configure `defaultBrowser: 'chrome'`
 
 ---
 
@@ -125,8 +127,8 @@ Este documento apresenta o plano detalhado de casos de teste do sistema **Recebi
 | Componente | Especificação |
 |------------|---------------|
 | Aplicação | `https://recebi-ten.vercel.app` (padrão) ou `http://localhost:<porta>` servindo a **raiz do repositório** (o app usa caminhos absolutos como `/src/html/form.html`) |
-| Cypress | 14.5.4; `baseUrl` em `cypress.config.js` |
-| Chrome / Edge / Firefox | Versão estável atual |
+| Cypress | 16.1.x (recomendado 16.1.1; evite a 16.0.0); Node.js 22, 24 ou ≥ 26; `baseUrl` em `cypress.config.js` |
+| Chrome / Edge / Firefox | Versão estável atual (Firefox ≥ 140). Chrome é o navegador padrão; Electron deprecado |
 | Safari / iOS / Android | Verificação manual (ou WebKit experimental) |
 | Fuso horário | Os testes de data devem calcular a data **local**, nunca fixar valores |
 
@@ -157,7 +159,7 @@ Este documento apresenta o plano detalhado de casos de teste do sistema **Recebi
 
 **3. O botão "Gerar" nasce desabilitado.** Marque `input-privacy` antes de clicar. Ele fica habilitado **somente** pelo checkbox, não pelo preenchimento do formulário.
 
-**4. APIs externas sempre simuladas.** Selecionar um estado chama o IBGE; sair do campo CEP com 8 dígitos chama o ViaCEP. Use `cy.mockLocalidades()` e `cy.mockViaCep()` (Apêndice C) e aguarde com `cy.wait('@ibge')` / `cy.wait('@viacep')`. A Google Fonts também gera requisições, mas não afeta os testes.
+**4. APIs externas sempre simuladas.** Selecionar um estado chama o IBGE; sair do campo CEP com 8 dígitos chama o ViaCEP. Use `cy.mockLocalidades()` e `cy.mockViaCep()` (Apêndice C) e aguarde com `cy.wait('@ibge')` / `cy.wait('@viacep')`. A Google Fonts também gera requisições, mas não afeta os testes. No Chrome/Edge (Cypress 16) o `cy.intercept` usa a rede nativa do navegador; veja as diferenças em [3.6](#36-atualização-para-o-cypress-161-o-que-muda-nos-testes).
 
 **5. `window.print` e `alert`.**
 - `window.print` é chamado **somente** ao clicar em `btn-print-receipt`. Use `cy.stub(win, 'print')` em `onBeforeLoad` (já feito por `cy.abrirFormulario()`).
@@ -171,9 +173,9 @@ Este documento apresenta o plano detalhado de casos de teste do sistema **Recebi
 
 **9. Cor e data por `invoke`.** Para `input[type=color]`: `.invoke('val', '#ff0000').trigger('input')`. Para `type=date`: `.clear().type('2020-01-15')`.
 
-**10. Teclado.** `{tab}` no `type()` não move o foco. Para ordem de tabulação use `cy.press(Cypress.Keys.Tab)` (Cypress ≥ 14.3; confira na documentação da sua versão) ou o plugin `cypress-real-events`. O `input[type=date]` consome vários Tabs (dia, mês, ano).
+**10. Teclado.** `{tab}` no `type()` não move o foco. Para ordem de tabulação use `cy.press(Cypress.Keys.Tab)` (disponível no Cypress 16.1) ou o plugin `cypress-real-events`. O `input[type=date]` consome vários Tabs (dia, mês, ano).
 
-**11. `@media print`.** Só é emulável em navegadores Chromium, via CDP:
+**11. `@media print`.** Só é emulável em navegadores Chromium (use Chrome ou Edge; o Electron está deprecado), via CDP:
 `Cypress.automation('remote:debugger:protocol', { command: 'Emulation.setEmulatedMedia', params: { media: 'print' } })`. Restaure com `media: 'screen'` ao final do teste.
 
 **12. Padrão de comentário.** Cada `describe('TC-XXX-NNN')` traz a tabela do TDD comentada, e cada passo é comentado com a linha da tabela acima do código:
@@ -196,6 +198,31 @@ cy.get('[data-testid="btn-generate"]').should('be.disabled')
 | Preview | O recibo abre em um overlay (`#printContainer.visible`); o formulário permanece no DOM com os dados |
 
 ---
+### 3.6 Atualização para o Cypress 16.1 (o que muda nos testes)
+
+Este plano passou do Cypress 14.5.4 para o **16.1.x**. Os resultados esperados dos casos **não mudam**: o que muda são pré-requisitos, comandos de apoio e algumas notas de implementação. Recomenda-se instalar `cypress@16.1.1` (a 16.1.0 corrige regressões da 16.0.0 em Chrome/Edge, como execução que trava sem saída e `blockHosts` não aplicado). A 16.2.0 já existe e traz `cy.getByRole()`; **este plano não usa esse comando**.
+
+| Mudança no Cypress | Impacto neste plano | Ação |
+|--------------------|---------------------|------|
+| Node.js 22.x, 24.x ou ≥ 26 (20 e 25 deixam de ser suportados) | Máquinas locais, CI e Docker | Atualizar o Node antes de `npm install` |
+| Electron deprecado como navegador de teste | Execução sem `--browser` cai no Electron | `defaultBrowser: 'chrome'` no `cypress.config.js` e `--browser chrome` no CI; no Docker usar `cypress/browsers` (não `cypress/base`) |
+| Firefox ≥ 140 (exigido desde o Cypress 15.19) | TC-BRW-002 | Atualizar o Firefox do ambiente |
+| `keystrokeDelay` padrão de 10 para **0** ms | TC-MSK-*, TC-OBS-*, TC-EST-003 a 005, `preencherFormulario` | Nenhum resultado esperado muda (a máscara continua sendo reaplicada a cada `input`). Se surgir flake em campo com tratamento assíncrono, use `{ delay: 10 }` no `type()` ou `Cypress.Keyboard.defaults({ keystrokeDelay: 10 })`. Remova `{ delay: 0 }` redundantes |
+| Algoritmo de visibilidade `modern` por padrão | Asserções `be.visible` / `not.be.visible` | Ver a lista abaixo da tabela |
+| Chrome/Edge usam a **rede nativa** do navegador (HTTP/2); Firefox e WebKit seguem a rede antiga | `cy.intercept` em TC-EST-*, TC-SEG-001 | Não asserir `req.httpVersion`, `content-encoding`, status `304` nem `res.statusMessage`. O limite de resposta passa a ser fixo (30 s) e não segue `responseTimeout`: use `cy.wait('@alias', { timeout })`. Rode TC-EST-* e TC-SEG-001 em Chrome **e** Firefox. Confirme no primeiro run em Chrome o `forceNetworkError` de TC-EST-005 |
+| `cy.getCookie(s)`, `cy.getAllCookies()`, `cy.getAllLocalStorage()` e `cy.getAllSessionStorage()` viram **queries** com retry | TC-SEG-003 | Encadeie `.should()`; asserção dentro de `.then()` roda uma vez e não repete |
+| `Cypress.env()` removido (use `cy.env()` ou `Cypress.expose()`) | Este plano não usa `Cypress.env()` | Para parametrizar, use `--expose` ou `Cypress.expose()`. Confirme com `npx cypress run` que `CYPRESS_BASE_URL` continua sobrescrevendo o `baseUrl` |
+| `cy.exec()` e `cy.end()` removidos | Não usados neste plano | Se precisar de shell, registre um `cy.task()` |
+| `viewportWidth`, `viewportHeight` e `blockHosts` não podem ser alterados com `Cypress.config()` durante o teste | TC-BRW-005 a 007 | Usar `cy.viewport()` (já previsto) ou configuração no `describe`/`it` |
+| Opções removidas: `experimentalFastVisibility`, `experimentalMemoryManagement` (use `manageBrowserMemory`), `experimentalSourceRewriting`, `allowCypressEnv`, `execTimeout` | `cypress.config.js` | Apagar do arquivo se existirem |
+| Escapes temporários (`forceHttp1`, `visibilityStrategy: 'legacy'`) | — | Usar só para diagnosticar; ambos são deprecados. Não deixar fixos no repositório |
+
+**Onde revisar asserções de visibilidade.** O algoritmo `modern` não considera recorte por `overflow` de ancestral, ocultação por `transform` nem cobertura por elementos `fixed`/`sticky`, como o `legacy` fazia. Revise, ao escrever os testes: o select de cidade (TC-FRM-001, TC-EST-002), a prévia/placeholder da logo (TC-LOG-001), `#discountContainer` (TC-SRV-007), `#cepSuccess` (TC-EST-004), as mensagens de erro inline (`.visible` em TC-CLI-002, TC-VAL-003), `#printContainer` (TC-PRE-*) e os cards da política (TC-POL-001). Quando a ocultação não for por `display`/`visibility`/`hidden`, prefira `have.class`, `have.css` ou `have.attr` a `be.visible`.
+
+**Antes de atualizar um repositório que já esteja no Cypress 14:** o guia oficial recomenda subir uma versão maior por vez (14 → 15 → 16). Na 15 saiu o formato de 3 argumentos de `cy.stub()` (este plano já usa `.callsFake`) e o `cy.exec().code` foi renomeado para `exitCode`.
+
+---
+
 ## 4. Casos de Teste por Módulo
 
 > **Como ler as tabelas.** A coluna "Resultado Esperado" traz o comportamento **correto**. Quando o app diverge, o passo é marcado com 🐞 e a nota do caso informa o **comportamento atual**. Dados de teste citados (CPF, CNPJ etc.) estão no [Apêndice A](#apêndice-a--massa-de-dados). Seletores estão no [Apêndice B](#apêndice-b--mapa-de-seletores).
@@ -961,7 +988,7 @@ cy.get('[data-testid="btn-generate"]').should('be.disabled')
 
 **Critério de Aceite:** Campo opcional; limite de 500 caracteres respeitado.
 
-**Notas Cypress:** `.type('y'.repeat(550), { delay: 0 })` respeita o `maxlength`. Para preencher rápido o passo 3, use `.invoke('val', 'x'.repeat(500)).trigger('input')`.
+**Notas Cypress:** `.type('y'.repeat(550))` respeita o `maxlength` (no Cypress 16 o `keystrokeDelay` padrão já é 0, então `{ delay: 0 }` é desnecessário). Para preencher rápido o passo 3, use `.invoke('val', 'x'.repeat(500)).trigger('input')`.
 
 #### TC-OBS-002: Exibição Condicional no Recibo
 
@@ -1408,7 +1435,7 @@ cy.get('[data-testid="btn-generate"]').should('be.disabled')
 
 **Critério de Aceite:** A política está acessível e declara o tratamento de dados.
 
-**Notas Cypress:** o link abre na **mesma aba**; clicar nele a partir do formulário preenchido descarta os dados (DEF-17). Para testar a página, visite-a diretamente.
+**Notas Cypress:** o link abre na **mesma aba**; clicar nele a partir do formulário preenchido descarta os dados (DEF-17). Para testar a página, visite-a diretamente. Para a revelação progressiva, assertar a classe `.visible` (`have.class`) e não `be.visible`: se os cards forem ocultados por `transform`, o algoritmo de visibilidade `modern` do Cypress 16 não os trata como ocultos.
 
 #### TC-POL-002: Contato
 
@@ -1441,7 +1468,7 @@ cy.get('[data-testid="btn-generate"]').should('be.disabled')
 
 **Critério de Aceite:** Zero requisições com dados do formulário, exceto as consultas de localidade documentadas.
 
-**Notas Cypress:** a lista permitida de hosts nos passos 1–4 é: o próprio `baseUrl`, `fonts.googleapis.com`, `fonts.gstatic.com`, `viacep.com.br`, `servicodados.ibge.gov.br`. O passo 5 registra a divergência com a Política de Privacidade ("Nenhum dado digitado… é enviado a servidores externos"). Decisão pendente: ajustar o texto da política ou usar uma base local de cidades/CEP.
+**Notas Cypress:** a lista permitida de hosts nos passos 1–4 é: o próprio `baseUrl`, `fonts.googleapis.com`, `fonts.gstatic.com`, `viacep.com.br`, `servicodados.ibge.gov.br`. O passo 5 registra a divergência com a Política de Privacidade ("Nenhum dado digitado… é enviado a servidores externos"). Decisão pendente: ajustar o texto da política ou usar uma base local de cidades/CEP. No Chrome/Edge (Cypress 16) não asserir `req.httpVersion`, cabeçalhos de compressão nem status `304` no `cy.intercept`; compare método, host, URL e corpo. Repita o caso no Firefox, que usa a rede antiga.
 
 #### TC-SEG-002: CSP Headers
 
@@ -1471,6 +1498,8 @@ cy.get('[data-testid="btn-generate"]').should('be.disabled')
 | 5 | Recarregar a página | `cy.reload()` | Formulário volta ao estado inicial; nenhum dado restaurado |
 
 **Critério de Aceite:** Zero cookies; dados não persistidos.
+
+**Notas Cypress:** no Cypress 16 `cy.getCookies()` é uma query com retry: use `cy.getCookies().should('be.empty')`, não `.then()`. Para o storage, `cy.window().its('localStorage.length').should('eq', 0)` e o equivalente para `sessionStorage`.
 
 #### TC-SEG-004: Consentimento de Privacidade
 
@@ -1518,7 +1547,7 @@ cy.get('[data-testid="btn-generate"]').should('be.disabled')
 
 **Arquivo de teste:** `cypress/e2e/acessibilidade.cy.js`
 
-> Recomenda-se `cypress-axe` (dependências `cypress-axe` e `axe-core`) para os passos de contraste e ARIA: `cy.injectAxe()` e `cy.checkA11y()`.
+> Recomenda-se `cypress-axe` (dependências `cypress-axe` e `axe-core`) para os passos de contraste e ARIA: `cy.injectAxe()` e `cy.checkA11y()`. Confirme a compatibilidade da versão do `cypress-axe` com o Cypress 16 antes de fixá-la; o `cy.getByRole()` nativo só existe a partir do 16.2.0.
 
 #### TC-A11-001: Labels Associados aos Campos
 
@@ -1548,7 +1577,7 @@ cy.get('[data-testid="btn-generate"]').should('be.disabled')
 
 **Critério de Aceite:** WCAG 2.1 — 2.1.1 Keyboard.
 
-**Notas Cypress:** `{tab}` no `type()` não move o foco. Alternativas: `cy.press` (Cypress ≥ 14.3) ou `cypress-real-events` (`cy.realPress('Tab')`).
+**Notas Cypress:** `{tab}` no `type()` não move o foco. Alternativas: `cy.press` (disponível no Cypress 16.1) ou `cypress-real-events` (`cy.realPress('Tab')`).
 
 #### TC-A11-003: Contraste de Cores
 
@@ -1680,7 +1709,7 @@ cy.get('[data-testid="btn-generate"]').should('be.disabled')
 
 **Arquivo de teste:** `cypress/e2e/compatibilidade.cy.js`
 
-> **Estratégia.** Os casos BRW-001 a BRW-004 são **o mesmo teste de fumaça** executado em navegadores diferentes (`npx cypress run --browser chrome|firefox|edge`). Escreva um único `describe` com o fluxo (abrir → preencher → gerar → imprimir com stub) e rode-o por navegador. Os casos BRW-005 a BRW-007 usam `cy.viewport()`.
+> **Estratégia.** Os casos BRW-001 a BRW-004 são **o mesmo teste de fumaça** executado em navegadores diferentes (`npx cypress run --browser chrome|firefox|edge`). Escreva um único `describe` com o fluxo (abrir → preencher → gerar → imprimir com stub) e rode-o por navegador. Os casos BRW-005 a BRW-007 usam `cy.viewport()` (no Cypress 16 não altere o viewport com `Cypress.config()` durante o teste). Chrome e Edge usam a rede nativa do navegador e Firefox/WebKit a rede antiga; por isso os testes com `cy.intercept` devem passar nos dois grupos.
 
 #### TC-BRW-001: Compatibilidade Chrome
 
@@ -1930,6 +1959,7 @@ Estas não são necessariamente defeitos do app; decida se o app ou o SDD deve m
 |--------|------|-------|-----------|
 | 1.0 | Abril 2026 | QA Team | Versão inicial, escrita a partir do SDD v1.0 |
 | 2.0 | Outubro 2026 | QA Team | Reescrita a partir do comportamento verificado da aplicação: dados de teste corrigidos (CPF/CNPJ, placa, máscaras, anos); novos módulos (Home, Preview, Personalização, Política, SEO/PWA); casos ampliados (EST-004 a 007, SRV-006/009, LOG-007/008, SEG-005/006, A11-005/006 e outros); preenchidas as lacunas TC-SRV-006 e TC-GER-003; seção de defeitos conhecidos; notas de implementação para Cypress; apêndices de massa de dados, seletores e comandos |
+| 2.1 | Outubro 2026 | QA Team | Atualização para o Cypress 16.1.x: pré-requisitos (Node.js 22+, Chrome como navegador padrão), nova seção 3.6 com as mudanças do Cypress 16 que afetam os testes, notas em TC-OBS-001, TC-SEG-001, TC-SEG-003, TC-POL-001 e TC-A11-002, configuração de referência no apêndice C e nota de Docker no apêndice D |
 
 ---
 
@@ -2116,6 +2146,21 @@ Para tornar os testes menos frágeis, adicione ao app: `link-github`, `link-priv
 
 ## Apêndice C — Comandos Cypress de Apoio
 
+Configuração de referência para o Cypress 16.1 (`cypress.config.js`). Não defina `keystrokeDelay`, `forceHttp1` nem `visibilityStrategy`: os padrões do 16 são os desejados.
+
+```js
+const { defineConfig } = require('cypress')
+
+module.exports = defineConfig({
+  defaultBrowser: 'chrome', // o Electron está deprecado
+  e2e: {
+    // sobrescrevível com CYPRESS_BASE_URL (ver 3.6)
+    baseUrl: 'https://recebi-ten.vercel.app',
+    specPattern: 'cypress/e2e/**/*.cy.js',
+  },
+})
+```
+
 Em `cypress/support/commands.js`:
 
 ```js
@@ -2268,8 +2313,8 @@ cypress/e2e/
 
 **Total:** 101 casos de teste em 21 arquivos. Arquivos novos em relação à v1.0: `modules/home.cy.js`, `modules/preview-recibo.cy.js`, `modules/personalizacao.cy.js`, `modules/politica-privacidade.cy.js` e `seo-pwa.cy.js`.
 
-Para rodar um arquivo por vez: `npx cypress run --spec "cypress/e2e/modules/form.cy.js"`. Para abrir a interface: `npx cypress open` (apenas local, sem configuração Nix). Preferencialmente usar Docker conforme instruções no README.
+Para rodar um arquivo por vez: `npx cypress run --spec "cypress/e2e/modules/form.cy.js"`. Para abrir a interface: `npx cypress open` (apenas local, sem configuração Nix). Preferencialmente usar Docker conforme instruções no README. No Cypress 16 a imagem precisa ter um navegador (`cypress/browsers`, não `cypress/base`) e Node.js 22+; rode com `--browser chrome`.
 
 ---
 
-_Fim do Documento — Recebi — Plano de Casos de Teste v2.0_
+_Fim do Documento — Recebi — Plano de Casos de Teste v2.1_
