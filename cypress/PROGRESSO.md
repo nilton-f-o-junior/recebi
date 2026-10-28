@@ -15,7 +15,7 @@ Ambiente: Docker (`cypress/included:16.1.0`), Chrome.
 | 0 | Infraestrutura (config, comandos, fixtures, imagens, scripts) | — | ✅ Concluído | — | — | — | 2026-10-28 |
 | 1 | Home e formulário principal | HOM-001/002, FRM-001 a 006 | ✅ Concluído | 8 | — | — | 2026-10-28 |
 | 2 | Máscaras | MSK-001 a 006 | ✅ Concluído | 5 | 1 (DEF-07) | — | 2026-10-28 |
-| 3 | Cliente, beneficiário e veículo | CLI 5, BEN 4, VEI 4 | ⏳ Pendente | — | — | — | — |
+| 3 | Cliente, beneficiário e veículo | CLI 5, BEN 4, VEI 4 | ✅ Concluído | 13 | — | — | 2026-10-28 |
 | 4 | Informações do recibo e observações | INF 2, OBS 3 | ⏳ Pendente | — | — | — | — |
 | 5 | Serviços e produtos | SRV 9 | ⏳ Pendente | — | — | — | — |
 | 6 | Estabelecimento | EST 7 | ⏳ Pendente | — | — | — | — |
