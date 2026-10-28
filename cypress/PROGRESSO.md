@@ -20,7 +20,7 @@ Ambiente: Docker (`cypress/included:16.1.0`), Chrome.
 | 5 | Serviços e produtos | SRV 9 | ✅ Concluído | 8 | 1 (DEF-02) | — | 2026-10-28 |
 | 6 | Estabelecimento | EST 7 | ✅ Concluído | 7 | — | — | 2026-10-28 |
 | 7 | Upload de logo | LOG 8 | ✅ Concluído | 7 | 1 (DEF-09) | — | 2026-10-28 |
-| 8 | Geração, preview e personalização | GER 5, PRE 5, PER 3 | ⏳ Pendente | — | — | — | — |
+| 8 | Geração, preview e personalização | GER 5, PRE 5, PER 3 | ✅ Concluído | 12 | 1 (DEF-11) | — | 2026-10-28 |
 | 9 | Validação de campos | VAL 4 | ⏳ Pendente | — | — | — | — |
 | 10 | Política de privacidade e segurança | POL 2, SEG 6 | ⏳ Pendente | — | — | — | — |
 | 11 | Acessibilidade | A11 6 | ⏳ Pendente | — | — | — | — |
@@ -29,7 +29,10 @@ Ambiente: Docker (`cypress/included:16.1.0`), Chrome.
 
 ## Divergências novas
 
-Nenhuma até o momento.
+- **TC-PRE-004:** o TDD pede "existe exatamente 1 `.receipt-wrapper`". O modal de
+  preview tem um `.receipt-wrapper` de layout (`#printContainer > .receipt-wrapper`)
+  e o recibo gerado tem outro dentro de `#receiptContent`. O teste verifica que há
+  exatamente 1 dentro de `#receiptContent`, que é o conteúdo do recibo.
 
 ## Casos manuais (🖐)
 
