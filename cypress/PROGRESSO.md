@@ -19,7 +19,7 @@ Ambiente: Docker (`cypress/included:16.1.0`), Chrome.
 | 4 | Informações do recibo e observações | INF 2, OBS 3 | ✅ Concluído | 5 | — | — | 2026-10-28 |
 | 5 | Serviços e produtos | SRV 9 | ✅ Concluído | 8 | 1 (DEF-02) | — | 2026-10-28 |
 | 6 | Estabelecimento | EST 7 | ✅ Concluído | 7 | — | — | 2026-10-28 |
-| 7 | Upload de logo | LOG 8 | ⏳ Pendente | — | — | — | — |
+| 7 | Upload de logo | LOG 8 | ✅ Concluído | 7 | 1 (DEF-09) | — | 2026-10-28 |
 | 8 | Geração, preview e personalização | GER 5, PRE 5, PER 3 | ⏳ Pendente | — | — | — | — |
 | 9 | Validação de campos | VAL 4 | ⏳ Pendente | — | — | — | — |
 | 10 | Política de privacidade e segurança | POL 2, SEG 6 | ⏳ Pendente | — | — | — | — |
