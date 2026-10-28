@@ -17,7 +17,7 @@ Ambiente: Docker (`cypress/included:16.1.0`), Chrome.
 | 2 | Máscaras | MSK-001 a 006 | ✅ Concluído | 5 | 1 (DEF-07) | — | 2026-10-28 |
 | 3 | Cliente, beneficiário e veículo | CLI 5, BEN 4, VEI 4 | ✅ Concluído | 13 | — | — | 2026-10-28 |
 | 4 | Informações do recibo e observações | INF 2, OBS 3 | ✅ Concluído | 5 | — | — | 2026-10-28 |
-| 5 | Serviços e produtos | SRV 9 | ⏳ Pendente | — | — | — | — |
+| 5 | Serviços e produtos | SRV 9 | ✅ Concluído | 8 | 1 (DEF-02) | — | 2026-10-28 |
 | 6 | Estabelecimento | EST 7 | ⏳ Pendente | — | — | — | — |
 | 7 | Upload de logo | LOG 8 | ⏳ Pendente | — | — | — | — |
 | 8 | Geração, preview e personalização | GER 5, PRE 5, PER 3 | ⏳ Pendente | — | — | — | — |
