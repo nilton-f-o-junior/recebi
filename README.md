@@ -61,7 +61,7 @@ Documentação de apoio:
 - Progresso por lote: [`cypress/PROGRESSO.md`](cypress/PROGRESSO.md)
 - Como rodar: [`docs/COMO_RODAR_TESTES.md`](docs/COMO_RODAR_TESTES.md)
 
-**Status atual (2026-10-28):** lotes 0 a 12 concluídos; 87 testes ativos passando, 6 skips intencionais (DEF mapeados) e 1 caso manual. Próximo: lote 13 (compatibilidade e responsividade).
+**Status atual (2026-10-29):** lotes 0 a 13 concluídos; **101 casos cobertos**, com 93 testes ativos passando, 6 skips intencionais (DEF mapeados) e 2 casos manuais (IMP-004 e BRW-003). O fluxo de compatibilidade foi validado em Chrome, Firefox e Edge.
 
 > **Ambiente Docker:** o Cypress roda no mesmo namespace do app (`network_mode: "service:app"`) e acessa `http://localhost:4173`. Isso evita o bloqueio de Local Network Access do Chrome 142+; não use `http://app:4173`. Detalhes em [`docs/COMO_RODAR_TESTES.md`](docs/COMO_RODAR_TESTES.md).
 

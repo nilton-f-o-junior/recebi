@@ -29,12 +29,12 @@ Ambiente: Docker (`cypress/included:16.1.0`), Chrome.
 | 10 | Política de privacidade e segurança | POL 2, SEG 6 | ✅ Concluído | 7 | 1 (DEF-01) | — | 2026-10-28 |
 | 11 | Acessibilidade | A11 6 | ✅ Concluído | 5 | 1 (DEF-05) | — | 2026-10-28 |
 | 12 | Impressão e SEO/PWA | IMP 4, SEO 3 | ✅ Concluído | 6 | — | 1 (IMP-004) | 2026-10-28 |
-| 13 | Compatibilidade e responsividade | BRW 7 | ⏳ Pendente | — | — | — | — |
+| 13 | Compatibilidade e responsividade | BRW 7 | ✅ Concluído | 6 | — | 1 (BRW-003) | 2026-10-29 |
 
 ## Resumo
 
-- **Lotes 0 a 12 concluídos** em 2026-10-28: **87 testes ativos passando**, **6 skips intencionais** (`MSK-006`, `SRV-008`, `LOG-008`, `PRE-005`, `SEG-002`, `A11-004`), todos por DEF já mapeados, e **1 caso manual** (IMP-004).
-- **Próximo:** lote 13 (compatibilidade e responsividade).
+- **Lotes 0 a 13 concluídos** em 2026-10-29: **93 testes ativos passando**, **6 skips intencionais** (`MSK-006`, `SRV-008`, `LOG-008`, `PRE-005`, `SEG-002`, `A11-004`), todos por DEF já mapeados, e **2 casos manuais** (IMP-004 e BRW-003). Total: **101 casos cobertos**.
+- O lote 13 foi executado duas vezes no Chrome (gate) e uma vez em Firefox e Edge; o fluxo de fumaça passou nos três navegadores. O Safari permanece manual.
 - Cada lote é validado duas vezes em Chrome no Docker antes do commit. O status detalhado de execução e as divergências ficam nas seções abaixo.
 
 ## Defeitos conhecidos cobertos
@@ -52,6 +52,9 @@ Ambiente: Docker (`cypress/included:16.1.0`), Chrome.
 - **DIV-01 (TC-IMP-002/003):** o SDD §5.6 prevê margens de 15 mm, fonte de 11 pt e
   impressão monocromática; o app usa 24 mm no topo/rodapé, corpo de 16 px e **força** as
   cores de destaque com `print-color-adjust: exact`. Os testes fixam o comportamento atual.
+- **DIV-02 (TC-BRW-007):** o SDD §5.5 descreve o ponto de quebra do layout em 768 px,
+  mas o app usa `max-width: 640px`. O teste fixa o comportamento atual e verifica as
+  grades em 768, 640 e 641 px.
 - **TC-A11-002:** `cy.press(ENTER)` no botão focado não dispara o clique nativo no Chrome
   153. O teste usa `type("{enter}")`, mantendo a tecla Enter, e registra a limitação.
 - **TC-A11-003:** além dos tokens previstos no TDD, o axe também aponta contraste de
@@ -68,3 +71,6 @@ Ambiente: Docker (`cypress/included:16.1.0`), Chrome.
 - **TC-IMP-004 (Salvar como PDF):** o diálogo nativo de impressão e o arquivo PDF não
   são controláveis pelo Cypress. O caso permanece `it.skip` com a tabela do TDD e os
   5 passos manuais.
+- **TC-BRW-003 (Compatibilidade Safari):** o Safari não está disponível na imagem
+  `cypress/included`. O caso permanece `it.skip` com a tabela do TDD e os 4 passos
+  manuais (abrir, simular impressão, preencher/gerar e usar os controles de data/cor).
