@@ -22,16 +22,20 @@ Ambiente: Docker (`cypress/included:16.1.0`), Chrome.
 | 7 | Upload de logo | LOG 8 | ✅ Concluído | 7 | 1 (DEF-09) | — | 2026-10-28 |
 | 8 | Geração, preview e personalização | GER 5, PRE 5, PER 3 | ✅ Concluído | 12 | 1 (DEF-11) | — | 2026-10-28 |
 | 9 | Validação de campos | VAL 4 | ✅ Concluído | 4 | — | — | 2026-10-28 |
-| 10 | Política de privacidade e segurança | POL 2, SEG 6 | 🚧 Em andamento | — | — | — | 2026-10-28 |
+| 10 | Política de privacidade e segurança | POL 2, SEG 6 | ✅ Concluído | 7 | 1 (DEF-01) | — | 2026-10-28 |
 | 11 | Acessibilidade | A11 6 | ⏳ Pendente | — | — | — | — |
 | 12 | Impressão e SEO/PWA | IMP 4, SEO 3 | ⏳ Pendente | — | — | — | — |
 | 13 | Compatibilidade e responsividade | BRW 7 | ⏳ Pendente | — | — | — | — |
 
 ## Resumo
 
-- **Lotes 0 a 9 concluídos** em 2026-10-28: **69 testes ativos passando** e **4 skips intencionais** (`MSK-006`, `SRV-008`, `LOG-008`, `PRE-005`), todos por DEF já mapeados.
-- **Lote 10 em andamento** (política de privacidade e segurança). Os casos só entram na contagem depois da execução dupla em Chrome e do commit do lote.
+- **Lotes 0 a 10 concluídos** em 2026-10-28: **76 testes ativos passando** e **5 skips intencionais** (`MSK-006`, `SRV-008`, `LOG-008`, `PRE-005`, `SEG-002`), todos por DEF já mapeados.
+- **Próximo:** lote 11 (acessibilidade).
 - Cada lote é validado duas vezes em Chrome no Docker antes do commit. O status detalhado de execução e as divergências ficam nas seções abaixo.
+
+## Defeitos conhecidos cobertos
+
+- **DEF-01 (TC-SEG-001 / TC-SEG-002):** o ViaCEP recebe o CEP digitado e o IBGE recebe a UF; o repositório não define CSP. Em TC-SEG-001 os passos 1–4 são verificados e o passo 5 fixa o comportamento atual com `// DEF-01: comportamento atual; inverter após correção`; TC-SEG-002 permanece `it.skip` até a política de CSP ser definida.
 
 ## Divergências novas
 
