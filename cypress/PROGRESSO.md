@@ -7,6 +7,10 @@ Ambiente: Docker (`cypress/included:16.1.0`), Chrome.
 > `localhost` (Local Network Access). Por isso o serviço `cypress` do `docker-compose.yml`
 > usa `network_mode: "service:app"` e `CYPRESS_baseUrl=http://localhost:4173`. Não trocar
 > por `http://app:4173`: scripts, CSS e imagens falham sem erro visível no Cypress.
+>
+> **Nota do axe:** `cypress-axe@1.7.0` declara peer `^10`–`^15`, mas foi validado com
+> Cypress 16.1.0 no Chrome 153. A instalação usou `--legacy-peer-deps`; as versões de
+> `cypress-axe` e `axe-core` estão fixadas no `package.json`.
 
 ## Lotes
 
@@ -23,22 +27,29 @@ Ambiente: Docker (`cypress/included:16.1.0`), Chrome.
 | 8 | Geração, preview e personalização | GER 5, PRE 5, PER 3 | ✅ Concluído | 12 | 1 (DEF-11) | — | 2026-10-28 |
 | 9 | Validação de campos | VAL 4 | ✅ Concluído | 4 | — | — | 2026-10-28 |
 | 10 | Política de privacidade e segurança | POL 2, SEG 6 | ✅ Concluído | 7 | 1 (DEF-01) | — | 2026-10-28 |
-| 11 | Acessibilidade | A11 6 | ⏳ Pendente | — | — | — | — |
+| 11 | Acessibilidade | A11 6 | ✅ Concluído | 5 | 1 (DEF-05) | — | 2026-10-28 |
 | 12 | Impressão e SEO/PWA | IMP 4, SEO 3 | ⏳ Pendente | — | — | — | — |
 | 13 | Compatibilidade e responsividade | BRW 7 | ⏳ Pendente | — | — | — | — |
 
 ## Resumo
 
-- **Lotes 0 a 10 concluídos** em 2026-10-28: **76 testes ativos passando** e **5 skips intencionais** (`MSK-006`, `SRV-008`, `LOG-008`, `PRE-005`, `SEG-002`), todos por DEF já mapeados.
-- **Próximo:** lote 11 (acessibilidade).
+- **Lotes 0 a 11 concluídos** em 2026-10-28: **81 testes ativos passando** e **6 skips intencionais** (`MSK-006`, `SRV-008`, `LOG-008`, `PRE-005`, `SEG-002`, `A11-004`), todos por DEF já mapeados.
+- **Próximo:** lote 12 (impressão e SEO/PWA).
 - Cada lote é validado duas vezes em Chrome no Docker antes do commit. O status detalhado de execução e as divergências ficam nas seções abaixo.
 
 ## Defeitos conhecidos cobertos
 
 - **DEF-01 (TC-SEG-001 / TC-SEG-002):** o ViaCEP recebe o CEP digitado e o IBGE recebe a UF; o repositório não define CSP. Em TC-SEG-001 os passos 1–4 são verificados e o passo 5 fixa o comportamento atual com `// DEF-01: comportamento atual; inverter após correção`; TC-SEG-002 permanece `it.skip` até a política de CSP ser definida.
+- **DEF-05 (TC-A11-001 / TC-A11-003 / TC-A11-004 / TC-A11-006):** o formulário tem campos sem `label` associado, contraste abaixo de 4,5:1 em textos atenuados/placeholders/erros, campos obrigatórios sem `aria-required`/`aria-invalid` e `lang="en"` com título grafado incorretamente. TC-A11-001/003/006 fixam o comportamento atual com `// DEF-05: comportamento atual; inverter após correção`; TC-A11-004 permanece `it.skip`.
 
 ## Divergências novas
 
+- **TC-A11-002:** `cy.press(ENTER)` no botão focado não dispara o clique nativo no Chrome
+  153. O teste usa `type("{enter}")`, mantendo a tecla Enter, e registra a limitação.
+- **TC-A11-003:** além dos tokens previstos no TDD, o axe também aponta contraste de
+  `--accent` (`#3d95c5`, 3,33:1) em títulos de seção e abas. O teste valida os tokens
+  documentados e usa o axe apenas para confirmar que há violações atuais; o accent não
+  é cobrado individualmente.
 - **TC-PRE-004:** o TDD pede "existe exatamente 1 `.receipt-wrapper`". O modal de
   preview tem um `.receipt-wrapper` de layout (`#printContainer > .receipt-wrapper`)
   e o recibo gerado tem outro dentro de `#receiptContent`. O teste verifica que há

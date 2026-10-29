@@ -12,6 +12,8 @@
     "test:e2e:edge": "docker compose --profile test run --rm cypress --browser edge"
   },
   "devDependencies": {
-    "cypress": "16.1.0"
+    "axe-core": "4.14.0",
+    "cypress": "16.1.0",
+    "cypress-axe": "1.7.0"
   }
 }
