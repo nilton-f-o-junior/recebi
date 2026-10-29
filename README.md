@@ -50,11 +50,20 @@ Simples assim. Sem sistema, sem mensalidade, sem complicação.
 
 ## 🧪 Testes
 
-Os testes end-to-end (E2E) usam [Cypress](https://www.cypress.io/) e estão em `cypress/e2e/modules/`. O ambiente é **100% Docker** — não é necessário instalar Node, Cypress ou Nix no host.
+Os testes end-to-end (E2E) usam [Cypress](https://www.cypress.io/) e estão em `cypress/e2e/` (módulos em `cypress/e2e/modules/` e casos globais na raiz). O ambiente é **100% Docker** — não é necessário instalar Node, Cypress ou Nix no host.
 
 > **Versão do Cypress:** fixada em **16.1.0** pela imagem Docker `cypress/included:16.1.0` e pelo `package.json` (`"cypress": "16.1.0"` sem `^`). Imagem e pacote npm são mantidos na mesma versão.
 
-O plano de testes fica em `cypress/e2e/test-tree.md`.
+Documentação de apoio:
+
+- TDD (fonte dos casos): [`docs/TDD_Recebi_Casos_de_Teste.md`](docs/TDD_Recebi_Casos_de_Teste.md)
+- Inventário dos 101 casos: [`cypress/e2e/test-tree.md`](cypress/e2e/test-tree.md)
+- Progresso por lote: [`cypress/PROGRESSO.md`](cypress/PROGRESSO.md)
+- Como rodar: [`docs/COMO_RODAR_TESTES.md`](docs/COMO_RODAR_TESTES.md)
+
+**Status atual (2026-10-28):** lotes 0 a 9 concluídos; lote 10 (política de privacidade e segurança) em andamento.
+
+> **Ambiente Docker:** o Cypress roda no mesmo namespace do app (`network_mode: "service:app"`) e acessa `http://localhost:4173`. Isso evita o bloqueio de Local Network Access do Chrome 142+; não use `http://app:4173`. Detalhes em [`docs/COMO_RODAR_TESTES.md`](docs/COMO_RODAR_TESTES.md).
 
 ### Pré-requisitos
 - Docker e Docker Compose instalados
@@ -73,20 +82,20 @@ A aplicação ficará disponível em [http://localhost:4173](http://localhost:41
 docker compose down
 ```
 
-#### Rodar toda a suíte E2E (headless)
-O serviço `cypress` usa o profile `test` para não subir junto com `docker compose up`.
+#### Rodar toda a suíte E2E (headless, Chrome)
+O serviço `cypress` usa o profile `test` para não subir junto com `docker compose up`. O navegador padrão já é o Chrome; `--browser chrome` deixa a escolha explícita.
 ```bash
-docker compose --profile test run --rm cypress
+docker compose --profile test run --rm cypress --browser chrome
 ```
 Ou via script npm:
 ```bash
-npm run test:e2e
+npm run test:e2e:chrome
 ```
 
 #### Rodar um spec individual
 Escreva/rode os testes um por vez durante o TDD. Exemplo:
 ```bash
-docker compose --profile test run --rm cypress --spec "cypress/e2e/modules/form.cy.js"
+docker compose --profile test run --rm cypress --browser chrome --spec "cypress/e2e/modules/form.cy.js"
 ```
 Ou via script npm:
 ```bash

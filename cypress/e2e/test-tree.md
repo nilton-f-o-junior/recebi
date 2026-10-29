@@ -1,6 +1,11 @@
 
+# Inventário de casos E2E
 
-/modules
+Fonte dos títulos: [`docs/TDD_Recebi_Casos_de_Teste.md`](../../docs/TDD_Recebi_Casos_de_Teste.md) (v2.1).
+Este arquivo lista os **101 casos** por spec; o status de implementação, skips e divergências fica em
+[`cypress/PROGRESSO.md`](../PROGRESSO.md).
+
+## /modules
 form.cy.js
     TC-FRM-001: Carregamento Inicial do Formulário
     TC-FRM-002: Habilitação do Botão ao Marcar Privacidade
